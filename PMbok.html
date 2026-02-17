@@ -1,0 +1,2610 @@
+<!DOCTYPE html>
+<!-- saved from url=(0117)file:///C:/Users/ZAPV03371/Downloads/Saldanha%20Bay%20Municipality%20%E2%80%A2%20PMBOK%20Guide%20(6th%20+%207th).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mining the Mind • PMBOK Guide (6th + 7th)</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --brand:#1d4ed8;
+      --brand2:#06b6d4;
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+      --shadow2: 0 6px 18px rgba(2, 6, 23, 0.08);
+      --radius: 18px;
+      --radius2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(29,78,216,.10), transparent 60%),
+        radial-gradient(900px 600px at 100% 0%, rgba(6,182,212,.10), transparent 55%),
+        var(--bg);
+    }
+
+    .app{
+      max-width: 1780px;
+      margin: 0 auto;
+      padding: 20px 18px 46px;
+    }
+
+    .topbar{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      min-width: 320px;
+    }
+    .logo{
+      width:46px;height:46px;border-radius:16px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: var(--shadow2);
+      position:relative;
+      flex: 0 0 auto;
+      margin-top:2px;
+    }
+    .logo:before, .logo:after{
+      content:"";
+      position:absolute;
+      inset: 11px 13px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.86);
+      transform: rotate(12deg);
+    }
+    .logo:after{
+      inset: 17px 19px;
+      opacity:.9;
+      transform: rotate(-12deg);
+    }
+
+    .titlewrap h1{
+      font-size: 18px;
+      line-height: 1.2;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 920px;
+      line-height: 1.45;
+    }
+    .subtitle b{ color: rgba(15,23,42,.9); }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(2,6,23,0.04);
+      backdrop-filter: blur(8px);
+    }
+    .chip input[type="search"]{
+      border:none; outline:none;
+      background:transparent;
+      color: var(--ink);
+      width: 280px;
+      font-size: 13px;
+    }
+
+    .btn{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      color: var(--ink);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .18s ease, border-color .18s ease;
+      box-shadow: 0 2px 10px rgba(2,6,23,0.05);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(29,78,216,.35); box-shadow: var(--shadow2);}
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn.primary{
+      border-color: rgba(29,78,216,.35);
+      background: linear-gradient(135deg, rgba(29,78,216,.10), rgba(6,182,212,.08));
+    }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .toggle{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 2px 10px rgba(2,6,23,0.05);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .toggle:hover{ transform: translateY(-1px); border-color: rgba(29,78,216,.35); box-shadow: var(--shadow2);}
+    .switch{
+      width:42px; height:24px; border-radius:999px;
+      background: rgba(15,23,42,.12);
+      position:relative;
+      flex: 0 0 auto;
+    }
+    .knob{
+      width:18px; height:18px; border-radius:999px;
+      background:white;
+      position:absolute; top:3px; left:3px;
+      box-shadow: 0 2px 6px rgba(2,6,23,0.18);
+      transition:left .18s ease;
+    }
+    .toggle[data-on="true"] .switch{ background: rgba(29,78,216,.35); }
+    .toggle[data-on="true"] .knob{ left:21px; }
+    .toggle .tlabel{font-size:13px;color:var(--muted)}
+    .toggle strong{font-size:13px;color:var(--ink)}
+
+    .seg{
+      display:inline-flex;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      border-radius: 14px;
+      overflow:hidden;
+      box-shadow: 0 2px 10px rgba(2,6,23,0.05);
+    }
+    .seg button{
+      border:none;
+      background:transparent;
+      padding: 10px 12px;
+      font-size: 13px;
+      cursor:pointer;
+      color: rgba(15,23,42,.75);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+      border-right: 1px solid var(--line);
+    }
+    .seg button:last-child{ border-right:none; }
+    .seg button.active{
+      color: rgba(15,23,42,.95);
+      font-weight: 800;
+      background: linear-gradient(135deg, rgba(29,78,216,.12), rgba(6,182,212,.10));
+    }
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: rgba(29,78,216,.35);
+      box-shadow: 0 0 0 6px rgba(29,78,216,.08);
+    }
+
+    .panel{
+      background: rgba(255,255,255,.84);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel .header{
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(29,78,216,.06), rgba(255,255,255,0));
+    }
+    .panel .header .kicker{
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(29,78,216,.92);
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .panel .header h2{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+    .panel .header p{
+      margin:8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .panel .content{ padding: 12px; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px dashed rgba(29,78,216,.35);
+      background: rgba(29,78,216,.06);
+      color: rgba(15,23,42,.85);
+      font-size: 12.5px;
+      margin-top: 10px;
+    }
+
+    .guideRow{ margin: 10px 0 14px; }
+    .guideGrid{
+      display:grid;
+      gap: 10px;
+      padding: 12px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    @media (max-width: 1450px){ .guideGrid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 980px){
+      .guideGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chip input[type="search"]{ width: 180px; }
+    }
+    @media (max-width: 620px){ .guideGrid{ grid-template-columns: 1fr; } }
+
+    .guideCard{
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: var(--radius2);
+      padding: 12px;
+      box-shadow: 0 2px 12px rgba(2,6,23,0.04);
+      min-height: 150px;
+    }
+    .guideCard h3{ margin:0 0 6px; font-size: 14px; }
+    .guideCard p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+    .stepper{
+      margin-top: 10px;
+      display:flex;
+      gap: 8px;
+      flex-wrap:wrap;
+    }
+    .step{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      font-size: 12.5px;
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .18s ease, box-shadow .18s ease;
+      white-space:nowrap;
+    }
+    .step:hover{ transform: translateY(-1px); border-color: rgba(29,78,216,.35); box-shadow: 0 6px 18px rgba(2,6,23,0.06); }
+    .step.active{
+      color: var(--ink);
+      border-color: rgba(29,78,216,.35);
+      background: linear-gradient(135deg, rgba(29,78,216,.12), rgba(6,182,212,.10));
+      font-weight: 800;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 1120px){
+      .grid3{ grid-template-columns: 1fr 1fr; }
+      .spanAll{ grid-column: 1 / -1; }
+    }
+    @media (max-width: 760px){
+      .grid3{ grid-template-columns: 1fr; }
+      .spanAll{ grid-column: auto; }
+    }
+
+    /* PMBOK6 Assistant row */
+    .assistRow{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+    }
+    @media (max-width: 1200px){ .assistRow{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media (max-width: 820px){ .assistRow{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 620px){ .assistRow{ grid-template-columns: 1fr; } }
+
+    .assistPhase{
+      border: 1px solid var(--line);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.95);
+      padding: 12px;
+      box-shadow: 0 2px 12px rgba(2,6,23,0.04);
+      cursor:pointer;
+      transition: transform .08s ease, border-color .18s ease, box-shadow .18s ease;
+      min-height: 150px;
+    }
+    .assistPhase:hover{
+      transform: translateY(-1px);
+      border-color: rgba(29,78,216,.35);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+    }
+    .assistPhase.active{
+      border-color: rgba(29,78,216,.45);
+      background: linear-gradient(135deg, rgba(29,78,216,.10), rgba(6,182,212,.08));
+    }
+    .assistPhase h3{ margin:0 0 6px; font-size: 14px; }
+    .assistPhase ul{
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* Matrix */
+    .matrix{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.94);
+    }
+    table{
+      border-collapse: collapse;
+      width:100%;
+      min-width: 980px;
+      font-size: 13px;
+    }
+    th, td{
+      border-bottom:1px solid var(--line);
+      padding: 10px 10px;
+      vertical-align: top;
+      text-align:left;
+      color: rgba(15,23,42,.86);
+    }
+    th{
+      position: sticky;
+      top: 0;
+      background: linear-gradient(180deg, rgba(29,78,216,.06), rgba(255,255,255,.94));
+      z-index: 1;
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(29,78,216,.88);
+      font-weight: 900;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      color: rgba(71,85,105,.92);
+      font-size: 12px;
+      margin: 2px 6px 2px 0;
+      white-space:nowrap;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .tag:hover{
+      transform: translateY(-1px);
+      border-color: rgba(29,78,216,.35);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+    }
+    .tag strong{ color: rgba(15,23,42,.9); }
+    .tag.process{
+      border-color: rgba(6,182,212,.35);
+      background: rgba(6,182,212,.06);
+      color: rgba(15,23,42,.82);
+    }
+    /* Tiny indicator for “ITTO loaded” (screenshot-friendly) */
+    .tag.process.hasItto::after{
+      content:"";
+      width:8px;height:8px;border-radius:99px;
+      margin-left:8px;
+      background: rgba(29,78,216,.55);
+      box-shadow: 0 0 0 4px rgba(29,78,216,.10);
+      display:inline-block;
+    }
+
+    /* PMBOK6 ITTO drawer */
+    .drawer{
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow:hidden;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 2px 12px rgba(2,6,23,0.04);
+    }
+    .drawerHead{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(6,182,212,.08), rgba(255,255,255,0));
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .drawerHead h3{ margin:0; font-size: 14px; }
+    .drawerHead p{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; max-width: 980px; }
+    .drawerHead .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+    .drawerBody{
+      padding: 12px 14px 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 980px){ .drawerBody{ grid-template-columns:1fr; } }
+    .ittoBox{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,.95);
+    }
+    .ittoBox h4{
+      margin:0;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform:uppercase;
+      color: rgba(15,23,42,.75);
+    }
+    .ittoBox ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Expandable cards (PMBOK7) */
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius2);
+      box-shadow: 0 2px 12px rgba(2,6,23,0.04);
+      overflow:hidden;
+      margin-bottom: 10px;
+    }
+    .card summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 14px 14px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .card summary::-webkit-details-marker{ display:none; }
+
+    .left{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      min-width:0;
+    }
+    .badge{
+      width:34px; height:34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(29,78,216,.13), rgba(6,182,212,.10));
+      border: 1px solid rgba(29,78,216,.18);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(15,23,42,.88);
+    }
+    .meta{ min-width:0; }
+    .meta .name{
+      font-weight: 800;
+      font-size: 14px;
+      margin: 0;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .meta .hint{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .chev{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+      transition: transform .18s ease, border-color .18s ease;
+      color: rgba(15,23,42,.7);
+    }
+    details[open] summary .chev{
+      transform: rotate(180deg);
+      border-color: rgba(29,78,216,.35);
+    }
+    .body{
+      padding: 0 14px 14px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(29,78,216,.03), rgba(255,255,255,0));
+    }
+    .body .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    @media (max-width: 620px){ .body .row{ grid-template-columns:1fr; } }
+    .box{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,.92);
+    }
+    .box h4{
+      margin:0;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform:uppercase;
+      color: rgba(15,23,42,.75);
+    }
+    .box ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer{
+      margin-top: 12px;
+      color: rgba(71,85,105,.9);
+      font-size: 12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding: 10px 2px;
+    }
+    .note{ font-family: var(--mono); opacity:.85; }
+
+    body.present{ background:#fff; }
+    body.present .panel,
+    body.present .drawer{
+      box-shadow:none;
+      border-color:#dbe3ee;
+    }
+    body.present .chip,
+    body.present .btn,
+    body.present .toggle,
+    body.present .seg{
+      box-shadow:none;
+      border-color:#dbe3ee;
+      background:#fff;
+    }
+    body.present .watermark{ display:none; }
+
+    .watermark{
+      position: fixed;
+      right: 14px;
+      bottom: 12px;
+      font-size: 11px;
+      color: rgba(71,85,105,.7);
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(8px);
+    }
+
+    .hide{ display:none !important; }
+
+    /* ---------------------------
+       ITTO LIBRARY MODAL
+    ---------------------------- */
+    .modalBack{
+      position:fixed;
+      inset:0;
+      background: rgba(15,23,42,.35);
+      backdrop-filter: blur(8px);
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: 18px;
+      z-index: 99;
+    }
+    .modalCard{
+      width: min(1400px, 100%);
+      margin-top: 10px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(226,232,240,.9);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(29,78,216,.06), rgba(255,255,255,0));
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .modalHead h3{ margin:0; font-size: 15px; }
+    .modalHead p{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; max-width: 980px; }
+    .modalBody{ padding: 12px 14px 14px; }
+    .modalGrid{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px){ .modalGrid{ grid-template-columns: 1fr; } }
+    .pane{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.92);
+      padding: 12px;
+    }
+    .lbl{
+      display:block;
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(29,78,216,.86);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .field{
+      margin-bottom: 10px;
+    }
+    .input, select, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 10px;
+      font-size: 13px;
+      outline:none;
+      background: rgba(255,255,255,.96);
+      color: var(--ink);
+    }
+    textarea{ min-height: 110px; resize: vertical; line-height: 1.45; }
+    select{ min-height: 290px; }
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .formGrid{ grid-template-columns: 1fr; } }
+    .span2{ grid-column: 1 / -1; }
+    .actionsRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top: 10px;
+    }
+    .actionsRight{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .smallNote{
+      margin: 8px 0 0;
+      color: rgba(71,85,105,.9);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .kbd{
+      font-family: var(--mono);
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius: 10px;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="titlewrap">
+          <h1>Mining the Mind • PMBOK Guide</h1>
+          <p class="subtitle">
+            A <b>transparent</b>, <b>effective</b> way of working: switch between <b>PMBOK 6th (ITTO + processes)</b> and <b>PMBOK 7th (principles &amp; outcomes)</b>.
+          </p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="seg" role="tablist" aria-label="Edition switch">
+          <button id="tab6" class="active" role="tab" aria-selected="true">
+            <span class="dot"></span> PMBOK 6th
+          </button>
+          <button id="tab7" role="tab" aria-selected="false">
+            <span class="dot" style="background:rgba(6,182,212,.45); box-shadow:0 0 0 6px rgba(6,182,212,.10)"></span> PMBOK 7th
+          </button>
+        </div>
+
+        <div class="chip" title="Search within the selected edition (Ctrl/Cmd+K)">
+          <span style="font-family:var(--mono); font-size:12px; color:rgba(15,23,42,.65)">⌕</span>
+          <input id="q" type="search" placeholder="Search PMBOK 6 (e.g., charter, WBS, risk, procurement)">
+        </div>
+
+        <button class="btn" id="ittoLibraryBtn" title="Add/edit ITTOs (stored locally)">📚 ITTO Library</button>
+
+        <button class="btn" id="expandAll">⤢ Expand</button>
+        <button class="btn" id="collapseAll">⤡ Collapse</button>
+
+        <div class="toggle" id="presentToggle" data-on="false" title="Optimise layout for screenshots">
+          <div>
+            <div class="tlabel">Layout</div>
+            <strong>Presentation Mode</strong>
+          </div>
+          <div class="switch"><div class="knob"></div></div>
+        </div>
+
+        <button class="btn primary" id="focusTop">◎ Focus</button>
+      </div>
+    </div>
+
+    <!-- PMBOK 6 VIEW -->
+    <div id="view6">
+      <section class="panel guideRow">
+        <div class="header">
+          <div class="kicker">PMBOK 6th • Guided Flow</div>
+          <h2>Process Groups (transparent governance story)</h2>
+          <p>
+            Use the flow below for meetings and reporting.
+            <span class="pill">Tip: click a phase below to update the assistant row.</span>
+          </p>
+        </div>
+
+        <!-- Assistant row (moved ABOVE matrix) -->
+        <div class="assistRow" id="assistRow"><div class="assistPhase active" data-phase="init">
+      <h3>Initiating</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.45">Authorise + align</p>
+      <ul><li>Charter mandate + success criteria</li><li>Stakeholder map + decision owners</li><li>Governance: reporting, escalation, logs</li></ul>
+    </div><div class="assistPhase" data-phase="plan">
+      <h3>Planning</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.45">Baseline + control</p>
+      <ul><li>Scope/WBS + requirements trace</li><li>Schedule + resources + cost baseline</li><li>Risk, procurement, comms, quality plans</li></ul>
+    </div><div class="assistPhase" data-phase="exec">
+      <h3>Executing</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.45">Deliver + manage</p>
+      <ul><li>Mobilise team + suppliers</li><li>Manage quality + comms + stakeholders</li><li>Capture knowledge + issues/decisions</li></ul>
+    </div><div class="assistPhase" data-phase="mc">
+      <h3>Monitoring &amp; Controlling</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.45">Track + change</p>
+      <ul><li>Progress vs baseline + forecasting</li><li>Integrated change control</li><li>Risk monitoring + transparent reporting</li></ul>
+    </div><div class="assistPhase" data-phase="close">
+      <h3>Closing</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.45">Accept + archive</p>
+      <ul><li>Formal acceptance + handover</li><li>Close procurements + financial closure</li><li>Lessons learned + audit pack archive</li></ul>
+    </div></div>
+
+        <div class="footer" style="padding:10px 14px;">
+          <div class="note">PMBOK 6th view • ITTO-enabled • audit-friendly</div>
+          <div>Click any process pill in the matrix to open ITTO.</div>
+        </div>
+      </section>
+
+      <section class="panel" id="m6-matrix">
+        <div class="header">
+          <div class="kicker">PMBOK 6th • Process Map</div>
+          <h2>Knowledge Areas × Process Groups</h2>
+          <p>Click a Knowledge Area tag to highlight a row; click a process pill to view its ITTO.</p>
+        </div>
+        <div class="content">
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <span class="tag" data-ka="integration"><strong>Integration</strong></span>
+            <span class="tag" data-ka="scope"><strong>Scope</strong></span>
+            <span class="tag" data-ka="schedule"><strong>Schedule</strong></span>
+            <span class="tag" data-ka="cost"><strong>Cost</strong></span>
+            <span class="tag" data-ka="quality"><strong>Quality</strong></span>
+            <span class="tag" data-ka="resource"><strong>Resource</strong></span>
+            <span class="tag" data-ka="communications"><strong>Communications</strong></span>
+            <span class="tag" data-ka="risk"><strong>Risk</strong></span>
+            <span class="tag" data-ka="procurement"><strong>Procurement</strong></span>
+            <span class="tag" data-ka="stakeholder"><strong>Stakeholder</strong></span>
+            <span class="tag" data-ka="clear"><strong>Clear highlight</strong></span>
+          </div>
+
+          <div class="matrix" aria-label="PMBOK 6 matrix">
+            <table>
+              <thead>
+                <tr>
+                  <th>Knowledge Area</th>
+                  <th>Initiating</th>
+                  <th>Planning</th>
+                  <th>Executing</th>
+                  <th>Monitoring &amp; Controlling</th>
+                  <th>Closing</th>
+                </tr>
+              </thead>
+              <tbody id="matrixBody"><tr data-ka="integration">
+      <td><strong>Integration</strong></td>
+      <td><span class="tag process hasItto" data-proc="Develop Project Charter" title="Click to view ITTO">Develop Project Charter</span></td>
+      <td><span class="tag process hasItto" data-proc="Develop Project Management Plan" title="Click to view ITTO">Develop Project Management Plan</span></td>
+      <td><span class="tag process hasItto" data-proc="Direct and Manage Project Work" title="Click to view ITTO">Direct and Manage Project Work</span><span class="tag process hasItto" data-proc="Manage Project Knowledge" title="Click to view ITTO">Manage Project Knowledge</span></td>
+      <td><span class="tag process hasItto" data-proc="Monitor and Control Project Work" title="Click to view ITTO">Monitor and Control Project Work</span><span class="tag process hasItto" data-proc="Perform Integrated Change Control" title="Click to view ITTO">Perform Integrated Change Control</span></td>
+      <td><span class="tag process hasItto" data-proc="Close Project or Phase" title="Click to view ITTO">Close Project or Phase</span></td>
+    </tr><tr data-ka="scope">
+      <td><strong>Scope</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Scope Management" title="Click to view ITTO">Plan Scope Management</span><span class="tag process hasItto" data-proc="Collect Requirements" title="Click to view ITTO">Collect Requirements</span><span class="tag process hasItto" data-proc="Define Scope" title="Click to view ITTO">Define Scope</span><span class="tag process hasItto" data-proc="Create WBS" title="Click to view ITTO">Create WBS</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Validate Scope" title="Click to view ITTO">Validate Scope</span><span class="tag process hasItto" data-proc="Control Scope" title="Click to view ITTO">Control Scope</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="schedule">
+      <td><strong>Schedule</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Schedule Management" title="Click to view ITTO">Plan Schedule Management</span><span class="tag process hasItto" data-proc="Define Activities" title="Click to view ITTO">Define Activities</span><span class="tag process hasItto" data-proc="Sequence Activities" title="Click to view ITTO">Sequence Activities</span><span class="tag process hasItto" data-proc="Estimate Activity Durations" title="Click to view ITTO">Estimate Activity Durations</span><span class="tag process hasItto" data-proc="Develop Schedule" title="Click to view ITTO">Develop Schedule</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Control Schedule" title="Click to view ITTO">Control Schedule</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="cost">
+      <td><strong>Cost</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Cost Management" title="Click to view ITTO">Plan Cost Management</span><span class="tag process hasItto" data-proc="Estimate Costs" title="Click to view ITTO">Estimate Costs</span><span class="tag process hasItto" data-proc="Determine Budget" title="Click to view ITTO">Determine Budget</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Control Costs" title="Click to view ITTO">Control Costs</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="quality">
+      <td><strong>Quality</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Quality Management" title="Click to view ITTO">Plan Quality Management</span></td>
+      <td><span class="tag process hasItto" data-proc="Manage Quality" title="Click to view ITTO">Manage Quality</span></td>
+      <td><span class="tag process hasItto" data-proc="Control Quality" title="Click to view ITTO">Control Quality</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="resource">
+      <td><strong>Resource</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Resource Management" title="Click to view ITTO">Plan Resource Management</span><span class="tag process hasItto" data-proc="Estimate Activity Resources" title="Click to view ITTO">Estimate Activity Resources</span></td>
+      <td><span class="tag process hasItto" data-proc="Acquire Resources" title="Click to view ITTO">Acquire Resources</span><span class="tag process hasItto" data-proc="Develop Team" title="Click to view ITTO">Develop Team</span><span class="tag process hasItto" data-proc="Manage Team" title="Click to view ITTO">Manage Team</span></td>
+      <td><span class="tag process hasItto" data-proc="Control Resources" title="Click to view ITTO">Control Resources</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="communications">
+      <td><strong>Communications</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Communications Management" title="Click to view ITTO">Plan Communications Management</span></td>
+      <td><span class="tag process hasItto" data-proc="Manage Communications" title="Click to view ITTO">Manage Communications</span></td>
+      <td><span class="tag process hasItto" data-proc="Monitor Communications" title="Click to view ITTO">Monitor Communications</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="risk">
+      <td><strong>Risk</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Risk Management" title="Click to view ITTO">Plan Risk Management</span><span class="tag process hasItto" data-proc="Identify Risks" title="Click to view ITTO">Identify Risks</span><span class="tag process hasItto" data-proc="Perform Qualitative Risk Analysis" title="Click to view ITTO">Perform Qualitative Risk Analysis</span><span class="tag process hasItto" data-proc="Perform Quantitative Risk Analysis" title="Click to view ITTO">Perform Quantitative Risk Analysis</span><span class="tag process hasItto" data-proc="Plan Risk Responses" title="Click to view ITTO">Plan Risk Responses</span></td>
+      <td><span class="tag process hasItto" data-proc="Implement Risk Responses" title="Click to view ITTO">Implement Risk Responses</span></td>
+      <td><span class="tag process hasItto" data-proc="Monitor Risks" title="Click to view ITTO">Monitor Risks</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="procurement">
+      <td><strong>Procurement</strong></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Procurement Management" title="Click to view ITTO">Plan Procurement Management</span></td>
+      <td><span class="tag process hasItto" data-proc="Conduct Procurements" title="Click to view ITTO">Conduct Procurements</span></td>
+      <td><span class="tag process hasItto" data-proc="Control Procurements" title="Click to view ITTO">Control Procurements</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr><tr data-ka="stakeholder">
+      <td><strong>Stakeholder</strong></td>
+      <td><span class="tag process hasItto" data-proc="Identify Stakeholders" title="Click to view ITTO">Identify Stakeholders</span></td>
+      <td><span class="tag process hasItto" data-proc="Plan Stakeholder Engagement" title="Click to view ITTO">Plan Stakeholder Engagement</span></td>
+      <td><span class="tag process hasItto" data-proc="Manage Stakeholder Engagement" title="Click to view ITTO">Manage Stakeholder Engagement</span></td>
+      <td><span class="tag process hasItto" data-proc="Monitor Stakeholder Engagement" title="Click to view ITTO">Monitor Stakeholder Engagement</span></td>
+      <td><span style="color:rgba(71,85,105,.75)">—</span></td>
+    </tr></tbody>
+            </table>
+          </div>
+
+          <!-- ITTO Drawer -->
+          <div class="drawer" id="ittoDrawer">
+            <div class="drawerHead">
+              <div>
+                <div class="kicker">PMBOK 6th • ITTO</div>
+                <h3 id="ittoTitle">Select a process to view ITTO</h3>
+                <p id="ittoPurpose">Click any process pill (e.g., “Develop Project Charter”) in the matrix above.</p>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="ittoEditBtn" type="button" disabled="">✎ Edit ITTO</button>
+                <button class="btn" id="ittoClose" type="button">✕ Clear selection</button>
+              </div>
+            </div>
+            <div class="drawerBody">
+              <div class="ittoBox">
+                <h4>Inputs</h4>
+                <ul id="ittoInputs"><li style="color:rgba(71,85,105,.75)">—</li></ul>
+              </div>
+              <div class="ittoBox">
+                <h4>Tools &amp; Techniques</h4>
+                <ul id="ittoTools"><li style="color:rgba(71,85,105,.75)">—</li></ul>
+              </div>
+              <div class="ittoBox">
+                <h4>Outputs</h4>
+                <ul id="ittoOutputs"><li style="color:rgba(71,85,105,.75)">—</li></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="pill">For screenshots: select a process → ITTO appears immediately below the matrix.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PMBOK 7 VIEW -->
+    <div id="view7" class="hide">
+      <section class="panel guideRow">
+        <div class="header">
+          <div class="kicker">PMBOK 7th • Guide Path</div>
+          <h2>Principles + Performance Domains for outcome-based delivery</h2>
+          <p>
+            Click a pill to jump and open the right card.
+            <span class="pill">Tip: Presentation Mode + expand one card = perfect screenshot.</span>
+          </p>
+        </div>
+
+        <div class="guideGrid">
+          <div class="guideCard">
+            <h3>1) Define Value &amp; Success</h3>
+            <p>Outcomes, benefits, and what “done well” looks like.</p>
+            <div class="stepper">
+              <div class="step" data-focus="pd-delivery">Delivery</div>
+              <div class="step" data-focus="pd-measurement">Measurement</div>
+              <div class="step" data-focus="principle-value">Value</div>
+            </div>
+          </div>
+          <div class="guideCard">
+            <h3>2) Decide the Approach</h3>
+            <p>Lifecycle choice and tailoring to context and risk.</p>
+            <div class="stepper">
+              <div class="step" data-focus="pd-approach">Lifecycle</div>
+              <div class="step" data-focus="pd-planning">Planning</div>
+              <div class="step" data-focus="principle-tailor">Tailor</div>
+            </div>
+          </div>
+          <div class="guideCard">
+            <h3>3) Enable People</h3>
+            <p>Stakeholders, team environment, decision flow.</p>
+            <div class="stepper">
+              <div class="step" data-focus="pd-team">Team</div>
+              <div class="step" data-focus="pd-stakeholders">Stakeholders</div>
+              <div class="step" data-focus="principle-team">Collab</div>
+            </div>
+          </div>
+          <div class="guideCard">
+            <h3>4) Execute &amp; Deliver</h3>
+            <p>Work coordination with quality and stewardship.</p>
+            <div class="stepper">
+              <div class="step" data-focus="pd-work">Work</div>
+              <div class="step" data-focus="principle-quality">Quality</div>
+              <div class="step" data-focus="principle-stewardship">Steward</div>
+            </div>
+          </div>
+          <div class="guideCard">
+            <h3>5) Adapt &amp; Improve</h3>
+            <p>Uncertainty, learning loops, adoption of change.</p>
+            <div class="stepper">
+              <div class="step" data-focus="pd-uncertainty">Uncertainty</div>
+              <div class="step" data-focus="principle-risk">Risk</div>
+              <div class="step" data-focus="principle-learn">Change</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid3" id="mainGrid7">
+        <section class="panel" id="principlesA">
+          <div class="header">
+            <div class="kicker">Principles</div>
+            <h2>Principles • Column A</h2>
+            <p>Behaviours and decision patterns (first half).</p>
+          </div>
+          <div class="content" id="principlesAList"><details class="card" id="principle-stewardship">
+    <summary>
+      <div class="left">
+        <div class="badge">P1</div>
+        <div class="meta">
+          <p class="name">Be a diligent, respectful, and caring steward</p>
+          <p class="hint">Act responsibly for resources, people, society, safety, and the long-term.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Integrity and duty of care</li><li>Balance short-term with long-term sustainability</li><li>Protect people, environment, reputation</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Transparent trade-offs</li><li>Clear accountability + governance</li><li>Safety/compliance/quality built-in</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-team">
+    <summary>
+      <div class="left">
+        <div class="badge">P2</div>
+        <div class="meta">
+          <p class="name">Create a collaborative project team environment</p>
+          <p class="hint">Build trust, clarity, and healthy ways of working.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Psychological safety and teamwork</li><li>Shared norms reduce friction</li><li>Cross-functional collaboration</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Working agreements + escalation paths</li><li>Roles + decision rights</li><li>Retrospectives + facilitation</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-stakeholders">
+    <summary>
+      <div class="left">
+        <div class="badge">P3</div>
+        <div class="meta">
+          <p class="name">Engage effectively with stakeholders</p>
+          <p class="hint">Understand needs and influence to build alignment.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Identify stakeholders continuously</li><li>Build support/manage expectations</li><li>Communicate progress/trade-offs</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Stakeholder mapping + engagement plan</li><li>Governance forums</li><li>Decision logs/workshops</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-value">
+    <summary>
+      <div class="left">
+        <div class="badge">P4</div>
+        <div class="meta">
+          <p class="name">Focus on value</p>
+          <p class="hint">Deliver outcomes that matter—value is the target.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Clarify benefits and success criteria</li><li>Prioritise value work</li><li>Measure value realisation</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Benefits map + KPIs</li><li>Value-based prioritisation</li><li>Value reviews with sponsors/users</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-systems">
+    <summary>
+      <div class="left">
+        <div class="badge">P5</div>
+        <div class="meta">
+          <p class="name">Recognize, evaluate, and respond to system interactions</p>
+          <p class="hint">Projects sit inside systems—consider dependencies and ripple effects.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>See the whole system</li><li>Identify constraints/dependencies</li><li>Optimize overall outcome</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Dependency mapping</li><li>Interface management</li><li>Constraint-based planning</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-leadership">
+    <summary>
+      <div class="left">
+        <div class="badge">P6</div>
+        <div class="meta">
+          <p class="name">Demonstrate leadership behaviors</p>
+          <p class="hint">Lead through vision, empathy, influence, decisiveness.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Create clarity and motivate</li><li>Enable decisions under uncertainty</li><li>Build capability in others</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Servant leadership + coaching</li><li>Option-based decisions</li><li>Remove blockers visibly</li></ul>
+        </div>
+      </div>
+    </div>
+  </details></div>
+        </section>
+
+        <section class="panel" id="principlesB">
+          <div class="header">
+            <div class="kicker">Principles</div>
+            <h2>Principles • Column B</h2>
+            <p>Behaviours and decision patterns (second half).</p>
+          </div>
+          <div class="content" id="principlesBList"><details class="card" id="principle-tailor">
+    <summary>
+      <div class="left">
+        <div class="badge">P7</div>
+        <div class="meta">
+          <p class="name">Tailor based on context</p>
+          <p class="hint">Fit approach to complexity, constraints, risk, and culture.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Choose lifecycle intentionally</li><li>Adapt without losing control</li><li>Scale practices to risk/size</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Tailoring workshop</li><li>Hybrid delivery models</li><li>Right-size documentation</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-quality">
+    <summary>
+      <div class="left">
+        <div class="badge">P8</div>
+        <div class="meta">
+          <p class="name">Build quality into processes and deliverables</p>
+          <p class="hint">Quality is designed in, not inspected later.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Prevent defects early</li><li>Align to acceptance criteria</li><li>Balance quality–cost–time</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Definition of Done + criteria</li><li>Reviews/testing/inspections</li><li>Metrics + root cause</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-complexity">
+    <summary>
+      <div class="left">
+        <div class="badge">P9</div>
+        <div class="meta">
+          <p class="name">Navigate complexity</p>
+          <p class="hint">Complexity needs learning loops and adaptability.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Reduce uncertainty via feedback</li><li>Manage emergent behaviour</li><li>Decide with imperfect info</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Pilots/prototypes</li><li>Scenario planning</li><li>Frequent reviews</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-risk">
+    <summary>
+      <div class="left">
+        <div class="badge">P10</div>
+        <div class="meta">
+          <p class="name">Optimize risk responses</p>
+          <p class="hint">Manage threats and opportunities proactively.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Evaluate uncertainty</li><li>Proportionate responses</li><li>Exploit opportunities too</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Risk workshops</li><li>Owners + actions</li><li>Contingency + reserves</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-adaptability">
+    <summary>
+      <div class="left">
+        <div class="badge">P11</div>
+        <div class="meta">
+          <p class="name">Embrace adaptability and resilience</p>
+          <p class="hint">Expect change—design for learning and recovery.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Adaptive plans/buffers</li><li>Respond quickly to disruption</li><li>Maintain momentum</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Rolling-wave planning</li><li>Fit-for-purpose change control</li><li>Recovery planning</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="principle-learn">
+    <summary>
+      <div class="left">
+        <div class="badge">P12</div>
+        <div class="meta">
+          <p class="name">Enable change to achieve the envisioned future state</p>
+          <p class="hint">Projects create change—ensure adoption and benefits.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Integrate change management</li><li>Support transition/training</li><li>Sustain benefits after handover</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Impact assessments</li><li>Readiness checks</li><li>Transition-to-ops planning</li></ul>
+        </div>
+      </div>
+    </div>
+  </details></div>
+        </section>
+
+        <section class="panel spanAll" id="domains">
+          <div class="header">
+            <div class="kicker">Performance Domains</div>
+            <h2>Performance Domains</h2>
+            <p>Where outcomes must be achieved.</p>
+          </div>
+          <div class="content" id="domainsList"><details class="card" id="pd-stakeholders">
+    <summary>
+      <div class="left">
+        <div class="badge">D1</div>
+        <div class="meta">
+          <p class="name">Stakeholders</p>
+          <p class="hint">Build alignment and engagement so the project can succeed.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Understand needs and influence</li><li>Maintain relationships</li><li>Secure decisions/support</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Stakeholder analysis</li><li>Comms plan + forums</li><li>Issue resolution</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-team">
+    <summary>
+      <div class="left">
+        <div class="badge">D2</div>
+        <div class="meta">
+          <p class="name">Team</p>
+          <p class="hint">Create a team that can deliver predictably and adaptively.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>High-performing capability</li><li>Working norms</li><li>Autonomy with boundaries</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Team charter</li><li>Cadence (stand-ups/reviews)</li><li>Capacity planning</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-approach">
+    <summary>
+      <div class="left">
+        <div class="badge">D3</div>
+        <div class="meta">
+          <p class="name">Development Approach &amp; Life Cycle</p>
+          <p class="hint">Choose and tailor predictive, adaptive, or hybrid approaches.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Lifecycle fit to uncertainty</li><li>Phases + gates</li><li>Enable learning</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Tailoring rationale</li><li>Stage gates / releases</li><li>Governance aligned</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-planning">
+    <summary>
+      <div class="left">
+        <div class="badge">D4</div>
+        <div class="meta">
+          <p class="name">Planning</p>
+          <p class="hint">Create a plan that is realistic, adaptive, and decision-ready.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Integrate scope/schedule/cost/resources</li><li>Plan risk/quality/procurement/comms</li><li>Rolling-wave where needed</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Baselines + forecasts</li><li>Dependency mapping</li><li>Right-sized change control</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-work">
+    <summary>
+      <div class="left">
+        <div class="badge">D5</div>
+        <div class="meta">
+          <p class="name">Project Work</p>
+          <p class="hint">Execute with visibility, control, and continuous learning.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Coordinate teams/suppliers</li><li>Manage issues/decisions/interfaces</li><li>Maintain transparency</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Weekly rhythm + action tracking</li><li>Interface management</li><li>Lessons learned</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-delivery">
+    <summary>
+      <div class="left">
+        <div class="badge">D6</div>
+        <div class="meta">
+          <p class="name">Delivery</p>
+          <p class="hint">Deliver outputs and outcomes that achieve intended value.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Meet acceptance + quality</li><li>Incremental delivery</li><li>Operational readiness</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Acceptance/commissioning plan</li><li>Handover strategy</li><li>Benefits tracking</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-measurement">
+    <summary>
+      <div class="left">
+        <div class="badge">D7</div>
+        <div class="meta">
+          <p class="name">Measurement</p>
+          <p class="hint">Use metrics to support decisions and improve performance.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Measure progress/outcomes</li><li>Forecast/manage variance</li><li>Evidence-based decisions</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Dashboards + reporting rhythm</li><li>Leading indicators</li><li>Decision-ready insights</li></ul>
+        </div>
+      </div>
+    </div>
+  </details><details class="card" id="pd-uncertainty">
+    <summary>
+      <div class="left">
+        <div class="badge">D8</div>
+        <div class="meta">
+          <p class="name">Uncertainty</p>
+          <p class="hint">Manage risk, ambiguity, and complexity throughout.</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul><li>Evaluate uncertainty continuously</li><li>Proportionate responses</li><li>Adapt as new info emerges</li></ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul><li>Risk + assumptions log</li><li>Scenario planning</li><li>Experiments/pilots</li></ul>
+        </div>
+      </div>
+    </div>
+  </details></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="note">Mining the Mind • PMBOK Guide App • transparency • accountability • delivery</div>
+      <div>Keyboard: <span class="kbd">Ctrl/Cmd+K</span> search • <span class="kbd">Ctrl/Cmd+P</span> presentation • <span class="kbd">Esc</span> close ITTO Library</div>
+    </div>
+  </div>
+
+  <div class="watermark">Mining the Mind • PMBOK Guide</div>
+
+  <!-- ITTO LIBRARY MODAL -->
+  <div id="ittoModal" class="modalBack hide" role="dialog" aria-modal="true" aria-labelledby="ittoModalTitle">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div>
+          <div class="kicker">PMBOK 6th • ITTO Library</div>
+          <h3 id="ittoModalTitle">Add / Edit ITTO</h3>
+          <p id="ittoModalSub">Paste ITTOs from your licensed material. Stored locally in this browser (not uploaded anywhere).</p>
+        </div>
+        <button class="btn" id="ittoModalClose" type="button">✕ Close</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="modalGrid">
+          <!-- Left: process picker -->
+          <div class="pane">
+            <div class="lbl">Process Picker</div>
+
+            <div class="field">
+              <input id="ittoProcSearch" class="input" type="search" placeholder="Search process name (e.g., WBS, schedule, change)">
+              <div class="smallNote">Tip: click a process, then <b>Load</b>.</div>
+            </div>
+
+            <div class="field">
+              <select id="ittoProcSelect" size="12" aria-label="Process list"><option value="Acquire Resources">● Acquire Resources</option><option value="Close Project or Phase">● Close Project or Phase</option><option value="Collect Requirements">● Collect Requirements</option><option value="Conduct Procurements">● Conduct Procurements</option><option value="Control Costs">● Control Costs</option><option value="Control Procurements">● Control Procurements</option><option value="Control Quality">● Control Quality</option><option value="Control Resources">● Control Resources</option><option value="Control Schedule">● Control Schedule</option><option value="Control Scope">● Control Scope</option><option value="Create WBS">● Create WBS</option><option value="Define Activities">● Define Activities</option><option value="Define Scope">● Define Scope</option><option value="Determine Budget">● Determine Budget</option><option value="Develop Project Charter">● Develop Project Charter</option><option value="Develop Project Management Plan">● Develop Project Management Plan</option><option value="Develop Schedule">● Develop Schedule</option><option value="Develop Team">● Develop Team</option><option value="Direct and Manage Project Work">● Direct and Manage Project Work</option><option value="Estimate Activity Durations">● Estimate Activity Durations</option><option value="Estimate Activity Resources">● Estimate Activity Resources</option><option value="Estimate Costs">● Estimate Costs</option><option value="Identify Risks">● Identify Risks</option><option value="Identify Stakeholders">● Identify Stakeholders</option><option value="Implement Risk Responses">● Implement Risk Responses</option><option value="Manage Communications">● Manage Communications</option><option value="Manage Project Knowledge">● Manage Project Knowledge</option><option value="Manage Quality">● Manage Quality</option><option value="Manage Stakeholder Engagement">● Manage Stakeholder Engagement</option><option value="Manage Team">● Manage Team</option><option value="Monitor and Control Project Work">● Monitor and Control Project Work</option><option value="Monitor Communications">● Monitor Communications</option><option value="Monitor Risks">● Monitor Risks</option><option value="Monitor Stakeholder Engagement">● Monitor Stakeholder Engagement</option><option value="Perform Integrated Change Control">● Perform Integrated Change Control</option><option value="Perform Qualitative Risk Analysis">● Perform Qualitative Risk Analysis</option><option value="Perform Quantitative Risk Analysis">● Perform Quantitative Risk Analysis</option><option value="Plan Communications Management">● Plan Communications Management</option><option value="Plan Cost Management">● Plan Cost Management</option><option value="Plan Procurement Management">● Plan Procurement Management</option><option value="Plan Quality Management">● Plan Quality Management</option><option value="Plan Resource Management">● Plan Resource Management</option><option value="Plan Risk Management">● Plan Risk Management</option><option value="Plan Risk Responses">● Plan Risk Responses</option><option value="Plan Schedule Management">● Plan Schedule Management</option><option value="Plan Scope Management">● Plan Scope Management</option><option value="Plan Stakeholder Engagement">● Plan Stakeholder Engagement</option><option value="Sequence Activities">● Sequence Activities</option><option value="Validate Scope">● Validate Scope</option></select>
+              <div class="smallNote" id="ittoStats">ITTO loaded: 49 / 49 • Stored locally in this browser</div>
+            </div>
+
+            <div class="actionsRow">
+              <button class="btn primary" id="ittoLoad" type="button">Load</button>
+              <button class="btn" id="ittoBlank" type="button">New blank</button>
+            </div>
+
+            <div class="smallNote">
+              Export/Import lets you move your ITTO library between laptops.
+            </div>
+          </div>
+
+          <!-- Right: editor -->
+          <div class="pane">
+            <div class="lbl">Editor</div>
+
+            <div class="formGrid">
+              <div class="field span2">
+                <label class="smallNote" for="ittoProcName"><b>Selected process</b></label>
+                <input id="ittoProcName" class="input" type="text" disabled="" value="—">
+              </div>
+
+              <div class="field span2">
+                <label class="smallNote" for="ittoPurposeEdit"><b>Purpose</b></label>
+                <textarea id="ittoPurposeEdit" placeholder="One paragraph: why this process exists."></textarea>
+              </div>
+
+              <div class="field">
+                <label class="smallNote" for="ittoInputsEdit"><b>Inputs</b> (one per line)</label>
+                <textarea id="ittoInputsEdit" placeholder="Paste each input on a new line"></textarea>
+              </div>
+
+              <div class="field">
+                <label class="smallNote" for="ittoToolsEdit"><b>Tools &amp; Techniques</b> (one per line)</label>
+                <textarea id="ittoToolsEdit" placeholder="Paste each tool/technique on a new line"></textarea>
+              </div>
+
+              <div class="field span2">
+                <label class="smallNote" for="ittoOutputsEdit"><b>Outputs</b> (one per line)</label>
+                <textarea id="ittoOutputsEdit" placeholder="Paste each output on a new line"></textarea>
+              </div>
+            </div>
+
+            <div class="actionsRow">
+              <div class="actionsRight">
+                <button class="btn" id="ittoDelete" type="button">🗑 Delete</button>
+                <button class="btn" id="ittoReset" type="button">↺ Reset to defaults</button>
+                <button class="btn" id="ittoExport" type="button">⇩ Export JSON</button>
+                <label class="btn" for="ittoImportFile" style="cursor:pointer">⇧ Import JSON</label>
+                <input id="ittoImportFile" type="file" accept="application/json" class="hide">
+                <button class="btn primary" id="ittoSave" type="button">✓ Save</button>
+              </div>
+            </div>
+
+            <div class="smallNote">
+              After saving: close this window → click the process pill in the matrix → screenshot the ITTO drawer.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    OPTIONAL BULK ITTO LOAD (paste your full JSON object here)
+    Format: { "Process Name": { "purpose":"...", "inputs":[...], "tools":[...], "outputs":[...] }, ... }
+  -->
+  <script id="ittoBulkJson" type="application/json">
+{}
+  </script>
+
+<script>
+/* ---------------------------
+   PMBOK 7 DATA
+---------------------------- */
+const PMBOK7 = [
+  { section:"Principles", id:"principle-stewardship", code:"P1", title:"Be a diligent, respectful, and caring steward",
+    summary:"Act responsibly for resources, people, society, safety, and the long-term.",
+    intent:["Integrity and duty of care","Balance short-term with long-term sustainability","Protect people, environment, reputation"],
+    practices:["Transparent trade-offs","Clear accountability + governance","Safety/compliance/quality built-in"]
+  },
+  { section:"Principles", id:"principle-team", code:"P2", title:"Create a collaborative project team environment",
+    summary:"Build trust, clarity, and healthy ways of working.",
+    intent:["Psychological safety and teamwork","Shared norms reduce friction","Cross-functional collaboration"],
+    practices:["Working agreements + escalation paths","Roles + decision rights","Retrospectives + facilitation"]
+  },
+  { section:"Principles", id:"principle-stakeholders", code:"P3", title:"Engage effectively with stakeholders",
+    summary:"Understand needs and influence to build alignment.",
+    intent:["Identify stakeholders continuously","Build support/manage expectations","Communicate progress/trade-offs"],
+    practices:["Stakeholder mapping + engagement plan","Governance forums","Decision logs/workshops"]
+  },
+  { section:"Principles", id:"principle-value", code:"P4", title:"Focus on value",
+    summary:"Deliver outcomes that matter—value is the target.",
+    intent:["Clarify benefits and success criteria","Prioritise value work","Measure value realisation"],
+    practices:["Benefits map + KPIs","Value-based prioritisation","Value reviews with sponsors/users"]
+  },
+  { section:"Principles", id:"principle-systems", code:"P5", title:"Recognize, evaluate, and respond to system interactions",
+    summary:"Projects sit inside systems—consider dependencies and ripple effects.",
+    intent:["See the whole system","Identify constraints/dependencies","Optimize overall outcome"],
+    practices:["Dependency mapping","Interface management","Constraint-based planning"]
+  },
+  { section:"Principles", id:"principle-leadership", code:"P6", title:"Demonstrate leadership behaviors",
+    summary:"Lead through vision, empathy, influence, decisiveness.",
+    intent:["Create clarity and motivate","Enable decisions under uncertainty","Build capability in others"],
+    practices:["Servant leadership + coaching","Option-based decisions","Remove blockers visibly"]
+  },
+  { section:"Principles", id:"principle-tailor", code:"P7", title:"Tailor based on context",
+    summary:"Fit approach to complexity, constraints, risk, and culture.",
+    intent:["Choose lifecycle intentionally","Adapt without losing control","Scale practices to risk/size"],
+    practices:["Tailoring workshop","Hybrid delivery models","Right-size documentation"]
+  },
+  { section:"Principles", id:"principle-quality", code:"P8", title:"Build quality into processes and deliverables",
+    summary:"Quality is designed in, not inspected later.",
+    intent:["Prevent defects early","Align to acceptance criteria","Balance quality–cost–time"],
+    practices:["Definition of Done + criteria","Reviews/testing/inspections","Metrics + root cause"]
+  },
+  { section:"Principles", id:"principle-complexity", code:"P9", title:"Navigate complexity",
+    summary:"Complexity needs learning loops and adaptability.",
+    intent:["Reduce uncertainty via feedback","Manage emergent behaviour","Decide with imperfect info"],
+    practices:["Pilots/prototypes","Scenario planning","Frequent reviews"]
+  },
+  { section:"Principles", id:"principle-risk", code:"P10", title:"Optimize risk responses",
+    summary:"Manage threats and opportunities proactively.",
+    intent:["Evaluate uncertainty","Proportionate responses","Exploit opportunities too"],
+    practices:["Risk workshops","Owners + actions","Contingency + reserves"]
+  },
+  { section:"Principles", id:"principle-adaptability", code:"P11", title:"Embrace adaptability and resilience",
+    summary:"Expect change—design for learning and recovery.",
+    intent:["Adaptive plans/buffers","Respond quickly to disruption","Maintain momentum"],
+    practices:["Rolling-wave planning","Fit-for-purpose change control","Recovery planning"]
+  },
+  { section:"Principles", id:"principle-learn", code:"P12", title:"Enable change to achieve the envisioned future state",
+    summary:"Projects create change—ensure adoption and benefits.",
+    intent:["Integrate change management","Support transition/training","Sustain benefits after handover"],
+    practices:["Impact assessments","Readiness checks","Transition-to-ops planning"]
+  },
+
+  { section:"Performance Domains", id:"pd-stakeholders", code:"D1", title:"Stakeholders",
+    summary:"Build alignment and engagement so the project can succeed.",
+    intent:["Understand needs and influence","Maintain relationships","Secure decisions/support"],
+    practices:["Stakeholder analysis","Comms plan + forums","Issue resolution"]
+  },
+  { section:"Performance Domains", id:"pd-team", code:"D2", title:"Team",
+    summary:"Create a team that can deliver predictably and adaptively.",
+    intent:["High-performing capability","Working norms","Autonomy with boundaries"],
+    practices:["Team charter","Cadence (stand-ups/reviews)","Capacity planning"]
+  },
+  { section:"Performance Domains", id:"pd-approach", code:"D3", title:"Development Approach & Life Cycle",
+    summary:"Choose and tailor predictive, adaptive, or hybrid approaches.",
+    intent:["Lifecycle fit to uncertainty","Phases + gates","Enable learning"],
+    practices:["Tailoring rationale","Stage gates / releases","Governance aligned"]
+  },
+  { section:"Performance Domains", id:"pd-planning", code:"D4", title:"Planning",
+    summary:"Create a plan that is realistic, adaptive, and decision-ready.",
+    intent:["Integrate scope/schedule/cost/resources","Plan risk/quality/procurement/comms","Rolling-wave where needed"],
+    practices:["Baselines + forecasts","Dependency mapping","Right-sized change control"]
+  },
+  { section:"Performance Domains", id:"pd-work", code:"D5", title:"Project Work",
+    summary:"Execute with visibility, control, and continuous learning.",
+    intent:["Coordinate teams/suppliers","Manage issues/decisions/interfaces","Maintain transparency"],
+    practices:["Weekly rhythm + action tracking","Interface management","Lessons learned"]
+  },
+  { section:"Performance Domains", id:"pd-delivery", code:"D6", title:"Delivery",
+    summary:"Deliver outputs and outcomes that achieve intended value.",
+    intent:["Meet acceptance + quality","Incremental delivery","Operational readiness"],
+    practices:["Acceptance/commissioning plan","Handover strategy","Benefits tracking"]
+  },
+  { section:"Performance Domains", id:"pd-measurement", code:"D7", title:"Measurement",
+    summary:"Use metrics to support decisions and improve performance.",
+    intent:["Measure progress/outcomes","Forecast/manage variance","Evidence-based decisions"],
+    practices:["Dashboards + reporting rhythm","Leading indicators","Decision-ready insights"]
+  },
+  { section:"Performance Domains", id:"pd-uncertainty", code:"D8", title:"Uncertainty",
+    summary:"Manage risk, ambiguity, and complexity throughout.",
+    intent:["Evaluate uncertainty continuously","Proportionate responses","Adapt as new info emerges"],
+    practices:["Risk + assumptions log","Scenario planning","Experiments/pilots"]
+  }
+];
+
+/* ---------------------------
+   PMBOK 6 MATRIX
+---------------------------- */
+const PMBOK6_MATRIX = [
+  { ka:"Integration", key:"integration",
+    I:["Develop Project Charter"],
+    P:["Develop Project Management Plan"],
+    E:["Direct and Manage Project Work","Manage Project Knowledge"],
+    M:["Monitor and Control Project Work","Perform Integrated Change Control"],
+    C:["Close Project or Phase"]
+  },
+  { ka:"Scope", key:"scope",
+    I:[],
+    P:["Plan Scope Management","Collect Requirements","Define Scope","Create WBS"],
+    E:[],
+    M:["Validate Scope","Control Scope"],
+    C:[]
+  },
+  { ka:"Schedule", key:"schedule",
+    I:[],
+    P:["Plan Schedule Management","Define Activities","Sequence Activities","Estimate Activity Durations","Develop Schedule"],
+    E:[],
+    M:["Control Schedule"],
+    C:[]
+  },
+  { ka:"Cost", key:"cost",
+    I:[],
+    P:["Plan Cost Management","Estimate Costs","Determine Budget"],
+    E:[],
+    M:["Control Costs"],
+    C:[]
+  },
+  { ka:"Quality", key:"quality",
+    I:[],
+    P:["Plan Quality Management"],
+    E:["Manage Quality"],
+    M:["Control Quality"],
+    C:[]
+  },
+  { ka:"Resource", key:"resource",
+    I:[],
+    P:["Plan Resource Management","Estimate Activity Resources"],
+    E:["Acquire Resources","Develop Team","Manage Team"],
+    M:["Control Resources"],
+    C:[]
+  },
+  { ka:"Communications", key:"communications",
+    I:[],
+    P:["Plan Communications Management"],
+    E:["Manage Communications"],
+    M:["Monitor Communications"],
+    C:[]
+  },
+  { ka:"Risk", key:"risk",
+    I:[],
+    P:["Plan Risk Management","Identify Risks","Perform Qualitative Risk Analysis","Perform Quantitative Risk Analysis","Plan Risk Responses"],
+    E:["Implement Risk Responses"],
+    M:["Monitor Risks"],
+    C:[]
+  },
+  { ka:"Procurement", key:"procurement",
+    I:[],
+    P:["Plan Procurement Management"],
+    E:["Conduct Procurements"],
+    M:["Control Procurements"],
+    C:[]
+  },
+  { ka:"Stakeholder", key:"stakeholder",
+    I:["Identify Stakeholders"],
+    P:["Plan Stakeholder Engagement"],
+    E:["Manage Stakeholder Engagement"],
+    M:["Monitor Stakeholder Engagement"],
+    C:[]
+  }
+];
+
+/* ---------------------------
+   PMBOK 6 ASSISTANT (ROW)
+---------------------------- */
+const ASSIST_ROW = [
+  {
+    key:"init",
+    title:"Initiating",
+    desc:"Authorise + align",
+    bullets:[
+      "Charter mandate + success criteria",
+      "Stakeholder map + decision owners",
+      "Governance: reporting, escalation, logs"
+    ]
+  },
+  {
+    key:"plan",
+    title:"Planning",
+    desc:"Baseline + control",
+    bullets:[
+      "Scope/WBS + requirements trace",
+      "Schedule + resources + cost baseline",
+      "Risk, procurement, comms, quality plans"
+    ]
+  },
+  {
+    key:"exec",
+    title:"Executing",
+    desc:"Deliver + manage",
+    bullets:[
+      "Mobilise team + suppliers",
+      "Manage quality + comms + stakeholders",
+      "Capture knowledge + issues/decisions"
+    ]
+  },
+  {
+    key:"mc",
+    title:"Monitoring & Controlling",
+    desc:"Track + change",
+    bullets:[
+      "Progress vs baseline + forecasting",
+      "Integrated change control",
+      "Risk monitoring + transparent reporting"
+    ]
+  },
+  {
+    key:"close",
+    title:"Closing",
+    desc:"Accept + archive",
+    bullets:[
+      "Formal acceptance + handover",
+      "Close procurements + financial closure",
+      "Lessons learned + audit pack archive"
+    ]
+  }
+];
+
+/* ---------------------------
+   PMBOK 6 ITTO DEFAULTS (small starter set)
+---------------------------- */
+const ITTO_DEFAULT = {
+  "Develop Project Charter": {
+    purpose: "Formally authorises the project and gives the PM authority to apply resources.",
+    inputs:[
+      "Business documents (business case, benefits management plan)",
+      "Agreements",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    tools:[
+      "Expert judgment",
+      "Data gathering (brainstorming, focus groups, interviews)",
+      "Interpersonal & team skills (facilitation, conflict mgmt)",
+      "Meetings"
+    ],
+    outputs:[
+      "Project charter",
+      "Assumption log"
+    ]
+  },
+  "Identify Stakeholders": {
+    purpose: "Identifies stakeholders and analyses their interests, influence, and impact.",
+    inputs:[
+      "Project charter",
+      "Business documents",
+      "Project documents (issue log, assumptions log)",
+      "Agreements, EEF, OPA"
+    ],
+    tools:[
+      "Expert judgment",
+      "Data gathering (questionnaires, interviews)",
+      "Data analysis (stakeholder analysis)",
+      "Data representation (power/interest, influence/impact)",
+      "Meetings"
+    ],
+    outputs:[
+      "Stakeholder register",
+      "Change requests (if needed)",
+      "Project documents updates"
+    ]
+  },
+  "Develop Project Management Plan": {
+    purpose: "Integrates all subsidiary plans into one approved baseline/control document.",
+    inputs:["Project charter","Outputs from other planning processes","EEF, OPA"],
+    tools:["Expert judgment","Data gathering","Facilitation","Meetings"],
+    outputs:["Project management plan (baselines + subsidiary plans)"]
+  },
+  "Create WBS": {
+    purpose: "Decomposes deliverables into manageable work packages for planning and control.",
+    inputs:["Project scope statement","Requirements documentation","EEF, OPA"],
+    tools:["Decomposition","Expert judgment"],
+    outputs:["Scope baseline (WBS, WBS dictionary, scope statement)","Project documents updates"]
+  },
+  "Perform Integrated Change Control": {
+    purpose: "Reviews/approves/rejects changes and manages baseline updates transparently.",
+    inputs:["Project management plan","Change requests","Work performance reports","EEF, OPA"],
+    tools:["Change control tools","Expert judgment","Meetings"],
+    outputs:["Approved change requests","Project management plan updates","Project documents updates"]
+  },
+  "Close Project or Phase": {
+    purpose: "Finalises activities and formally closes the project/phase with traceability.",
+    inputs:["Project charter","Project management plan","Accepted deliverables","Procurement documentation","EEF, OPA"],
+    tools:["Expert judgment","Document analysis","Meetings"],
+    outputs:["Final product/service/result transition","Final report","OPA updates","Project documents updates"]
+  }
+};
+
+const ITTO_STORAGE_KEY = "sbm_pmbok6_itto_v1";
+let ITTO = {};
+let currentProcessSelected = null;
+
+/* ---------------------------
+   DOM
+---------------------------- */
+const qEl = document.getElementById("q");
+const tab6 = document.getElementById("tab6");
+const tab7 = document.getElementById("tab7");
+const view6 = document.getElementById("view6");
+const view7 = document.getElementById("view7");
+
+const presentToggle = document.getElementById("presentToggle");
+const expandAllBtn = document.getElementById("expandAll");
+const collapseAllBtn = document.getElementById("collapseAll");
+const focusTopBtn = document.getElementById("focusTop");
+
+const ittoLibraryBtn = document.getElementById("ittoLibraryBtn");
+
+const principlesAList = document.getElementById("principlesAList");
+const principlesBList = document.getElementById("principlesBList");
+const domainsList = document.getElementById("domainsList");
+
+const matrixBody = document.getElementById("matrixBody");
+const assistRow = document.getElementById("assistRow");
+
+const ittoTitle = document.getElementById("ittoTitle");
+const ittoPurpose = document.getElementById("ittoPurpose");
+const ittoInputs = document.getElementById("ittoInputs");
+const ittoTools = document.getElementById("ittoTools");
+const ittoOutputs = document.getElementById("ittoOutputs");
+const ittoClose = document.getElementById("ittoClose");
+const ittoEditBtn = document.getElementById("ittoEditBtn");
+
+/* Modal DOM */
+const ittoModal = document.getElementById("ittoModal");
+const ittoModalClose = document.getElementById("ittoModalClose");
+const ittoProcSearch = document.getElementById("ittoProcSearch");
+const ittoProcSelect = document.getElementById("ittoProcSelect");
+const ittoStats = document.getElementById("ittoStats");
+
+const ittoLoadBtn = document.getElementById("ittoLoad");
+const ittoBlankBtn = document.getElementById("ittoBlank");
+const ittoSaveBtn = document.getElementById("ittoSave");
+const ittoDeleteBtn = document.getElementById("ittoDelete");
+const ittoResetBtn = document.getElementById("ittoReset");
+const ittoExportBtn = document.getElementById("ittoExport");
+const ittoImportFile = document.getElementById("ittoImportFile");
+
+const ittoProcName = document.getElementById("ittoProcName");
+const ittoPurposeEdit = document.getElementById("ittoPurposeEdit");
+const ittoInputsEdit = document.getElementById("ittoInputsEdit");
+const ittoToolsEdit = document.getElementById("ittoToolsEdit");
+const ittoOutputsEdit = document.getElementById("ittoOutputsEdit");
+
+let activeEdition = 6;
+let currentEditProc = null;
+
+/* ---------------------------
+   Helpers
+---------------------------- */
+function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+
+function escapeHtml(s){
+  return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+}
+
+function toLines(text){
+  return (text || "")
+    .split(/\r?\n/)
+    .map(x => x.trim())
+    .filter(Boolean);
+}
+
+function setPresent(on){
+  document.body.classList.toggle("present", on);
+  presentToggle.dataset.on = String(on);
+}
+
+function setAll(open){
+  const scope = activeEdition === 7 ? view7 : view6;
+  scope.querySelectorAll("details.card").forEach(d => d.open = open);
+}
+
+function focusTo(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(el.tagName.toLowerCase() === "details") el.open = true;
+  el.scrollIntoView({behavior:"smooth", block:"start"});
+  el.style.outline = "2px solid rgba(29,78,216,.35)";
+  el.style.boxShadow = "0 0 0 6px rgba(29,78,216,.10)";
+  setTimeout(()=>{ el.style.outline=""; el.style.boxShadow=""; }, 900);
+}
+
+/* ---------------------------
+   ITTO "real loaded" check (used everywhere)
+---------------------------- */
+function hasRealItto(it){
+  if(!it) return false;
+  const purposeOk = (it.purpose || "").trim().length > 0;
+  const inputsOk  = Array.isArray(it.inputs)  && it.inputs.length  > 0;
+  const toolsOk   = Array.isArray(it.tools)   && it.tools.length   > 0;
+  const outputsOk = Array.isArray(it.outputs) && it.outputs.length > 0;
+  return purposeOk || inputsOk || toolsOk || outputsOk;
+}
+
+/* ---------------------------
+   KA highlight (fixed + persistent)
+---------------------------- */
+let activeKA = null;
+
+function applyKAHighlight(){
+  document.querySelectorAll("#matrixBody tr").forEach(tr => tr.style.background = "");
+  if(!activeKA) return;
+  document.querySelectorAll(`#matrixBody tr[data-ka="${activeKA}"]`).forEach(tr => {
+    tr.style.background = "linear-gradient(135deg, rgba(29,78,216,.07), rgba(6,182,212,.05))";
+  });
+}
+
+function highlightKA(key){
+  activeKA = (!key || key === "clear") ? null : key;
+  applyKAHighlight();
+}
+
+/* ---------------------------
+   Bulk ITTO inline JSON loader
+---------------------------- */
+function loadInlineBulkITTO(){
+  const el = document.getElementById("ittoBulkJson");
+  if(!el) return {};
+  const txt = (el.textContent || "").trim();
+  if(!txt) return {};
+  try{
+    const parsed = JSON.parse(txt);
+    if(parsed && typeof parsed === "object") return parsed;
+  }catch(e){
+    // invalid JSON in inline block -> ignore
+  }
+  return {};
+}
+
+/* ---------------------------
+   ITTO persistence
+---------------------------- */
+function loadITTO(){
+  ITTO = deepClone(ITTO_DEFAULT);
+
+  // 1) Optional inline bulk JSON (paste once, loads every time)
+  const inlineBulk = loadInlineBulkITTO();
+  if(inlineBulk && typeof inlineBulk === "object"){
+    ITTO = { ...ITTO, ...inlineBulk };
+  }
+
+  // 2) LocalStorage overrides (your edits/imports)
+  try{
+    const raw = localStorage.getItem(ITTO_STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && typeof parsed === "object"){
+        ITTO = { ...ITTO, ...parsed };
+      }
+    }
+  }catch(e){
+    // ignore
+  }
+}
+
+function saveITTO(){
+  try{
+    localStorage.setItem(ITTO_STORAGE_KEY, JSON.stringify(ITTO));
+  }catch(e){
+    // ignore
+  }
+}
+
+/* ---------------------------
+   PMBOK7 rendering
+---------------------------- */
+function matchesFilter7(item, ft){
+  if(!ft) return true;
+  const blob = (item.title+" "+item.summary+" "+item.intent.join(" ")+" "+item.practices.join(" ")).toLowerCase();
+  return blob.includes(ft);
+}
+
+function cardTemplate7(item){
+  const details = document.createElement("details");
+  details.className = "card";
+  details.id = item.id;
+
+  const intentLis = item.intent.map(x => `<li>${x}</li>`).join("");
+  const practiceLis = item.practices.map(x => `<li>${x}</li>`).join("");
+
+  details.innerHTML = `
+    <summary>
+      <div class="left">
+        <div class="badge">${item.code}</div>
+        <div class="meta">
+          <p class="name">${item.title}</p>
+          <p class="hint">${item.summary}</p>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">⌄</div>
+    </summary>
+    <div class="body">
+      <div class="row">
+        <div class="box">
+          <h4>Intent</h4>
+          <ul>${intentLis}</ul>
+        </div>
+        <div class="box">
+          <h4>Practical moves</h4>
+          <ul>${practiceLis}</ul>
+        </div>
+      </div>
+    </div>
+  `;
+  return details;
+}
+
+function render7(filterText=""){
+  const ft = filterText.trim().toLowerCase();
+  principlesAList.innerHTML = "";
+  principlesBList.innerHTML = "";
+  domainsList.innerHTML = "";
+
+  const principles = PMBOK7.filter(d => d.section === "Principles").filter(d => matchesFilter7(d, ft));
+  const domains = PMBOK7.filter(d => d.section === "Performance Domains").filter(d => matchesFilter7(d, ft));
+
+  const mid = Math.ceil(principles.length / 2);
+  principles.slice(0, mid).forEach(item => principlesAList.appendChild(cardTemplate7(item)));
+  principles.slice(mid).forEach(item => principlesBList.appendChild(cardTemplate7(item)));
+  domains.forEach(item => domainsList.appendChild(cardTemplate7(item)));
+}
+
+/* ---------------------------
+   PMBOK6 rendering
+---------------------------- */
+function render6Matrix(filterText=""){
+  const ft = filterText.trim().toLowerCase();
+  matrixBody.innerHTML = "";
+
+  const rows = PMBOK6_MATRIX.filter(r => {
+    if(!ft) return true;
+    const blob = (r.ka + " " + [r.I,r.P,r.E,r.M,r.C].flat().join(" ")).toLowerCase();
+    return blob.includes(ft);
+  });
+
+  for(const r of rows){
+    const cell = (arr) => {
+      if(!arr || arr.length===0) return `<span style="color:rgba(71,85,105,.75)">—</span>`;
+      return arr.map(p => {
+        const hasItto = hasRealItto(ITTO[p]);
+        const cls = `tag process${hasItto ? " hasItto" : ""}`;
+        const tip = hasItto ? "Click to view ITTO" : "No ITTO yet (use ITTO Library to add)";
+        return `<span class="${cls}" data-proc="${escapeHtml(p)}" title="${tip}">${escapeHtml(p)}</span>`;
+      }).join("");
+    };
+
+    const tr = document.createElement("tr");
+    tr.dataset.ka = r.key;
+    tr.innerHTML = `
+      <td><strong>${r.ka}</strong></td>
+      <td>${cell(r.I)}</td>
+      <td>${cell(r.P)}</td>
+      <td>${cell(r.E)}</td>
+      <td>${cell(r.M)}</td>
+      <td>${cell(r.C)}</td>
+    `;
+    matrixBody.appendChild(tr);
+  }
+
+  // process pill click (FIX: stopPropagation + safe)
+  matrixBody.querySelectorAll(".tag.process").forEach(t=>{
+    t.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const name = t.getAttribute("data-proc");
+      showITTO(name);
+    });
+  });
+
+  // FIX: persist KA highlight after re-render/search
+  applyKAHighlight();
+}
+
+function showITTO(processName){
+  currentProcessSelected = processName;
+  ittoEditBtn.disabled = !processName;
+
+  const it = ITTO[processName];
+  const real = hasRealItto(it);
+
+  if(!it || !real){
+    ittoTitle.textContent = processName + " • ITTO (not loaded)";
+    ittoPurpose.textContent = it
+      ? "This ITTO exists but is empty. Use ITTO Library to add content (paste from your licensed PMBOK material)."
+      : "Use ITTO Library to add this ITTO (paste from your licensed PMBOK material).";
+    ittoInputs.innerHTML = `<li style="color:rgba(71,85,105,.75)">—</li>`;
+    ittoTools.innerHTML = `<li style="color:rgba(71,85,105,.75)">—</li>`;
+    ittoOutputs.innerHTML = `<li style="color:rgba(71,85,105,.75)">—</li>`;
+    document.getElementById("ittoDrawer").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+
+  ittoTitle.textContent = processName + " • ITTO";
+  ittoPurpose.textContent = it.purpose || "";
+
+  ittoInputs.innerHTML = (it.inputs && it.inputs.length) ? it.inputs.map(x=>`<li>${escapeHtml(x)}</li>`).join("") : `<li style="color:rgba(71,85,105,.75)">—</li>`;
+  ittoTools.innerHTML  = (it.tools && it.tools.length) ? it.tools.map(x=>`<li>${escapeHtml(x)}</li>`).join("") : `<li style="color:rgba(71,85,105,.75)">—</li>`;
+  ittoOutputs.innerHTML= (it.outputs && it.outputs.length) ? it.outputs.map(x=>`<li>${escapeHtml(x)}</li>`).join("") : `<li style="color:rgba(71,85,105,.75)">—</li>`;
+
+  document.getElementById("ittoDrawer").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function clearITTO(){
+  currentProcessSelected = null;
+  ittoEditBtn.disabled = true;
+
+  ittoTitle.textContent = "Select a process to view ITTO";
+  ittoPurpose.textContent = "Click any process pill (e.g., “Develop Project Charter”) in the matrix above.";
+  ittoInputs.innerHTML = `<li style="color:rgba(71,85,105,.75)">—</li>`;
+  ittoTools.innerHTML = `<li style="color:rgba(71,85,105,.75)">—</li>`;
+  ittoOutputs.innerHTML = `<li style="color:rgba(71,85,105,.75)">—</li>`;
+}
+
+function renderAssistRow(activeKey="init"){
+  assistRow.innerHTML = "";
+  ASSIST_ROW.forEach(ph=>{
+    const div = document.createElement("div");
+    div.className = "assistPhase" + (ph.key===activeKey ? " active" : "");
+    div.setAttribute("data-phase", ph.key);
+    div.innerHTML = `
+      <h3>${ph.title}</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.45">${ph.desc}</p>
+      <ul>${ph.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+    `;
+    div.addEventListener("click", ()=>{
+      document.querySelectorAll(".assistPhase").forEach(x=>x.classList.remove("active"));
+      div.classList.add("active");
+      document.getElementById("m6-matrix").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+    assistRow.appendChild(div);
+  });
+}
+
+/* ---------------------------
+   ITTO Library UI
+---------------------------- */
+function allProcessNames(){
+  const names = new Set();
+  PMBOK6_MATRIX.forEach(r => [r.I,r.P,r.E,r.M,r.C].flat().forEach(p => names.add(p)));
+  return Array.from(names).sort((a,b)=>a.localeCompare(b));
+}
+const PROCESS_LIST = allProcessNames();
+
+function openITTOEditor(procName=null){
+  if(procName) currentEditProc = procName;
+
+  ittoModal.classList.remove("hide");
+  ittoProcSearch.value = "";
+  populateProcSelect(PROCESS_LIST);
+
+  if(currentEditProc){
+    selectProcInList(currentEditProc);
+    loadProcIntoEditor(currentEditProc);
+  } else {
+    ittoProcName.value = "—";
+    ittoPurposeEdit.value = "";
+    ittoInputsEdit.value = "";
+    ittoToolsEdit.value = "";
+    ittoOutputsEdit.value = "";
+  }
+
+  updateIttoStats();
+  setTimeout(()=> ittoProcSearch.focus(), 50);
+}
+
+function closeITTOEditor(){
+  ittoModal.classList.add("hide");
+}
+
+function populateProcSelect(list){
+  ittoProcSelect.innerHTML = "";
+  list.forEach(p=>{
+    const opt = document.createElement("option");
+    opt.value = p;
+    const loaded = hasRealItto(ITTO[p]);
+    opt.textContent = loaded ? `● ${p}` : `  ${p}`;
+    ittoProcSelect.appendChild(opt);
+  });
+}
+
+function selectProcInList(proc){
+  for(const opt of ittoProcSelect.options){
+    if(opt.value === proc){
+      opt.selected = true;
+      ittoProcSelect.scrollTop = Math.max(0, opt.offsetTop - 140);
+      return;
+    }
+  }
+}
+
+function loadProcIntoEditor(proc){
+  currentEditProc = proc;
+  ittoProcName.value = proc;
+
+  const it = ITTO[proc] || { purpose:"", inputs:[], tools:[], outputs:[] };
+  ittoPurposeEdit.value = it.purpose || "";
+  ittoInputsEdit.value = (it.inputs || []).join("\n");
+  ittoToolsEdit.value  = (it.tools  || []).join("\n");
+  ittoOutputsEdit.value= (it.outputs|| []).join("\n");
+}
+
+function saveEditorToITTO(){
+  if(!currentEditProc){
+    alert("Select a process first.");
+    return;
+  }
+  ITTO[currentEditProc] = {
+    purpose: (ittoPurposeEdit.value || "").trim(),
+    inputs: toLines(ittoInputsEdit.value),
+    tools: toLines(ittoToolsEdit.value),
+    outputs: toLines(ittoOutputsEdit.value)
+  };
+  saveITTO();
+  updateIttoStats();
+  render6Matrix(qEl.value || "");
+  showITTO(currentEditProc);
+  populateProcSelect(filterProcessList(ittoProcSearch.value || ""));
+}
+
+function deleteCurrentITTO(){
+  if(!currentEditProc){
+    alert("Select a process first.");
+    return;
+  }
+  if(!ITTO[currentEditProc]){
+    alert("No ITTO to delete for this process.");
+    return;
+  }
+  if(!confirm(`Delete ITTO for:\n\n${currentEditProc}\n\nThis only removes it from your browser.`)) return;
+
+  delete ITTO[currentEditProc];
+  saveITTO();
+  updateIttoStats();
+  render6Matrix(qEl.value || "");
+  showITTO(currentEditProc);
+  populateProcSelect(filterProcessList(ittoProcSearch.value || ""));
+  loadProcIntoEditor(currentEditProc);
+}
+
+function resetToDefaults(){
+  if(!confirm("Reset ITTO library back to defaults and remove your additions from this browser?")) return;
+  localStorage.removeItem(ITTO_STORAGE_KEY);
+  loadITTO();
+  updateIttoStats();
+  render6Matrix(qEl.value || "");
+  clearITTO();
+  populateProcSelect(filterProcessList(ittoProcSearch.value || ""));
+  currentEditProc = null;
+  ittoProcName.value = "—";
+  ittoPurposeEdit.value = "";
+  ittoInputsEdit.value = "";
+  ittoToolsEdit.value  = "";
+  ittoOutputsEdit.value= "";
+}
+
+function exportITTO(){
+  const payload = JSON.stringify(ITTO, null, 2);
+  const blob = new Blob([payload], {type:"application/json"});
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().slice(0,10);
+  a.href = URL.createObjectURL(blob);
+  a.download = `SBM_PMBOK6_ITTO_${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+
+function importITTOFile(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const parsed = JSON.parse(reader.result);
+      if(!parsed || typeof parsed !== "object"){
+        alert("Invalid JSON.");
+        return;
+      }
+      ITTO = { ...ITTO, ...parsed };
+      saveITTO();
+      updateIttoStats();
+      render6Matrix(qEl.value || "");
+      populateProcSelect(filterProcessList(ittoProcSearch.value || ""));
+      alert("ITTO JSON imported successfully.");
+    }catch(e){
+      alert("Could not parse JSON file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* FIX: correct loaded count (ignores blanks) */
+function countIttoLoaded(){
+  return Object.keys(ITTO).filter(k => hasRealItto(ITTO[k])).length;
+}
+function updateIttoStats(){
+  const loaded = countIttoLoaded();
+  const total = PROCESS_LIST.length;
+  ittoStats.textContent = `ITTO loaded: ${loaded} / ${total} • Stored locally in this browser`;
+}
+
+function filterProcessList(q){
+  const ft = (q||"").trim().toLowerCase();
+  if(!ft) return PROCESS_LIST;
+  return PROCESS_LIST.filter(p => p.toLowerCase().includes(ft));
+}
+
+/* ---------------------------
+   Edition switch
+---------------------------- */
+function setEdition(ed){
+  activeEdition = ed;
+
+  if(ed === 6){
+    tab6.classList.add("active"); tab7.classList.remove("active");
+    tab6.setAttribute("aria-selected","true"); tab7.setAttribute("aria-selected","false");
+    view6.classList.remove("hide"); view7.classList.add("hide");
+    ittoLibraryBtn.classList.remove("hide");
+    qEl.placeholder = "Search PMBOK 6 (e.g., charter, WBS, risk, procurement)";
+    qEl.value = "";
+
+    // reset KA highlight cleanly when switching in
+    activeKA = null;
+
+    renderAssistRow("init");
+    render6Matrix("");
+    clearITTO();
+  } else {
+    tab7.classList.add("active"); tab6.classList.remove("active");
+    tab7.setAttribute("aria-selected","true"); tab6.setAttribute("aria-selected","false");
+    view7.classList.remove("hide"); view6.classList.add("hide");
+    ittoLibraryBtn.classList.add("hide");
+    qEl.placeholder = "Search PMBOK 7 (e.g., value, tailoring, measurement)";
+    qEl.value = "";
+    render7("");
+  }
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ---------------------------
+   Init
+---------------------------- */
+loadITTO();
+render7("");
+renderAssistRow("init");
+render6Matrix("");
+clearITTO();
+updateIttoStats();
+
+/* ---------------------------
+   Events
+---------------------------- */
+tab6.addEventListener("click", ()=> setEdition(6));
+tab7.addEventListener("click", ()=> setEdition(7));
+
+qEl.addEventListener("input", (e)=>{
+  const v = e.target.value || "";
+  if(activeEdition === 6) render6Matrix(v);
+  else render7(v);
+});
+
+expandAllBtn.addEventListener("click", ()=> setAll(true));
+collapseAllBtn.addEventListener("click", ()=> setAll(false));
+
+presentToggle.addEventListener("click", ()=>{
+  const on = presentToggle.dataset.on === "true";
+  setPresent(!on);
+});
+
+focusTopBtn.addEventListener("click", ()=>{
+  const topTarget = activeEdition === 6 ? view6 : view7;
+  topTarget.scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+/* FIX: KA highlight ONLY from KA chips (event delegation) */
+document.getElementById("m6-matrix").addEventListener("click", (e)=>{
+  const tag = e.target.closest(".tag[data-ka]");
+  if(!tag) return;
+  highlightKA(tag.getAttribute("data-ka"));
+});
+
+/* PMBOK6 ITTO clear */
+ittoClose.addEventListener("click", clearITTO);
+
+/* PMBOK6 ITTO edit button */
+ittoEditBtn.addEventListener("click", ()=>{
+  if(currentProcessSelected) openITTOEditor(currentProcessSelected);
+  else openITTOEditor(null);
+});
+
+/* Top ITTO Library button */
+ittoLibraryBtn.addEventListener("click", ()=> openITTOEditor(currentProcessSelected));
+
+/* Modal events */
+ittoModalClose.addEventListener("click", closeITTOEditor);
+ittoModal.addEventListener("click", (e)=>{
+  if(e.target === ittoModal) closeITTOEditor();
+});
+
+ittoProcSearch.addEventListener("input", ()=>{
+  populateProcSelect(filterProcessList(ittoProcSearch.value || ""));
+});
+
+ittoProcSelect.addEventListener("dblclick", ()=>{
+  const proc = ittoProcSelect.value;
+  if(proc) loadProcIntoEditor(proc);
+});
+
+ittoLoadBtn.addEventListener("click", ()=>{
+  const proc = ittoProcSelect.value;
+  if(proc) loadProcIntoEditor(proc);
+});
+
+ittoBlankBtn.addEventListener("click", ()=>{
+  const proc = ittoProcSelect.value;
+  if(!proc){
+    alert("Select a process first.");
+    return;
+  }
+  currentEditProc = proc;
+  ittoProcName.value = proc;
+  ittoPurposeEdit.value = "";
+  ittoInputsEdit.value = "";
+  ittoToolsEdit.value  = "";
+  ittoOutputsEdit.value= "";
+});
+
+ittoSaveBtn.addEventListener("click", saveEditorToITTO);
+ittoDeleteBtn.addEventListener("click", deleteCurrentITTO);
+ittoResetBtn.addEventListener("click", resetToDefaults);
+ittoExportBtn.addEventListener("click", exportITTO);
+
+ittoImportFile.addEventListener("change", ()=>{
+  const f = ittoImportFile.files && ittoImportFile.files[0];
+  if(f) importITTOFile(f);
+  ittoImportFile.value = "";
+});
+
+/* PMBOK7 guide focus */
+document.querySelectorAll("#view7 .step[data-focus]").forEach(step=>{
+  step.addEventListener("click", ()=>{
+    document.querySelectorAll("#view7 .step").forEach(s=>s.classList.remove("active"));
+    step.classList.add("active");
+    focusTo(step.dataset.focus);
+  });
+});
+
+/* Keyboard shortcuts */
+document.addEventListener("keydown", (e)=>{
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k"){
+    e.preventDefault(); qEl.focus();
+  }
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p"){
+    e.preventDefault(); setPresent(true);
+  }
+  if((e.ctrlKey || e.metaKey) && e.key === "1"){
+    e.preventDefault(); setEdition(6);
+  }
+  if((e.ctrlKey || e.metaKey) && e.key === "2"){
+    e.preventDefault(); setEdition(7);
+  }
+  if(e.key === "Escape" && !ittoModal.classList.contains("hide")){
+    closeITTOEditor();
+  }
+});
+
+/* Default */
+setEdition(6);
+</script>
+
+
+</body></html>
