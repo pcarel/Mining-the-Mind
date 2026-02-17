@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0117)file:///C:/Users/ZAPV03371/Downloads/Saldanha%20Bay%20Municipality%20%E2%80%A2%20PMBOK%20Guide%20(6th%20+%207th).html -->
+<!-- saved from url=(0069)file:///C:/Users/ZAPV03371/Downloads/Mining_the_Mind_PMBOK_Guide.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1860,70 +1860,913 @@ const ASSIST_ROW = [
 ---------------------------- */
 const ITTO_DEFAULT = {
   "Develop Project Charter": {
-    purpose: "Formally authorises the project and gives the PM authority to apply resources.",
-    inputs:[
-      "Business documents (business case, benefits management plan)",
+    "purpose": "Authorizes the project and gives the project manager authority.",
+    "inputs": [
+      "Business documents",
       "Agreements",
       "Enterprise environmental factors (EEF)",
       "Organizational process assets (OPA)"
     ],
-    tools:[
+    "tools": [
       "Expert judgment",
-      "Data gathering (brainstorming, focus groups, interviews)",
-      "Interpersonal & team skills (facilitation, conflict mgmt)",
+      "Data gathering",
+      "Facilitation",
       "Meetings"
     ],
-    outputs:[
+    "outputs": [
       "Project charter",
-      "Assumption log"
-    ]
-  },
-  "Identify Stakeholders": {
-    purpose: "Identifies stakeholders and analyses their interests, influence, and impact.",
-    inputs:[
-      "Project charter",
-      "Business documents",
-      "Project documents (issue log, assumptions log)",
-      "Agreements, EEF, OPA"
-    ],
-    tools:[
-      "Expert judgment",
-      "Data gathering (questionnaires, interviews)",
-      "Data analysis (stakeholder analysis)",
-      "Data representation (power/interest, influence/impact)",
-      "Meetings"
-    ],
-    outputs:[
-      "Stakeholder register",
-      "Change requests (if needed)",
-      "Project documents updates"
+      "Assumption log",
+      "Updates / change requests as appropriate"
     ]
   },
   "Develop Project Management Plan": {
-    purpose: "Integrates all subsidiary plans into one approved baseline/control document.",
-    inputs:["Project charter","Outputs from other planning processes","EEF, OPA"],
-    tools:["Expert judgment","Data gathering","Facilitation","Meetings"],
-    outputs:["Project management plan (baselines + subsidiary plans)"]
+    "purpose": "Integrates subsidiary plans into one approved plan for execution and control.",
+    "inputs": [
+      "Project charter",
+      "Planning outputs",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Facilitation",
+      "Meetings"
+    ],
+    "outputs": [
+      "Project management plan",
+      "Updates / change requests as appropriate"
+    ]
   },
-  "Create WBS": {
-    purpose: "Decomposes deliverables into manageable work packages for planning and control.",
-    inputs:["Project scope statement","Requirements documentation","EEF, OPA"],
-    tools:["Decomposition","Expert judgment"],
-    outputs:["Scope baseline (WBS, WBS dictionary, scope statement)","Project documents updates"]
+  "Direct and Manage Project Work": {
+    "purpose": "Executes the plan to produce deliverables and implement approved changes.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Deliverables",
+      "Work performance data",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Manage Project Knowledge": {
+    "purpose": "Uses and creates knowledge to support objectives and organizational learning.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Lessons learned register (updated)",
+      "OPA updates",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Monitor and Control Project Work": {
+    "purpose": "Reviews progress/performance to identify variances and drive corrective action.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Work performance reports",
+      "Updates / change requests as appropriate"
+    ]
   },
   "Perform Integrated Change Control": {
-    purpose: "Reviews/approves/rejects changes and manages baseline updates transparently.",
-    inputs:["Project management plan","Change requests","Work performance reports","EEF, OPA"],
-    tools:["Change control tools","Expert judgment","Meetings"],
-    outputs:["Approved change requests","Project management plan updates","Project documents updates"]
+    "purpose": "Reviews and decides on change requests and manages baseline updates.",
+    "inputs": [
+      "Project management plan",
+      "Change requests",
+      "Work performance reports",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Change control tools",
+      "Expert judgment",
+      "Meetings"
+    ],
+    "outputs": [
+      "Approved change requests",
+      "Updates / change requests as appropriate"
+    ]
   },
   "Close Project or Phase": {
-    purpose: "Finalises activities and formally closes the project/phase with traceability.",
-    inputs:["Project charter","Project management plan","Accepted deliverables","Procurement documentation","EEF, OPA"],
-    tools:["Expert judgment","Document analysis","Meetings"],
-    outputs:["Final product/service/result transition","Final report","OPA updates","Project documents updates"]
+    "purpose": "Finalizes all activities and formally closes the project/phase.",
+    "inputs": [
+      "Project charter",
+      "Project management plan",
+      "Accepted deliverables",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Document analysis",
+      "Meetings"
+    ],
+    "outputs": [
+      "Final report",
+      "Final transition",
+      "OPA updates",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Scope Management": {
+    "purpose": "Defines how scope will be planned, validated, and controlled.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Scope management plan",
+      "Requirements management plan",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Collect Requirements": {
+    "purpose": "Elicits and documents stakeholder requirements.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data gathering",
+      "Data analysis",
+      "Decision making / facilitation"
+    ],
+    "outputs": [
+      "Requirements documentation",
+      "Requirements traceability matrix",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Define Scope": {
+    "purpose": "Develops the detailed scope statement for the project and product.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data analysis",
+      "Facilitation / decision making"
+    ],
+    "outputs": [
+      "Project scope statement",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Create WBS": {
+    "purpose": "Decomposes deliverables into work packages for planning and control.",
+    "inputs": [
+      "Project scope statement",
+      "Requirements information",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Decomposition",
+      "Expert judgment"
+    ],
+    "outputs": [
+      "Scope baseline (scope statement, WBS, WBS dictionary)",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Validate Scope": {
+    "purpose": "Obtains formal acceptance of completed deliverables.",
+    "inputs": [
+      "Scope baseline",
+      "Verified deliverables",
+      "Work performance data",
+      "Project documents"
+    ],
+    "tools": [
+      "Inspection",
+      "Decision making",
+      "Meetings"
+    ],
+    "outputs": [
+      "Accepted deliverables",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Control Scope": {
+    "purpose": "Monitors scope and manages changes to the scope baseline.",
+    "inputs": [
+      "Scope baseline",
+      "Work performance data",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data analysis",
+      "Change control tools"
+    ],
+    "outputs": [
+      "Work performance information",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Schedule Management": {
+    "purpose": "Defines how the schedule will be developed, managed, and controlled.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Schedule management plan",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Define Activities": {
+    "purpose": "Identifies the activities required to produce deliverables.",
+    "inputs": [
+      "Scope baseline",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Decomposition / rolling wave planning",
+      "Expert judgment",
+      "Meetings"
+    ],
+    "outputs": [
+      "Activity list",
+      "Milestone list",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Sequence Activities": {
+    "purpose": "Establishes logical relationships among activities.",
+    "inputs": [
+      "Activity list and dependencies info",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Precedence diagramming",
+      "Dependency analysis",
+      "Leads & lags"
+    ],
+    "outputs": [
+      "Schedule network diagram (or equivalent)",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Estimate Activity Durations": {
+    "purpose": "Estimates the duration of activities.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Estimating techniques",
+      "Expert judgment",
+      "Data analysis"
+    ],
+    "outputs": [
+      "Duration estimates",
+      "Basis of estimates",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Develop Schedule": {
+    "purpose": "Builds the schedule model and establishes the schedule baseline.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Schedule analysis (critical path, optimization)",
+      "PMIS",
+      "Meetings"
+    ],
+    "outputs": [
+      "Project schedule",
+      "Schedule baseline",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Control Schedule": {
+    "purpose": "Monitors schedule status and manages changes to the schedule baseline.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data analysis",
+      "Schedule compression",
+      "PMIS"
+    ],
+    "outputs": [
+      "Work performance information",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Cost Management": {
+    "purpose": "Defines how costs will be estimated, budgeted, managed, and controlled.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Cost management plan",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Estimate Costs": {
+    "purpose": "Develops cost estimates for the work.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Estimating techniques",
+      "Expert judgment",
+      "Data analysis"
+    ],
+    "outputs": [
+      "Cost estimates",
+      "Basis of estimates",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Determine Budget": {
+    "purpose": "Aggregates costs to establish a cost baseline and funding needs.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Cost aggregation",
+      "Reserve analysis",
+      "Funding limit reconciliation"
+    ],
+    "outputs": [
+      "Cost baseline",
+      "Funding requirements",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Control Costs": {
+    "purpose": "Monitors cost performance and manages changes to the cost baseline.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Earned value / variance analysis",
+      "Forecasting",
+      "Reserve analysis"
+    ],
+    "outputs": [
+      "Work performance information",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Quality Management": {
+    "purpose": "Defines quality requirements and how compliance will be demonstrated.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Quality management plan",
+      "Quality metrics",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Manage Quality": {
+    "purpose": "Performs quality assurance activities and supports continuous improvement.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Audits",
+      "Data analysis",
+      "Problem solving"
+    ],
+    "outputs": [
+      "Quality reports",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Control Quality": {
+    "purpose": "Verifies deliverables meet quality requirements and records results.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Inspection/testing",
+      "Data analysis",
+      "Sampling"
+    ],
+    "outputs": [
+      "Verified deliverables",
+      "Quality control measurements",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Resource Management": {
+    "purpose": "Defines how team and physical resources will be estimated, acquired, managed, and used.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Resource management plan",
+      "Team charter",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Estimate Activity Resources": {
+    "purpose": "Estimates resources needed for activities.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Estimating techniques",
+      "Expert judgment",
+      "Data analysis"
+    ],
+    "outputs": [
+      "Resource requirements",
+      "Resource breakdown structure",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Acquire Resources": {
+    "purpose": "Obtains project team and physical resources.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Decision making / negotiation",
+      "Interpersonal skills",
+      "PMIS"
+    ],
+    "outputs": [
+      "Project team assignments",
+      "Physical resource assignments",
+      "Resource calendars",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Develop Team": {
+    "purpose": "Improves team competencies and interaction to enhance performance.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Training / coaching",
+      "Team building",
+      "Recognition and rewards"
+    ],
+    "outputs": [
+      "Team performance assessments",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Manage Team": {
+    "purpose": "Tracks performance, resolves issues, and manages changes to optimize team performance.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Conflict management",
+      "Emotional intelligence / influencing",
+      "Meetings"
+    ],
+    "outputs": [
+      "Team issue resolution outcomes",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Control Resources": {
+    "purpose": "Ensures physical resources are available and used as planned.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data analysis",
+      "PMIS",
+      "Problem solving"
+    ],
+    "outputs": [
+      "Work performance information",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Communications Management": {
+    "purpose": "Plans project communications based on stakeholder needs and information requirements.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Communication requirements analysis",
+      "Communication methods/tech",
+      "Meetings"
+    ],
+    "outputs": [
+      "Communications management plan",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Manage Communications": {
+    "purpose": "Creates, distributes, stores, and retrieves project information as planned.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Communication skills/technology",
+      "Information management systems",
+      "Meetings"
+    ],
+    "outputs": [
+      "Project communications",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Monitor Communications": {
+    "purpose": "Monitors communications to ensure information needs are met.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data analysis",
+      "Expert judgment",
+      "Meetings"
+    ],
+    "outputs": [
+      "Work performance information",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Risk Management": {
+    "purpose": "Defines how risk management activities will be conducted.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data gathering/analysis",
+      "Meetings / PMIS"
+    ],
+    "outputs": [
+      "Risk management plan",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Identify Risks": {
+    "purpose": "Identifies and documents risks and sources of overall project risk.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data gathering",
+      "Facilitation",
+      "Expert judgment"
+    ],
+    "outputs": [
+      "Risk register",
+      "Risk report",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Perform Qualitative Risk Analysis": {
+    "purpose": "Prioritizes risks based on probability, impact, and other characteristics.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Probability/impact assessment",
+      "Risk categorization",
+      "Data representation"
+    ],
+    "outputs": [
+      "Prioritized risk register (updated)",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Perform Quantitative Risk Analysis": {
+    "purpose": "Quantifies the combined effects of risks on objectives.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Simulation/sensitivity/decision tree",
+      "Expert judgment"
+    ],
+    "outputs": [
+      "Quantitative risk analysis results (updated risk report)",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Risk Responses": {
+    "purpose": "Selects and plans responses to address project risks.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Response strategies",
+      "Decision making",
+      "Data analysis"
+    ],
+    "outputs": [
+      "Risk response plan updates",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Implement Risk Responses": {
+    "purpose": "Implements agreed risk responses.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "PMIS",
+      "Expert judgment",
+      "Meetings"
+    ],
+    "outputs": [
+      "Risk response actions completed",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Monitor Risks": {
+    "purpose": "Monitors risks, response effectiveness, and identifies new risks.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data analysis",
+      "Risk audits",
+      "Meetings"
+    ],
+    "outputs": [
+      "Risk register / risk report (updated)",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Procurement Management": {
+    "purpose": "Plans how procurement will be managed and documents the approach.",
+    "inputs": [
+      "Project management plan",
+      "Project documents",
+      "Business documents/agreements",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Make-or-buy analysis",
+      "Expert judgment",
+      "Meetings"
+    ],
+    "outputs": [
+      "Procurement management plan",
+      "Procurement strategy",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Conduct Procurements": {
+    "purpose": "Selects sellers and establishes agreements.",
+    "inputs": [
+      "Procurement documentation",
+      "Seller proposals",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Proposal evaluation",
+      "Negotiation",
+      "Meetings"
+    ],
+    "outputs": [
+      "Selected sellers",
+      "Agreements",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Control Procurements": {
+    "purpose": "Monitors contract performance and manages procurement changes.",
+    "inputs": [
+      "Agreements",
+      "Work performance data",
+      "Procurement documentation",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Claims administration",
+      "Data analysis",
+      "Inspections/audits"
+    ],
+    "outputs": [
+      "Procurement performance information",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Identify Stakeholders": {
+    "purpose": "Identifies stakeholders and analyzes their interests, influence, and impact.",
+    "inputs": [
+      "Project charter",
+      "Business documents",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data gathering/analysis",
+      "Data representation",
+      "Meetings"
+    ],
+    "outputs": [
+      "Stakeholder register",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Plan Stakeholder Engagement": {
+    "purpose": "Plans strategies to engage stakeholders effectively.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Expert judgment",
+      "Data analysis",
+      "Meetings"
+    ],
+    "outputs": [
+      "Stakeholder engagement plan",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Manage Stakeholder Engagement": {
+    "purpose": "Engages stakeholders to meet needs and manage expectations.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Communication skills",
+      "Interpersonal skills",
+      "Meetings"
+    ],
+    "outputs": [
+      "Stakeholder issues addressed / communications",
+      "Updates / change requests as appropriate"
+    ]
+  },
+  "Monitor Stakeholder Engagement": {
+    "purpose": "Monitors stakeholder relationships and adjusts engagement strategies.",
+    "inputs": [
+      "Project charter and/or project management plan",
+      "Project documents",
+      "Enterprise environmental factors (EEF)",
+      "Organizational process assets (OPA)"
+    ],
+    "tools": [
+      "Data analysis",
+      "Decision making",
+      "Meetings"
+    ],
+    "outputs": [
+      "Stakeholder engagement plan (updated)",
+      "Updates / change requests as appropriate"
+    ]
   }
-};
+}
+;
 
 const ITTO_STORAGE_KEY = "sbm_pmbok6_itto_v1";
 let ITTO = {};
