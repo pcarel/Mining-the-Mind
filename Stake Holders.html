@@ -1,0 +1,1304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stakeholder Manager — Power/Interest Matrix</title>
+  <style>
+    :root{
+      --bg1:#f7fbff;
+      --bg2:#fff7fb;
+      --ink:#0f172a;
+      --muted:#475569;
+      --card: rgba(255,255,255,.82);
+      --line:#e2e8f0;
+      --shadow: 0 18px 55px rgba(15,23,42,.12);
+      --r:18px;
+
+      --a:#7c3aed;   /* purple */
+      --b:#00d4ff;   /* cyan */
+      --c:#22c55e;   /* lime */
+      --d:#fb923c;   /* orange */
+      --danger:#ef4444;
+
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--ink);
+      background:
+        radial-gradient(900px 520px at 14% 12%, rgba(124,58,237,.16), transparent 60%),
+        radial-gradient(900px 520px at 84% 18%, rgba(0,212,255,.16), transparent 62%),
+        radial-gradient(900px 520px at 56% 92%, rgba(34,197,94,.12), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+
+    header{
+      padding:18px 16px 8px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(0,212,255,.9), transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(124,58,237,.95), transparent 50%),
+        radial-gradient(circle at 65% 30%, rgba(34,197,94,.75), transparent 55%),
+        linear-gradient(135deg, rgba(255,255,255,.7), rgba(255,255,255,.35));
+      box-shadow: 0 14px 26px rgba(15,23,42,.12);
+      border:1px solid rgba(255,255,255,.55);
+    }
+    h1{
+      font-size:18px;
+      margin:0;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin:2px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.3;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.75);
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:650;
+      font-size:13px;
+      color:var(--ink);
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(15,23,42,.08);
+      transition: transform .08s ease, box-shadow .12s ease, background .12s ease;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(15,23,42,.12); background: rgba(255,255,255,.9); }
+    .btn:active{ transform: translateY(0px); }
+    .btn.danger{
+      border-color: rgba(239,68,68,.35);
+      color: var(--danger);
+    }
+    .btn small{
+      font-weight:700;
+      font-family:var(--mono);
+      opacity:.8;
+    }
+
+    main{
+      max-width:1200px;
+      margin:0 auto;
+      padding:10px 16px 22px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid rgba(226,232,240,.9);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(226,232,240,.9);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card .hd .title{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .card .hd .meta{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:2px;
+    }
+    .card .bd{ padding:14px; }
+
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 700px){
+      .form{ grid-template-columns: 1fr; }
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin:0 0 6px;
+    }
+    input, select, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 10px;
+      font-size:13px;
+      outline:none;
+      background: rgba(255,255,255,.9);
+    }
+    textarea{ min-height:86px; resize:vertical; }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(124,58,237,.55);
+      box-shadow: 0 0 0 4px rgba(124,58,237,.12);
+    }
+    .span2{ grid-column: 1 / -1; }
+
+    .row-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-start;
+      padding-top:8px;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .pill b{ color:var(--ink); }
+
+    /* List */
+    .list-head{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .search{
+      flex:1 1 260px;
+      position:relative;
+    }
+    .search input{ padding-left:34px; }
+    .search .icon{
+      position:absolute;
+      left:10px; top:50%;
+      transform:translateY(-50%);
+      color:var(--muted);
+      font-size:14px;
+      pointer-events:none;
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(226,232,240,.9);
+      background: rgba(255,255,255,.65);
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      padding:10px 10px;
+      border-bottom:1px solid rgba(226,232,240,.9);
+      background: rgba(255,255,255,.85);
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+    tbody td{
+      padding:10px 10px;
+      font-size:13px;
+      border-bottom:1px solid rgba(226,232,240,.8);
+      vertical-align:top;
+    }
+    tbody tr:last-child td{ border-bottom:none; }
+    tbody tr:hover{ background: rgba(124,58,237,.06); }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(226,232,240,.9);
+      font-size:12px;
+      color:var(--ink);
+      background: rgba(255,255,255,.7);
+      white-space:nowrap;
+    }
+    .mini{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .btn-sm{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.8);
+      border-radius:12px;
+      padding:8px 10px;
+      font-weight:650;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn-sm.danger{ color:var(--danger); border-color: rgba(239,68,68,.35); }
+
+    /* Matrix */
+    .matrix-wrap{
+      position:sticky;
+      top:12px;
+    }
+    @media (max-width: 980px){
+      .matrix-wrap{ position:relative; top:auto; }
+    }
+    .matrix-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .matrix-top .legend{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      display:inline-block;
+      background: linear-gradient(135deg, rgba(0,212,255,.95), rgba(124,58,237,.95));
+      border:1px solid rgba(15,23,42,.18);
+      box-shadow: 0 10px 20px rgba(15,23,42,.10);
+      margin-right:6px;
+    }
+    canvas{
+      width:100%;
+      height:420px;
+      display:block;
+      border-radius:16px;
+      border:1px solid rgba(226,232,240,.9);
+      background: rgba(255,255,255,.62);
+    }
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    /* Tooltip */
+    .tooltip{
+      position:fixed;
+      pointer-events:none;
+      z-index:9999;
+      background: rgba(15,23,42,.92);
+      color:#fff;
+      padding:10px 10px;
+      border-radius:12px;
+      font-size:12px;
+      max-width:260px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+      transform: translate(10px, 10px);
+      opacity:0;
+      transition: opacity .08s ease;
+    }
+    .tooltip .t{ font-weight:800; margin-bottom:4px; }
+    .tooltip .s{ opacity:.9; line-height:1.35; }
+
+    .note{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .kbd{
+      font-family:var(--mono);
+      border:1px solid rgba(226,232,240,.8);
+      background: rgba(255,255,255,.7);
+      border-radius:10px;
+      padding:2px 6px;
+      color:var(--ink);
+      font-weight:700;
+      font-size:11px;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Stakeholder Manager</h1>
+        <div class="subtitle">Add stakeholders on the left • See them mapped on the Power/Interest Matrix on the right.</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="btnExport" title="Download your stakeholder list as JSON">
+        ⤓ Export <small>.json</small>
+      </button>
+
+      <label class="btn" title="Import a JSON file (replaces current list)">
+        ⤒ Import <small>.json</small>
+        <input id="fileImport" type="file" accept="application/json" hidden />
+      </label>
+
+      <button class="btn danger" id="btnClear" title="Clear everything (also clears localStorage)">
+        ✕ Clear
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <!-- LEFT: Entry + List -->
+    <section class="card">
+      <div class="hd">
+        <div>
+          <p class="title">Add / Edit Stakeholder</p>
+          <div class="meta">Most fields are dropdowns — keep it fast and consistent.</div>
+        </div>
+        <div class="pill" title="Auto-saved in your browser (localStorage)">
+          💾 <b id="countPill">0</b> saved
+        </div>
+      </div>
+
+      <div class="bd">
+        <form id="stakeholderForm" class="form" autocomplete="off">
+          <div>
+            <label for="name">Name *</label>
+            <input id="name" required placeholder="e.g., Thandi Mokoena" />
+          </div>
+
+          <div>
+            <label for="organisation">Organisation</label>
+            <input id="organisation" placeholder="e.g., Municipality / Client / Contractor" />
+          </div>
+
+          <div>
+            <label for="role">Role / Title</label>
+            <select id="role">
+              <option value="Project Sponsor">Project Sponsor</option>
+              <option value="Client Rep">Client Rep</option>
+              <option value="End User">End User</option>
+              <option value="Contractor">Contractor</option>
+              <option value="Consultant">Consultant</option>
+              <option value="Regulator">Regulator</option>
+              <option value="Community">Community</option>
+              <option value="Operations">Operations</option>
+              <option value="Finance">Finance</option>
+              <option value="Legal">Legal</option>
+              <option value="Other" selected>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="Internal">Internal</option>
+              <option value="External" selected>External</option>
+              <option value="Supplier">Supplier</option>
+              <option value="Authority">Authority</option>
+              <option value="Community">Community</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="name@domain.com" />
+          </div>
+
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" placeholder="+27 ..." />
+          </div>
+
+          <div>
+            <label for="influence">Power / Importance</label>
+            <select id="influence">
+              <option value="1">1 — Low</option>
+              <option value="2">2 — Medium-Low</option>
+              <option value="3" selected>3 — Medium</option>
+              <option value="4">4 — Medium-High</option>
+              <option value="5">5 — High</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="interest">Interest</label>
+            <select id="interest">
+              <option value="1">1 — Low</option>
+              <option value="2">2 — Medium-Low</option>
+              <option value="3" selected>3 — Medium</option>
+              <option value="4">4 — Medium-High</option>
+              <option value="5">5 — High</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="attitude">Current Attitude</label>
+            <select id="attitude">
+              <option value="Supportive" selected>Supportive</option>
+              <option value="Neutral">Neutral</option>
+              <option value="Resistant">Resistant</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="engagement">Engagement Strategy</label>
+            <select id="engagement">
+              <option value="Manage closely" selected>Manage closely</option>
+              <option value="Keep satisfied">Keep satisfied</option>
+              <option value="Keep informed">Keep informed</option>
+              <option value="Monitor">Monitor</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="frequency">Communication Frequency</label>
+            <select id="frequency">
+              <option value="Daily">Daily</option>
+              <option value="Weekly" selected>Weekly</option>
+              <option value="Bi-weekly">Bi-weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Ad-hoc">Ad-hoc</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="channel">Preferred Channel</label>
+            <select id="channel">
+              <option value="Meeting" selected>Meeting</option>
+              <option value="Email">Email</option>
+              <option value="MS Teams">MS Teams</option>
+              <option value="Phone/WhatsApp">Phone/WhatsApp</option>
+              <option value="Site walkdown">Site walkdown</option>
+            </select>
+          </div>
+
+          <div class="span2">
+            <label for="notes">Notes</label>
+            <textarea id="notes" placeholder="Key concerns, hot buttons, what ‘good’ looks like, commitments, etc."></textarea>
+          </div>
+
+          <div class="span2 row-actions">
+            <button class="btn" type="submit" id="btnSave">➕ Add stakeholder</button>
+            <button class="btn" type="button" id="btnCancel" style="display:none;">↩ Cancel edit</button>
+            <span class="note">Tip: hover points on the matrix for details • click a point to select.</span>
+          </div>
+
+          <input type="hidden" id="editingId" value="" />
+        </form>
+
+        <hr style="border:none;border-top:1px solid rgba(226,232,240,.9);margin:14px 0">
+
+        <div class="list-head">
+          <div class="search">
+            <span class="icon">🔎</span>
+            <input id="search" placeholder="Search name / org / role / notes..." />
+          </div>
+          <div class="pill" title="Quick filters">
+            Sort:
+            <select id="sort" style="width:auto; padding:6px 10px; border-radius:12px; margin-left:8px;">
+              <option value="recent" selected>Most recent</option>
+              <option value="name">Name (A→Z)</option>
+              <option value="influence">Power (High→Low)</option>
+              <option value="interest">Interest (High→Low)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="max-height:360px; overflow:auto; border-radius:14px;">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:26%;">Stakeholder</th>
+                <th style="width:20%;">Org / Role</th>
+                <th style="width:22%;">Matrix</th>
+                <th style="width:18%;">Plan</th>
+                <th style="width:14%; text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Matrix -->
+    <aside class="card matrix-wrap">
+      <div class="hd">
+        <div>
+          <p class="title">Power / Interest Matrix</p>
+          <div class="meta">Y = Power/Importance • X = Interest</div>
+        </div>
+        <div class="matrix-top">
+          <div class="legend">
+            <span><span class="dot"></span>Stakeholder</span>
+            <span class="kbd">Hover</span> tooltip • <span class="kbd">Click</span> select
+          </div>
+        </div>
+      </div>
+
+      <div class="bd">
+        <canvas id="matrix" width="900" height="700" aria-label="Power Interest Matrix Canvas"></canvas>
+        <div class="hint">
+          Quadrants:
+          <b>Manage closely</b> (High/High) • <b>Keep satisfied</b> (High Power/Low Interest) •
+          <b>Keep informed</b> (Low Power/High Interest) • <b>Monitor</b> (Low/Low)
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+
+<script>
+  // ---------------------------
+  // Stakeholder Manager (Vanilla JS)
+  // ---------------------------
+
+  const els = {
+    form: document.getElementById('stakeholderForm'),
+    editingId: document.getElementById('editingId'),
+    name: document.getElementById('name'),
+    organisation: document.getElementById('organisation'),
+    role: document.getElementById('role'),
+    category: document.getElementById('category'),
+    email: document.getElementById('email'),
+    phone: document.getElementById('phone'),
+    influence: document.getElementById('influence'),
+    interest: document.getElementById('interest'),
+    attitude: document.getElementById('attitude'),
+    engagement: document.getElementById('engagement'),
+    frequency: document.getElementById('frequency'),
+    channel: document.getElementById('channel'),
+    notes: document.getElementById('notes'),
+
+    btnSave: document.getElementById('btnSave'),
+    btnCancel: document.getElementById('btnCancel'),
+
+    tbody: document.getElementById('tbody'),
+    search: document.getElementById('search'),
+    sort: document.getElementById('sort'),
+    countPill: document.getElementById('countPill'),
+
+    btnExport: document.getElementById('btnExport'),
+    fileImport: document.getElementById('fileImport'),
+    btnClear: document.getElementById('btnClear'),
+
+    canvas: document.getElementById('matrix'),
+    tooltip: document.getElementById('tooltip')
+  };
+
+  const STORAGE_KEY = 'stakeholders.powerInterest.v1';
+
+  /** @type {Array<any>} */
+  let stakeholders = loadFromStorage();
+  let filtered = [...stakeholders];
+  let selectedId = null;
+
+  // Canvas & hit-testing points
+  let points = []; // {id, xPx, yPx, stakeholder}
+
+  // ---------- Utilities ----------
+  function uid(){
+    return 'sh_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
+  }
+
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+  function nowISO(){ return new Date().toISOString(); }
+
+  function toInt(v){ return parseInt(v, 10); }
+
+  function safeText(s){ return (s ?? '').toString().trim(); }
+
+  function quadrantLabel(influence, interest){
+    const hiInf = influence >= 4;
+    const hiInt = interest >= 4;
+    if (hiInf && hiInt) return 'Manage closely';
+    if (hiInf && !hiInt) return 'Keep satisfied';
+    if (!hiInf && hiInt) return 'Keep informed';
+    return 'Monitor';
+  }
+
+  function saveToStorage(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stakeholders));
+    els.countPill.textContent = String(stakeholders.length);
+  }
+
+  function loadFromStorage(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      const arr = JSON.parse(raw);
+      if(!Array.isArray(arr)) return [];
+      return arr;
+    }catch{
+      return [];
+    }
+  }
+
+  function download(filename, text){
+    const blob = new Blob([text], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  function setEditingMode(isEditing){
+    els.btnCancel.style.display = isEditing ? 'inline-flex' : 'none';
+    els.btnSave.textContent = isEditing ? '✅ Update stakeholder' : '➕ Add stakeholder';
+  }
+
+  function resetForm(){
+    els.form.reset();
+    els.editingId.value = '';
+    setEditingMode(false);
+  }
+
+  // ---------- Rendering: Table ----------
+  function getSortedList(list){
+    const mode = els.sort.value;
+    const arr = [...list];
+
+    if(mode === 'name'){
+      arr.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+    } else if(mode === 'influence'){
+      arr.sort((a,b) => (b.influence - a.influence) || (b.interest - a.interest) || (b.updatedAt||'').localeCompare(a.updatedAt||''));
+    } else if(mode === 'interest'){
+      arr.sort((a,b) => (b.interest - a.interest) || (b.influence - a.influence) || (b.updatedAt||'').localeCompare(a.updatedAt||''));
+    } else {
+      // recent
+      arr.sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
+    }
+    return arr;
+  }
+
+  function applyFilter(){
+    const q = safeText(els.search.value).toLowerCase();
+    let list = [...stakeholders];
+
+    if(q){
+      list = list.filter(s => {
+        const blob = [
+          s.name, s.organisation, s.role, s.category, s.email, s.phone,
+          s.attitude, s.engagement, s.frequency, s.channel, s.notes
+        ].join(' ').toLowerCase();
+        return blob.includes(q);
+      });
+    }
+
+    filtered = getSortedList(list);
+    renderTable();
+    drawMatrix();
+  }
+
+  function renderTable(){
+    els.tbody.innerHTML = '';
+    const rows = filtered.map(s => {
+      const q = quadrantLabel(s.influence, s.interest);
+      const isSel = (s.id === selectedId);
+      const tr = document.createElement('tr');
+      tr.dataset.id = s.id;
+      if(isSel){
+        tr.style.outline = '2px solid rgba(124,58,237,.35)';
+        tr.style.outlineOffset = '-2px';
+      }
+
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight:800; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <span>${escapeHtml(s.name)}</span>
+            <span class="tag">${escapeHtml(s.category || '—')}</span>
+          </div>
+          <div class="mini">${escapeHtml(s.email || '')}${s.phone ? ' • ' + escapeHtml(s.phone) : ''}</div>
+        </td>
+
+        <td>
+          <div style="font-weight:750;">${escapeHtml(s.organisation || '—')}</div>
+          <div class="mini">${escapeHtml(s.role || '—')}</div>
+        </td>
+
+        <td>
+          <div class="tag">Power: <b style="margin-left:6px;">${s.influence}</b>/5</div>
+          <span style="display:inline-block;width:8px;"></span>
+          <div class="tag">Interest: <b style="margin-left:6px;">${s.interest}</b>/5</div>
+          <div class="mini" style="margin-top:6px;">Quadrant: <b style="color:var(--ink)">${escapeHtml(q)}</b></div>
+        </td>
+
+        <td>
+          <div class="mini">Attitude: <b style="color:var(--ink)">${escapeHtml(s.attitude || '—')}</b></div>
+          <div class="mini">Plan: <b style="color:var(--ink)">${escapeHtml(s.engagement || q)}</b></div>
+          <div class="mini">Comms: <b style="color:var(--ink)">${escapeHtml(s.frequency || '—')}</b> • ${escapeHtml(s.channel || '—')}</div>
+        </td>
+
+        <td style="text-align:right;">
+          <div class="actions">
+            <button class="btn-sm" data-action="select">Select</button>
+            <button class="btn-sm" data-action="edit">Edit</button>
+            <button class="btn-sm danger" data-action="delete">Delete</button>
+          </div>
+        </td>
+      `;
+      return tr;
+    });
+
+    rows.forEach(r => els.tbody.appendChild(r));
+    els.countPill.textContent = String(stakeholders.length);
+  }
+
+  // Basic HTML escaping
+  function escapeHtml(str){
+    return (str ?? '')
+      .toString()
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  // ---------- Rendering: Matrix ----------
+  function drawMatrix(){
+    const canvas = els.canvas;
+    const ctx = canvas.getContext('2d');
+
+    // Handle high-DPI scaling
+    const cssW = canvas.getBoundingClientRect().width;
+    const cssH = canvas.getBoundingClientRect().height;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const W = cssW;
+    const H = cssH;
+
+    // Layout
+    const pad = 46;
+    const left = pad, top = pad, right = W - pad, bottom = H - pad;
+    const w = right - left, h = bottom - top;
+
+    // Background grid + axes
+    ctx.clearRect(0,0,W,H);
+
+    // Soft background
+    roundRect(ctx, 10, 10, W-20, H-20, 16);
+    ctx.fillStyle = 'rgba(255,255,255,.70)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(226,232,240,.95)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Quadrants
+    const midX = left + w/2;
+    const midY = top + h/2;
+
+    // Fill quadrants lightly
+    fillRect(ctx, left, top, w/2, h/2, 'rgba(34,197,94,.06)');        // low int / high power? (top-left)
+    fillRect(ctx, midX, top, w/2, h/2, 'rgba(124,58,237,.06)');       // high/high (top-right)
+    fillRect(ctx, left, midY, w/2, h/2, 'rgba(148,163,184,.08)');     // low/low (bottom-left)
+    fillRect(ctx, midX, midY, w/2, h/2, 'rgba(0,212,255,.06)');       // high interest low power (bottom-right)
+
+    // Grid lines (1..5 ticks)
+    ctx.strokeStyle = 'rgba(148,163,184,.22)';
+    ctx.lineWidth = 1;
+    for(let i=1;i<=4;i++){
+      const x = left + (w * i/5);
+      const y = top + (h * i/5);
+      ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, bottom); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(right, y); ctx.stroke();
+    }
+
+    // Mid lines
+    ctx.strokeStyle = 'rgba(15,23,42,.22)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(midX, top); ctx.lineTo(midX, bottom); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(left, midY); ctx.lineTo(right, midY); ctx.stroke();
+
+    // Axis labels
+    ctx.fillStyle = 'rgba(15,23,42,.85)';
+    ctx.font = '700 13px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillText('Power / Importance →', left, 22); // top label
+    // y-axis label (rotated)
+    ctx.save();
+    ctx.translate(16, top + h/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('Power / Importance (Low → High)', 0, 0);
+    ctx.restore();
+
+    // X-axis label
+    ctx.fillText('Interest (Low → High)', left + w/2 - 66, H - 14);
+
+    // Quadrant labels
+    ctx.font = '800 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillStyle = 'rgba(15,23,42,.72)';
+    ctx.fillText('KEEP SATISFIED', left + 10, top + 18);
+    ctx.fillText('MANAGE CLOSELY', midX + 10, top + 18);
+    ctx.fillText('MONITOR', left + 10, midY + 18);
+    ctx.fillText('KEEP INFORMED', midX + 10, midY + 18);
+
+    // Tick labels 1..5 (interest) and 1..5 (power)
+    ctx.font = '700 11px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillStyle = 'rgba(71,85,105,.9)';
+    for(let i=1;i<=5;i++){
+      const x = left + (w * (i-1)/4); // show 1..5 across
+      ctx.fillText(String(i), x - 3, bottom + 20);
+    }
+    for(let i=1;i<=5;i++){
+      const y = bottom - (h * (i-1)/4);
+      ctx.fillText(String(i), left - 20, y + 4);
+    }
+
+    // Plot points
+    points = [];
+    const list = filtered.length ? filtered : stakeholders; // show all if filter empty, else show filtered
+
+    // simple anti-overlap jitter by bucket
+    const bucketCount = new Map(); // key "inf-int" -> count
+    list.forEach(s => {
+      const inf = clamp(toInt(s.influence),1,5);
+      const int = clamp(toInt(s.interest),1,5);
+      const key = `${inf}-${int}`;
+      const k = (bucketCount.get(key) || 0) + 1;
+      bucketCount.set(key, k);
+
+      // Map (1..5) to area:
+      // x: interest low->high; y: power low->high
+      const xN = (int - 1) / 4; // 0..1
+      const yN = (inf - 1) / 4; // 0..1
+      let x = left + xN * w;
+      let y = bottom - yN * h;
+
+      // jitter radius based on bucket index
+      const idx = k - 1;
+      const angle = idx * 2.399963229728653; // golden angle
+      const rad = Math.min(16, 5 + idx * 2);
+      x += Math.cos(angle) * rad;
+      y += Math.sin(angle) * rad;
+
+      // keep inside plot
+      x = clamp(x, left + 6, right - 6);
+      y = clamp(y, top + 6, bottom - 6);
+
+      const isSelected = s.id === selectedId;
+
+      // Draw point
+      ctx.beginPath();
+      ctx.arc(x, y, isSelected ? 7.2 : 6, 0, Math.PI*2);
+      const grad = ctx.createLinearGradient(x-6,y-6,x+6,y+6);
+      grad.addColorStop(0, 'rgba(0,212,255,.95)');
+      grad.addColorStop(1, 'rgba(124,58,237,.95)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      ctx.lineWidth = isSelected ? 2.2 : 1.2;
+      ctx.strokeStyle = isSelected ? 'rgba(15,23,42,.65)' : 'rgba(15,23,42,.25)';
+      ctx.stroke();
+
+      points.push({ id: s.id, xPx: x, yPx: y, stakeholder: s });
+    });
+
+    // small footer
+    ctx.fillStyle = 'rgba(71,85,105,.9)';
+    ctx.font = '600 11px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillText(`${stakeholders.length} stakeholder(s) • showing ${list.length}`, left, H - 12);
+  }
+
+  function fillRect(ctx,x,y,w,h,fill){
+    ctx.fillStyle = fill;
+    ctx.fillRect(x,y,w,h);
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y);
+    ctx.arcTo(x+w, y, x+w, y+h, rr);
+    ctx.arcTo(x+w, y+h, x, y+h, rr);
+    ctx.arcTo(x, y+h, x, y, rr);
+    ctx.arcTo(x, y, x+w, y, rr);
+    ctx.closePath();
+  }
+
+  // ---------- Tooltip / Hit-testing ----------
+  function findPointAt(clientX, clientY){
+    const rect = els.canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    // points are stored in CSS px coords, so this matches.
+    let best = null;
+    let bestD = 9999;
+    for(const p of points){
+      const dx = p.xPx - x;
+      const dy = p.yPx - y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if(d < bestD && d <= 10) { best = p; bestD = d; }
+    }
+    return best;
+  }
+
+  function showTooltip(p, clientX, clientY){
+    const s = p.stakeholder;
+    const quad = quadrantLabel(s.influence, s.interest);
+    els.tooltip.innerHTML = `
+      <div class="t">${escapeHtml(s.name)}</div>
+      <div class="s">
+        <div>${escapeHtml(s.organisation || '—')} • ${escapeHtml(s.role || '—')}</div>
+        <div style="margin-top:6px;">Power: <b>${s.influence}</b>/5 • Interest: <b>${s.interest}</b>/5</div>
+        <div>Quadrant: <b>${escapeHtml(quad)}</b></div>
+        <div>Attitude: <b>${escapeHtml(s.attitude || '—')}</b> • Comms: <b>${escapeHtml(s.frequency || '—')}</b></div>
+      </div>
+    `;
+    els.tooltip.style.left = clientX + 'px';
+    els.tooltip.style.top = clientY + 'px';
+    els.tooltip.style.opacity = '1';
+  }
+
+  function hideTooltip(){
+    els.tooltip.style.opacity = '0';
+  }
+
+  // ---------- CRUD ----------
+  function getFormData(){
+    const name = safeText(els.name.value);
+    if(!name) throw new Error('Name is required.');
+
+    const influence = clamp(toInt(els.influence.value),1,5);
+    const interest  = clamp(toInt(els.interest.value),1,5);
+
+    // If engagement dropdown doesn’t match quadrant, you can still override manually.
+    return {
+      id: els.editingId.value || uid(),
+      name,
+      organisation: safeText(els.organisation.value),
+      role: els.role.value,
+      category: els.category.value,
+      email: safeText(els.email.value),
+      phone: safeText(els.phone.value),
+      influence,
+      interest,
+      attitude: els.attitude.value,
+      engagement: els.engagement.value,
+      frequency: els.frequency.value,
+      channel: els.channel.value,
+      notes: safeText(els.notes.value),
+      updatedAt: nowISO()
+    };
+  }
+
+  function upsertStakeholder(s){
+    const idx = stakeholders.findIndex(x => x.id === s.id);
+    if(idx >= 0){
+      stakeholders[idx] = { ...stakeholders[idx], ...s };
+    } else {
+      stakeholders.unshift(s); // newest first
+    }
+    saveToStorage();
+    applyFilter();
+  }
+
+  function deleteStakeholder(id){
+    stakeholders = stakeholders.filter(s => s.id !== id);
+    if(selectedId === id) selectedId = null;
+    saveToStorage();
+    applyFilter();
+  }
+
+  function selectStakeholder(id){
+    selectedId = id;
+    renderTable();
+    drawMatrix();
+  }
+
+  function startEdit(id){
+    const s = stakeholders.find(x => x.id === id);
+    if(!s) return;
+
+    els.editingId.value = s.id;
+    els.name.value = s.name || '';
+    els.organisation.value = s.organisation || '';
+    els.role.value = s.role || 'Other';
+    els.category.value = s.category || 'External';
+    els.email.value = s.email || '';
+    els.phone.value = s.phone || '';
+    els.influence.value = String(s.influence ?? 3);
+    els.interest.value = String(s.interest ?? 3);
+    els.attitude.value = s.attitude || 'Supportive';
+    els.engagement.value = s.engagement || quadrantLabel(s.influence, s.interest);
+    els.frequency.value = s.frequency || 'Weekly';
+    els.channel.value = s.channel || 'Meeting';
+    els.notes.value = s.notes || '';
+
+    setEditingMode(true);
+    // also select on matrix
+    selectStakeholder(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ---------- Events ----------
+  els.form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    try{
+      const data = getFormData();
+
+      // Optional: auto-suggest engagement based on quadrant if user left it mismatched.
+      // (We won't force it, but you can uncomment to auto-set.)
+      // data.engagement = quadrantLabel(data.influence, data.interest);
+
+      upsertStakeholder(data);
+      resetForm();
+    }catch(err){
+      alert(err.message || 'Please check the form.');
+    }
+  });
+
+  els.btnCancel.addEventListener('click', () => {
+    resetForm();
+  });
+
+  els.tbody.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if(!btn) return;
+    const tr = e.target.closest('tr');
+    if(!tr) return;
+    const id = tr.dataset.id;
+    const action = btn.dataset.action;
+
+    if(action === 'select'){
+      selectStakeholder(id);
+      // also try to focus point
+    }
+    if(action === 'edit'){
+      startEdit(id);
+    }
+    if(action === 'delete'){
+      const s = stakeholders.find(x => x.id === id);
+      const ok = confirm(`Delete stakeholder: ${s?.name || 'this item'}?`);
+      if(ok) deleteStakeholder(id);
+    }
+  });
+
+  els.search.addEventListener('input', applyFilter);
+  els.sort.addEventListener('change', applyFilter);
+
+  // Export / Import / Clear
+  els.btnExport.addEventListener('click', () => {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      version: 1,
+      stakeholders
+    };
+    download(`stakeholders_${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(payload, null, 2));
+  });
+
+  els.fileImport.addEventListener('change', async () => {
+    const file = els.fileImport.files && els.fileImport.files[0];
+    if(!file) return;
+    try{
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+
+      let list = null;
+      if(Array.isArray(parsed)) list = parsed;
+      else if(parsed && Array.isArray(parsed.stakeholders)) list = parsed.stakeholders;
+
+      if(!list) throw new Error('Could not find a stakeholders array in that JSON.');
+
+      // Basic normalization / safety
+      stakeholders = list.map(s => ({
+        id: s.id || uid(),
+        name: safeText(s.name),
+        organisation: safeText(s.organisation),
+        role: s.role || 'Other',
+        category: s.category || 'External',
+        email: safeText(s.email),
+        phone: safeText(s.phone),
+        influence: clamp(toInt(s.influence || 3),1,5),
+        interest: clamp(toInt(s.interest || 3),1,5),
+        attitude: s.attitude || 'Unknown',
+        engagement: s.engagement || quadrantLabel(clamp(toInt(s.influence || 3),1,5), clamp(toInt(s.interest || 3),1,5)),
+        frequency: s.frequency || 'Weekly',
+        channel: s.channel || 'Meeting',
+        notes: safeText(s.notes),
+        updatedAt: s.updatedAt || nowISO()
+      })).filter(s => s.name); // require name
+
+      selectedId = null;
+      saveToStorage();
+      applyFilter();
+      resetForm();
+      alert(`Imported ${stakeholders.length} stakeholder(s).`);
+    }catch(err){
+      alert(err.message || 'Import failed.');
+    }finally{
+      els.fileImport.value = '';
+    }
+  });
+
+  els.btnClear.addEventListener('click', () => {
+    const ok = confirm('This will clear all stakeholders (and localStorage). Continue?');
+    if(!ok) return;
+    stakeholders = [];
+    filtered = [];
+    selectedId = null;
+    localStorage.removeItem(STORAGE_KEY);
+    resetForm();
+    applyFilter();
+  });
+
+  // Canvas interactions
+  els.canvas.addEventListener('mousemove', (e) => {
+    const p = findPointAt(e.clientX, e.clientY);
+    if(p) showTooltip(p, e.clientX, e.clientY);
+    else hideTooltip();
+  });
+
+  els.canvas.addEventListener('mouseleave', hideTooltip);
+
+  els.canvas.addEventListener('click', (e) => {
+    const p = findPointAt(e.clientX, e.clientY);
+    if(!p) return;
+    selectStakeholder(p.id);
+
+    // Scroll row into view (if it exists in filtered list)
+    const row = els.tbody.querySelector(`tr[data-id="${CSS.escape(p.id)}"]`);
+    if(row){
+      row.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  });
+
+  // Resize handling
+  window.addEventListener('resize', () => {
+    drawMatrix();
+  });
+
+  // ---------- Init ----------
+  function init(){
+    els.countPill.textContent = String(stakeholders.length);
+    // On first load with no data, add a friendly example (optional)
+    if(stakeholders.length === 0){
+      stakeholders = [
+        {
+          id: uid(),
+          name: "Project Sponsor",
+          organisation: "Client Org",
+          role: "Project Sponsor",
+          category: "External",
+          email: "",
+          phone: "",
+          influence: 5,
+          interest: 5,
+          attitude: "Supportive",
+          engagement: "Manage closely",
+          frequency: "Weekly",
+          channel: "Meeting",
+          notes: "Wants confidence in schedule + budget. Keep decisions documented.",
+          updatedAt: nowISO()
+        },
+        {
+          id: uid(),
+          name: "Operations Lead",
+          organisation: "Site / Ops",
+          role: "Operations",
+          category: "Internal",
+          email: "",
+          phone: "",
+          influence: 4,
+          interest: 3,
+          attitude: "Neutral",
+          engagement: "Keep satisfied",
+          frequency: "Bi-weekly",
+          channel: "MS Teams",
+          notes: "Cares about handover, maintainability, downtime windows.",
+          updatedAt: nowISO()
+        },
+        {
+          id: uid(),
+          name: "Community Rep",
+          organisation: "Local Community",
+          role: "Community",
+          category: "Community",
+          email: "",
+          phone: "",
+          influence: 2,
+          interest: 5,
+          attitude: "Unknown",
+          engagement: "Keep informed",
+          frequency: "Monthly",
+          channel: "Meeting",
+          notes: "Interested in safety, noise, job creation updates.",
+          updatedAt: nowISO()
+        }
+      ];
+      saveToStorage();
+    }
+
+    applyFilter();
+    drawMatrix();
+  }
+
+  init();
+</script>
+</body>
+</html>
