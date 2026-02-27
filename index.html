@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mining the Mind — Tools</title>
+  <meta name="description" content="A simple, WSP-themed landing page for project tools." />
+
+  <style>
+    :root{
+      /* WSP Primary palette (use in most circumstances) */
+      --wsp-black:#000000;
+      --wsp-white:#FFFFFF;
+      --wsp-red:#FF372F;
+
+      /* WSP Secondary palette (allowed for UI accents) */
+      --wsp-grey-1:#404040;
+      --wsp-grey-2:#CCCCCC;
+      --wsp-red-1:#CC2126;
+      --wsp-red-2:#680005;
+
+      --bg: var(--wsp-black);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --line: rgba(255,255,255,.16);
+      --card: rgba(255,255,255,.05);
+      --card2: rgba(255,255,255,.08);
+
+      --shadow: 0 22px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+
+      --font: Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Layout */
+    .wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 16px 40px;
+    }
+
+    /* Header */
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      border-radius: var(--radius);
+      padding: 12px 12px;
+      box-shadow: 0 14px 44px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      min-width: 240px;
+    }
+    .mark{
+      width:42px;height:42px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,55,47,.55), transparent 55%),
+        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      box-shadow: 0 16px 50px rgba(0,0,0,.45);
+    }
+    .brand h1{
+      margin:0;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      line-height: 1.2;
+    }
+    .brand p{
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    /* Buttons */
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor:pointer;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      transition: transform .08s ease, background .12s ease, box-shadow .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+    }
+    .btn:active{ transform: translateY(0); }
+    .btn.primary{
+      border-color: rgba(255,55,47,.55);
+      background: linear-gradient(135deg, rgba(255,55,47,.22), rgba(255,55,47,.10));
+    }
+    .btn.ghost{
+      background: rgba(255,255,255,.04);
+      border-color: rgba(255,255,255,.18);
+      color: rgba(255,255,255,.88);
+    }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
+    /* Hero — red gradient overlay ONLY here (title area) */
+    .hero{
+      margin-top: 14px;
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      /* Semi-transparent WSP red gradient overlay for hero/title only */
+      background: linear-gradient(135deg,
+        rgba(255,55,47,0.00) 0%,
+        rgba(255,55,47,0.18) 55%,
+        rgba(255,55,47,0.40) 100%
+      );
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      padding: clamp(18px, 3.6vw, 40px);
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+      align-items:end;
+    }
+    @media (max-width: 900px){
+      .hero-inner{ grid-template-columns: 1fr; }
+    }
+
+    /* Subheading brand rule: Arial 16pt bold red */
+    .eyebrow{
+      margin:0 0 10px;
+      font-size: 21.33px; /* 16pt */
+      font-weight: 700;
+      color: var(--wsp-red);
+      letter-spacing: .2px;
+    }
+    .hero h2{
+      margin:0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: .2px;
+      font-weight: 800;
+    }
+    .hero p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .hero-cta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    @media (max-width: 900px){
+      .hero-cta{ justify-content:flex-start; }
+    }
+    .meta{
+      font-family: var(--mono);
+      font-size: 11px;
+      opacity: .8;
+    }
+
+    /* Tiles grid (4 columns x 2 rows) */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .tile{
+      position:relative;
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--card);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 140px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      box-shadow: 0 14px 44px rgba(0,0,0,.35);
+      transition: transform .10s ease, background .12s ease, border-color .12s ease;
+      overflow:hidden;
+    }
+    .tile:hover{
+      transform: translateY(-2px);
+      background: var(--card2);
+      border-color: rgba(255,55,47,.25);
+    }
+
+    .tile-top{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+    .tile h3{
+      margin:0;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+    .tile p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+
+    .icon{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,55,47,.12);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+    }
+    .icon svg{
+      width: 22px;
+      height: 22px;
+    }
+
+    .tile-actions{
+      margin-top:auto;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .tile-actions .left{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    /* Under construction ribbon */
+    .ribbon{
+      position:absolute;
+      top: 12px;
+      right: -46px;
+      transform: rotate(35deg);
+      background: rgba(255,55,47,.92);
+      color: var(--wsp-white);
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: .6px;
+      padding: 8px 58px;
+      border: 1px solid rgba(0,0,0,.25);
+      box-shadow: 0 18px 40px rgba(0,0,0,.45);
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.82);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.65);
+      display:none;
+      z-index: 99999;
+      font-size: 13px;
+    }
+    .toast.show{ display:block; }
+
+    /* Modal preview */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      z-index: 9999;
+    }
+    .modal.open{ display:flex; }
+    .modalCard{
+      width:min(1100px, 100%);
+      height:min(780px, 92vh);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.92);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      box-shadow: 0 40px 120px rgba(0,0,0,.75);
+    }
+    .modalHd{
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      flex-wrap:wrap;
+    }
+    .modalTitle{
+      font-weight: 800;
+      display:flex;
+      gap:10px;
+      align-items:baseline;
+      flex-wrap:wrap;
+    }
+    .modalTitle small{
+      font-family: var(--mono);
+      font-weight: 800;
+      opacity: .75;
+      font-size: 11px;
+    }
+    .modalBody{ flex:1; background: rgba(255,255,255,.04); }
+    .modalBody iframe{ width:100%; height:100%; border:0; background:#fff; }
+
+    /* Focus states */
+    button:focus-visible, a:focus-visible{
+      outline: 3px solid var(--wsp-red);
+      outline-offset: 2px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>Mining the Mind — Project Tools</h1>
+          <p>Simple access to the tools your team actually uses.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" id="btnContinue" title="Open your last tool">
+          ⛏️ Continue <span class="meta" id="lastToolText">—</span>
+        </button>
+        <button class="btn ghost" id="btnResetLast">Reset</button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">One hub. Eight tools.</p>
+          <h2>Fast, clear project decisions — without the noise.</h2>
+          <p>
+            Built for delivery reality: quick structure when you need it, and straightforward stakeholder clarity.
+            Keep it simple. Keep it used.
+          </p>
+        </div>
+
+        <div class="hero-cta">
+          <button class="btn primary" id="btnOpenPmbok">Open PMBOK</button>
+          <button class="btn" id="btnOpenStakeholders">Open Stakeholders</button>
+          <div class="meta" id="statusText">Status: ready</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 x 2 TILE GRID -->
+    <section class="grid" id="toolGrid" aria-label="Tool tiles"></section>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Modal Preview -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Tool preview">
+      <div class="modalHd">
+        <div class="modalTitle">
+          <span id="modalTitle">Preview</span>
+          <small id="modalUrl">—</small>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn ghost" id="btnOpenNew">↗ Open in new tab</button>
+          <button class="btn" id="btnClose">✕ Close</button>
+        </div>
+      </div>
+      <div class="modalBody">
+        <iframe id="modalFrame" title="Tool preview iframe"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // CONFIG: edit tile titles, descriptions, and add URLs when ready
+    // =========================
+    const TOOLS = [
+      {
+        key: "pmbok",
+        title: "PMBOK App",
+        desc: "Quick structure and guidance for project delivery.",
+        url: "https://pcarel.github.io/Mining-the-Mind/PMbok.html"
+      },
+      {
+        key: "stakeholders",
+        title: "Stakeholders App",
+        desc: "Capture people, map power/interest, align decisions.",
+        url: "https://pcarel.github.io/Mining-the-Mind/STH.html"
+      },
+      {
+        key: "risk",
+        title: "Risk Radar",
+        desc: "Register + simple heatmap + actions for delivery.",
+        url: "" // add later
+      },
+      {
+        key: "pulse",
+        title: "Weekly Pulse",
+        desc: "Highlights, risks, priorities — one clean weekly view.",
+        url: "" // add later
+      },
+      {
+        key: "lessons",
+        title: "Lessons Organiser",
+        desc: "Capture and tag lessons learned so they don’t disappear.",
+        url: "" // add later
+      },
+      {
+        key: "safety",
+        title: "Safety Snapshot",
+        desc: "Quick HSE view (counts, trends, and actions).",
+        url: "" // add later
+      },
+      {
+        key: "cost",
+        title: "Cost Forecast",
+        desc: "Forecast basics and simple trend tracking.",
+        url: "" // add later
+      },
+      {
+        key: "schedule",
+        title: "Schedule Pulse",
+        desc: "Top constraints + lookahead + what’s slipping.",
+        url: "" // add later
+      }
+    ];
+
+    const LINKS = Object.fromEntries(TOOLS.filter(t => t.url).map(t => [t.key, t.url]));
+    const LAST_KEY = "mining_tools.last_opened.v2";
+
+    // =========================
+    // DOM
+    // =========================
+    const el = {
+      grid: document.getElementById("toolGrid"),
+      btnContinue: document.getElementById("btnContinue"),
+      lastToolText: document.getElementById("lastToolText"),
+      statusText: document.getElementById("statusText"),
+      btnResetLast: document.getElementById("btnResetLast"),
+
+      btnOpenPmbok: document.getElementById("btnOpenPmbok"),
+      btnOpenStakeholders: document.getElementById("btnOpenStakeholders"),
+
+      toast: document.getElementById("toast"),
+
+      modal: document.getElementById("modal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalUrl: document.getElementById("modalUrl"),
+      modalFrame: document.getElementById("modalFrame"),
+      btnClose: document.getElementById("btnClose"),
+      btnOpenNew: document.getElementById("btnOpenNew"),
+    };
+
+    let modalCurrentUrl = "";
+
+    function showToast(msg){
+      el.toast.textContent = msg;
+      el.toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => el.toast.classList.remove("show"), 2200);
+    }
+
+    function setLast(toolKey){
+      localStorage.setItem(LAST_KEY, toolKey);
+      renderLast();
+    }
+    function getLast(){
+      return localStorage.getItem(LAST_KEY) || "";
+    }
+    function renderLast(){
+      const v = getLast();
+      el.lastToolText.textContent = v ? v : "—";
+    }
+
+    function openTool(toolKey){
+      const url = LINKS[toolKey];
+      if(!url){
+        showToast("Under construction — link not added yet.");
+        return;
+      }
+      setLast(toolKey);
+      window.open(url, "_blank", "noopener,noreferrer");
+      el.statusText.textContent = "Status: opened " + toolKey;
+    }
+
+    function previewTool(toolKey){
+      const url = LINKS[toolKey];
+      if(!url){
+        showToast("Under construction — preview not available.");
+        return;
+      }
+      setLast(toolKey);
+      modalCurrentUrl = url;
+
+      const t = TOOLS.find(x => x.key === toolKey);
+      el.modalTitle.textContent = (t?.title || "Preview") + " — Preview";
+      el.modalUrl.textContent = url;
+
+      el.modalFrame.src = url;
+      el.modal.classList.add("open");
+      el.modal.setAttribute("aria-hidden", "false");
+      el.statusText.textContent = "Status: previewing " + toolKey;
+    }
+
+    function closeModal(){
+      el.modal.classList.remove("open");
+      el.modal.setAttribute("aria-hidden", "true");
+      el.modalFrame.src = "about:blank";
+      modalCurrentUrl = "";
+      el.statusText.textContent = "Status: ready";
+    }
+
+    function tileIconSVG(kind){
+      // Simple icons in WSP red/white only
+      const commonStroke = "rgba(255,255,255,.92)";
+      const redStroke = "rgba(255,55,47,.95)";
+      if(kind === "pmbok"){
+        return `
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 3h8l2 2v16H7V3Z" stroke="${commonStroke}" stroke-width="1.8"/>
+            <path d="M9 8h6M9 12h6M9 16h4" stroke="${redStroke}" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>`;
+      }
+      if(kind === "stakeholders"){
+        return `
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M16 11c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3Z" stroke="${commonStroke}" stroke-width="1.8"/>
+            <path d="M8 12c1.7 0 3-1.3 3-3S9.7 6 8 6 5 7.3 5 9s1.3 3 3 3Z" stroke="${commonStroke}" stroke-width="1.8"/>
+            <path d="M3.5 20c.7-3 3-5 6.5-5s5.8 2 6.5 5" stroke="${redStroke}" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>`;
+      }
+      // generic tool
+      return `
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2l2.2 4.6L19 7l-3.6 3.5.9 5L12 13.6 7.7 15.5l.9-5L5 7l4.8-.4L12 2Z"
+            stroke="${redStroke}" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>`;
+    }
+
+    function renderTiles(){
+      el.grid.innerHTML = "";
+
+      TOOLS.forEach(t => {
+        const live = !!t.url;
+
+        const tile = document.createElement("article");
+        tile.className = "tile";
+        tile.setAttribute("data-key", t.key);
+
+        tile.innerHTML = `
+          ${live ? "" : `<div class="ribbon" aria-hidden="true">UNDER CONSTRUCTION</div>`}
+
+          <div class="tile-top">
+            <div>
+              <h3>${t.title}</h3>
+              <p>${t.desc}</p>
+            </div>
+            <div class="icon">${tileIconSVG(t.key)}</div>
+          </div>
+
+          <div class="tile-actions">
+            <div class="left">
+              <button class="btn ${t.key === "pmbok" ? "primary" : ""}" data-open="${t.key}" ${live ? "" : "disabled"}>Open</button>
+              <button class="btn ghost" data-preview="${t.key}" ${live ? "" : "disabled"}>Preview</button>
+            </div>
+            <span class="meta">${live ? "Live" : "Coming soon"}</span>
+          </div>
+        `;
+
+        el.grid.appendChild(tile);
+      });
+
+      // wire tile buttons
+      document.querySelectorAll("[data-open]").forEach(b => {
+        b.addEventListener("click", () => openTool(b.dataset.open));
+      });
+      document.querySelectorAll("[data-preview]").forEach(b => {
+        b.addEventListener("click", () => previewTool(b.dataset.preview));
+      });
+
+      // clicking a disabled tile shows toast (nice UX)
+      el.grid.addEventListener("click", (e) => {
+        const tile = e.target.closest(".tile");
+        if(!tile) return;
+        const key = tile.getAttribute("data-key");
+        const tool = TOOLS.find(x => x.key === key);
+        if(tool && !tool.url){
+          // only if they click somewhere not on enabled buttons
+          if(!e.target.closest("button")){
+            showToast("Under construction — link not added yet.");
+          }
+        }
+      }, { once: true });
+    }
+
+    // Quick header buttons
+    el.btnOpenPmbok.addEventListener("click", () => openTool("pmbok"));
+    el.btnOpenStakeholders.addEventListener("click", () => openTool("stakeholders"));
+
+    // Continue
+    el.btnContinue.addEventListener("click", () => {
+      const last = getLast();
+      if(last && LINKS[last]) openTool(last);
+      else openTool("pmbok");
+    });
+
+    // Reset
+    el.btnResetLast.addEventListener("click", () => {
+      localStorage.removeItem(LAST_KEY);
+      renderLast();
+      el.statusText.textContent = "Status: reset";
+      showToast("Continue reset.");
+    });
+
+    // Modal controls
+    el.btnClose.addEventListener("click", closeModal);
+    el.modal.addEventListener("click", (e) => {
+      if(e.target === el.modal) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && el.modal.classList.contains("open")) closeModal();
+    });
+    el.btnOpenNew.addEventListener("click", () => {
+      if(modalCurrentUrl) window.open(modalCurrentUrl, "_blank", "noopener,noreferrer");
+    });
+
+    // Init
+    renderLast();
+    renderTiles();
+  </script>
+</body>
+</html>
