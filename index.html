@@ -3,16 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Stakeholder Manager — Power/Interest Matrix</title>
+  <title>Mining the Mind — Tools</title>
+  <meta name="description" content="A simple, WSP-themed landing page for project tools." />
 
   <style>
     :root{
-      /* WSP Primary palette */
+      /* WSP Primary palette (use in most circumstances) */
       --wsp-black:#000000;
       --wsp-white:#FFFFFF;
       --wsp-red:#FF372F;
 
-      /* Theme tokens */
+      /* WSP Secondary palette (allowed for UI accents) */
+      --wsp-grey-1:#404040;
+      --wsp-grey-2:#CCCCCC;
+      --wsp-red-1:#CC2126;
+      --wsp-red-2:#680005;
+
       --bg: var(--wsp-black);
       --text: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.72);
@@ -25,8 +31,6 @@
 
       --font: Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-
-      --danger: #ff6b66;
     }
 
     *{ box-sizing:border-box; }
@@ -38,6 +42,7 @@
       color: var(--text);
     }
 
+    /* Layout */
     .wrap{
       max-width: 1200px;
       margin: 0 auto;
@@ -46,38 +51,24 @@
 
     /* Header */
     header{
-      border:1px solid var(--line);
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      border: 1px solid var(--line);
       background: rgba(255,255,255,.04);
       border-radius: var(--radius);
       padding: 12px 12px;
       box-shadow: 0 14px 44px rgba(0,0,0,.35);
       backdrop-filter: blur(10px);
-      position:relative;
-      overflow:hidden;
     }
-    header::before{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(135deg,
-        rgba(255,55,47,0.00) 0%,
-        rgba(255,55,47,0.12) 55%,
-        rgba(255,55,47,0.24) 100%
-      );
-      pointer-events:none;
-    }
-    .topbar{
-      position:relative;
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
+
     .brand{
       display:flex;
-      align-items:center;
       gap:12px;
-      min-width: 260px;
+      align-items:center;
+      min-width: 240px;
     }
     .mark{
       width:42px;height:42px;border-radius:14px;
@@ -87,29 +78,29 @@
         linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
       box-shadow: 0 16px 50px rgba(0,0,0,.45);
     }
-    h1{
-      font-size:14px;
+    .brand h1{
       margin:0;
-      letter-spacing:.2px;
-      font-weight:900;
-      line-height:1.2;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      line-height: 1.2;
     }
-    .subtitle{
-      margin:3px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.25;
-      max-width:70ch;
+    .brand p{
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
     }
 
     /* Buttons */
-    .toolbar{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
     .btn{
       appearance:none;
       border:1px solid rgba(255,255,255,.22);
@@ -118,7 +109,7 @@
       border-radius: 14px;
       padding: 10px 12px;
       font-size: 13px;
-      font-weight: 900;
+      font-weight: 700;
       cursor:pointer;
       display:inline-flex;
       gap:8px;
@@ -131,12 +122,7 @@
       background: rgba(255,255,255,.10);
       box-shadow: 0 14px 40px rgba(0,0,0,.45);
     }
-    .btn:active{ transform: translateY(0px); }
-    .btn small{
-      font-weight:900;
-      font-family:var(--mono);
-      opacity:.85;
-    }
+    .btn:active{ transform: translateY(0); }
     .btn.primary{
       border-color: rgba(255,55,47,.55);
       background: linear-gradient(135deg, rgba(255,55,47,.22), rgba(255,55,47,.10));
@@ -146,339 +132,249 @@
       border-color: rgba(255,255,255,.18);
       color: rgba(255,255,255,.88);
     }
-    .btn.danger{
-      border-color: rgba(255,107,102,.45);
-      color: rgba(255,107,102,.95);
-      background: rgba(255,107,102,.08);
-    }
-    .btn.icon{
-      padding: 8px 10px;
-      border-radius: 12px;
-      font-weight: 1000;
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
     }
 
-    /* Cards + collapsible */
-    main{ margin-top:14px; display:grid; gap:14px; }
-
-    .card{
-      background: var(--card);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
+    /* Hero — red gradient overlay ONLY here (title area) */
+    .hero{
+      margin-top: 14px;
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
       box-shadow: var(--shadow);
       overflow:hidden;
-      backdrop-filter: blur(10px);
-    }
-    .card .hd{
-      padding:14px 14px 10px;
-      border-bottom:1px solid rgba(255,255,255,.12);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .card .hd .title{
-      margin:0;
-      font-size:14px;
-      letter-spacing:.2px;
-      font-weight:1000;
-    }
-    .card .hd .meta{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:2px;
-      line-height:1.35;
-    }
-    .card .bd{ padding:14px; }
-    .card.collapsed .bd{ display:none; }
-
-    .hd-right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.05);
-      color:var(--muted);
-      font-size:12px;
-      box-shadow: 0 14px 44px rgba(0,0,0,.25);
-      backdrop-filter: blur(10px);
-    }
-    .pill b{ color:var(--text); }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      font-size:12px;
-      color: var(--text);
-      background: rgba(255,255,255,.05);
-      white-space:nowrap;
-    }
-    .mini{
-      font-family:var(--mono);
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    /* Form */
-    .form{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width: 820px){
-      .form{ grid-template-columns: 1fr; }
-    }
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:0 0 6px;
-    }
-    input, select, textarea{
-      width:100%;
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:12px;
-      padding:10px 10px;
-      font-size:13px;
-      outline:none;
-      background: rgba(0,0,0,.25);
-      color: var(--text);
-    }
-    textarea{ min-height:86px; resize:vertical; }
-    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,.45); }
-    input:focus, select:focus, textarea:focus{
-      border-color: rgba(255,55,47,.62);
-      box-shadow: 0 0 0 4px rgba(255,55,47,.16);
-    }
-    select option{ background:#111; color:#fff; }
-    .span2{ grid-column: 1 / -1; }
-
-    /* slider field */
-    .sliderRow{
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap:10px;
-      align-items:center;
-    }
-    input[type="range"]{
-      padding:0;
-      height: 36px;
-      background: transparent;
-      border: none;
-    }
-    input[type="range"]::-webkit-slider-runnable-track{
-      height: 10px;
-      border-radius:999px;
-      background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,55,47,.55));
-      border:1px solid rgba(255,255,255,.14);
-    }
-    input[type="range"]::-webkit-slider-thumb{
-      -webkit-appearance:none;
-      width:18px; height:18px; border-radius:50%;
-      background: rgba(255,55,47,.95);
-      border:2px solid rgba(255,255,255,.70);
-      margin-top:-5px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.55);
-    }
-    input[type="range"]::-moz-range-track{
-      height: 10px;
-      border-radius:999px;
-      background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,55,47,.55));
-      border:1px solid rgba(255,255,255,.14);
-    }
-    input[type="range"]::-moz-range-thumb{
-      width:18px; height:18px; border-radius:50%;
-      background: rgba(255,55,47,.95);
-      border:2px solid rgba(255,255,255,.70);
-      box-shadow: 0 12px 30px rgba(0,0,0,.55);
-    }
-    .val{
-      font-family: var(--mono);
-      font-weight: 1000;
-      padding: 6px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      min-width: 64px;
-      text-align:center;
-    }
-
-    .row-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:flex-start;
-      padding-top:8px;
-    }
-    .note{ font-size:12px; color:var(--muted); }
-    .kbd{
-      font-family:var(--mono);
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      border-radius:10px;
-      padding:2px 6px;
-      color: var(--text);
-      font-weight:900;
-      font-size:11px;
-    }
-
-    hr{ border:none; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
-
-    /* Matrix area */
-    .matrixToolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:flex-end;
-      justify-content:space-between;
-      margin-bottom:10px;
-    }
-    .filters{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:flex-end;
-    }
-    .filters .f{
-      min-width: 180px;
-      flex: 1 1 180px;
-    }
-
-    canvas{
-      width:100%;
-      height:460px;
-      display:block;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-    }
-    .hint{ margin-top:10px; color:var(--muted); font-size:12px; line-height:1.4; }
-
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      display:inline-block;
-      background: linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,55,47,.95));
-      border:1px solid rgba(255,255,255,.18);
-      box-shadow: 0 10px 20px rgba(0,0,0,.35);
-      margin-right:6px;
-    }
-
-    /* Table */
-    .list-head{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .search{
-      flex:1 1 260px;
       position:relative;
     }
-    .search input{ padding-left:34px; }
-    .search .icon{
-      position:absolute;
-      left:10px; top:50%;
-      transform:translateY(-50%);
-      color:var(--muted);
-      font-size:14px;
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      /* Semi-transparent WSP red gradient overlay for hero/title only */
+      background: linear-gradient(135deg,
+        rgba(255,55,47,0.00) 0%,
+        rgba(255,55,47,0.18) 55%,
+        rgba(255,55,47,0.40) 100%
+      );
       pointer-events:none;
     }
-    table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      overflow:hidden;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
+    .hero-inner{
+      position:relative;
+      padding: clamp(18px, 3.6vw, 40px);
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+      align-items:end;
     }
-    thead th{
-      text-align:left;
-      font-size:12px;
-      color:var(--muted);
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.35);
-      position:sticky;
-      top:0;
-      z-index:1;
+    @media (max-width: 900px){
+      .hero-inner{ grid-template-columns: 1fr; }
     }
-    tbody td{
-      padding:10px 10px;
-      font-size:13px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      vertical-align:top;
-      color: var(--text);
-    }
-    tbody tr:last-child td{ border-bottom:none; }
-    tbody tr:hover{ background: rgba(255,55,47,.08); }
 
-    .actions{
+    /* Subheading brand rule: Arial 16pt bold red */
+    .eyebrow{
+      margin:0 0 10px;
+      font-size: 21.33px; /* 16pt */
+      font-weight: 700;
+      color: var(--wsp-red);
+      letter-spacing: .2px;
+    }
+    .hero h2{
+      margin:0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: .2px;
+      font-weight: 800;
+    }
+    .hero p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .hero-cta{
       display:flex;
-      gap:8px;
+      gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-    .btn-sm{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius:12px;
-      padding:8px 10px;
-      font-weight:900;
-      font-size:12px;
-      cursor:pointer;
-      transition: transform .08s ease, background .12s ease, border-color .12s ease;
+    @media (max-width: 900px){
+      .hero-cta{ justify-content:flex-start; }
     }
-    .btn-sm:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,55,47,.28);
-    }
-    .btn-sm.danger{
-      color: rgba(255,107,102,.95);
-      border-color: rgba(255,107,102,.35);
-      background: rgba(255,107,102,.08);
+    .meta{
+      font-family: var(--mono);
+      font-size: 11px;
+      opacity: .8;
     }
 
-    /* Tooltip */
-    .tooltip{
-      position:fixed;
-      pointer-events:none;
-      z-index:9999;
-      background: rgba(0,0,0,.88);
+    /* Tiles grid (4 columns x 2 rows) */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .tile{
+      position:relative;
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--card);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 140px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      box-shadow: 0 14px 44px rgba(0,0,0,.35);
+      transition: transform .10s ease, background .12s ease, border-color .12s ease;
+      overflow:hidden;
+    }
+    .tile:hover{
+      transform: translateY(-2px);
+      background: var(--card2);
+      border-color: rgba(255,55,47,.25);
+    }
+
+    .tile-top{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+    .tile h3{
+      margin:0;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+    .tile p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+
+    .icon{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,55,47,.12);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+    }
+    .icon svg{
+      width: 22px;
+      height: 22px;
+    }
+
+    .tile-actions{
+      margin-top:auto;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .tile-actions .left{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    /* Under construction ribbon */
+    .ribbon{
+      position:absolute;
+      top: 12px;
+      right: -46px;
+      transform: rotate(35deg);
+      background: rgba(255,55,47,.92);
+      color: var(--wsp-white);
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: .6px;
+      padding: 8px 58px;
+      border: 1px solid rgba(0,0,0,.25);
+      box-shadow: 0 18px 40px rgba(0,0,0,.45);
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.82);
       border: 1px solid rgba(255,255,255,.18);
-      color:#fff;
-      padding:10px 10px;
-      border-radius:12px;
-      font-size:12px;
-      max-width:280px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-      transform: translate(10px, 10px);
-      opacity:0;
-      transition: opacity .08s ease;
+      color: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.65);
+      display:none;
+      z-index: 99999;
+      font-size: 13px;
     }
-    .tooltip .t{ font-weight:1000; margin-bottom:4px; }
-    .tooltip .s{ opacity:.92; line-height:1.35; }
+    .toast.show{ display:block; }
 
-    /* Focus */
-    button:focus-visible, label.btn:focus-within, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    /* Modal preview */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      z-index: 9999;
+    }
+    .modal.open{ display:flex; }
+    .modalCard{
+      width:min(1100px, 100%);
+      height:min(780px, 92vh);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.92);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      box-shadow: 0 40px 120px rgba(0,0,0,.75);
+    }
+    .modalHd{
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      flex-wrap:wrap;
+    }
+    .modalTitle{
+      font-weight: 800;
+      display:flex;
+      gap:10px;
+      align-items:baseline;
+      flex-wrap:wrap;
+    }
+    .modalTitle small{
+      font-family: var(--mono);
+      font-weight: 800;
+      opacity: .75;
+      font-size: 11px;
+    }
+    .modalBody{ flex:1; background: rgba(255,255,255,.04); }
+    .modalBody iframe{ width:100%; height:100%; border:0; background:#fff; }
+
+    /* Focus states */
+    button:focus-visible, a:focus-visible{
       outline: 3px solid var(--wsp-red);
       outline-offset: 2px;
       border-radius: 12px;
@@ -488,1124 +384,328 @@
 
 <body>
   <div class="wrap">
+
     <header>
-      <div class="topbar">
-        <div class="brand">
-          <div class="mark" aria-hidden="true"></div>
-          <div>
-            <h1>Stakeholder Manager</h1>
-            <div class="subtitle">
-              Capture stakeholders • Use 0–100 sliders for Power & Interest • Filter the matrix by Organisation/Role/Category.
-            </div>
-          </div>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>Mining the Mind — Project Tools</h1>
+          <p>Simple access to the tools your team actually uses.</p>
         </div>
+      </div>
 
-        <div class="toolbar">
-          <button class="btn ghost" id="btnExport" title="Download your stakeholder list as JSON">
-            ⤓ Export <small>.json</small>
-          </button>
-
-          <label class="btn ghost" title="Import a JSON file (replaces current list)">
-            ⤒ Import <small>.json</small>
-            <input id="fileImport" type="file" accept="application/json" hidden />
-          </label>
-
-          <button class="btn danger" id="btnClear" title="Clear everything (also clears localStorage)">
-            ✕ Clear
-          </button>
-        </div>
+      <div class="actions">
+        <button class="btn ghost" id="btnContinue" title="Open your last tool">
+          ⛏️ Continue <span class="meta" id="lastToolText">—</span>
+        </button>
+        <button class="btn ghost" id="btnResetLast">Reset</button>
       </div>
     </header>
 
-    <main>
-      <!-- 1) INPUT (collapsible) -->
-      <section class="card" id="cardForm">
-        <div class="hd">
-          <div>
-            <p class="title">Input (Add / Edit Stakeholder)</p>
-            <div class="meta">Power & Interest are 0–100 sliders. Use the table to edit/delete.</div>
-          </div>
-
-          <div class="hd-right">
-            <div class="pill" title="Auto-saved in your browser (localStorage)">
-              💾 <b id="countPill">0</b> saved
-            </div>
-            <button class="btn icon ghost" data-collapse="#cardForm" aria-expanded="true" title="Minimise / expand">
-              ▾
-            </button>
-          </div>
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">One hub. Eight tools.</p>
+          <h2>Fast, clear project decisions — without the noise.</h2>
+          <p>
+            Built for delivery reality: quick structure when you need it, and straightforward stakeholder clarity.
+            Keep it simple. Keep it used.
+          </p>
         </div>
 
-        <div class="bd">
-          <form id="stakeholderForm" class="form" autocomplete="off">
-            <div>
-              <label for="name">Name *</label>
-              <input id="name" required placeholder="e.g., Thandi Mokoena" />
-            </div>
-
-            <div>
-              <label for="organisation">Organisation</label>
-              <input id="organisation" placeholder="e.g., Client / Municipality / Contractor" />
-            </div>
-
-            <div>
-              <label for="role">Role / Title</label>
-              <select id="role">
-                <option value="Project Sponsor">Project Sponsor</option>
-                <option value="Client Rep">Client Rep</option>
-                <option value="End User">End User</option>
-                <option value="Contractor">Contractor</option>
-                <option value="Consultant">Consultant</option>
-                <option value="Regulator">Regulator</option>
-                <option value="Community">Community</option>
-                <option value="Operations">Operations</option>
-                <option value="Finance">Finance</option>
-                <option value="Legal">Legal</option>
-                <option value="Other" selected>Other</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="category">Category</label>
-              <select id="category">
-                <option value="Internal">Internal</option>
-                <option value="External" selected>External</option>
-                <option value="Supplier">Supplier</option>
-                <option value="Authority">Authority</option>
-                <option value="Community">Community</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="email">Email</label>
-              <input id="email" type="email" placeholder="name@domain.com" />
-            </div>
-
-            <div>
-              <label for="phone">Phone</label>
-              <input id="phone" placeholder="+27 ..." />
-            </div>
-
-            <!-- Power slider 0-100 -->
-            <div>
-              <label for="power">Power / Importance (0–100)</label>
-              <div class="sliderRow">
-                <input id="power" type="range" min="0" max="100" step="1" value="60" />
-                <div class="val"><span id="powerVal">60</span></div>
-              </div>
-              <div class="mini">Higher = more influence / decision impact</div>
-            </div>
-
-            <!-- Interest slider 0-100 -->
-            <div>
-              <label for="interest">Interest (0–100)</label>
-              <div class="sliderRow">
-                <input id="interest" type="range" min="0" max="100" step="1" value="60" />
-                <div class="val"><span id="interestVal">60</span></div>
-              </div>
-              <div class="mini">Higher = more engaged / cares more</div>
-            </div>
-
-            <div>
-              <label for="attitude">Current Attitude</label>
-              <select id="attitude">
-                <option value="Supportive" selected>Supportive</option>
-                <option value="Neutral">Neutral</option>
-                <option value="Resistant">Resistant</option>
-                <option value="Unknown">Unknown</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="engagement">Engagement Strategy</label>
-              <select id="engagement">
-                <option value="Manage closely" selected>Manage closely</option>
-                <option value="Keep satisfied">Keep satisfied</option>
-                <option value="Keep informed">Keep informed</option>
-                <option value="Monitor">Monitor</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="frequency">Communication Frequency</label>
-              <select id="frequency">
-                <option value="Daily">Daily</option>
-                <option value="Weekly" selected>Weekly</option>
-                <option value="Bi-weekly">Bi-weekly</option>
-                <option value="Monthly">Monthly</option>
-                <option value="Ad-hoc">Ad-hoc</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="channel">Preferred Channel</label>
-              <select id="channel">
-                <option value="Meeting" selected>Meeting</option>
-                <option value="Email">Email</option>
-                <option value="MS Teams">MS Teams</option>
-                <option value="Phone/WhatsApp">Phone/WhatsApp</option>
-                <option value="Site walkdown">Site walkdown</option>
-              </select>
-            </div>
-
-            <div class="span2">
-              <label for="notes">Notes</label>
-              <textarea id="notes" placeholder="Key concerns, hot buttons, what ‘good’ looks like, commitments, etc."></textarea>
-            </div>
-
-            <div class="span2 row-actions">
-              <button class="btn primary" type="submit" id="btnSave">➕ Add stakeholder</button>
-              <button class="btn ghost" type="button" id="btnCancel" style="display:none;">↩ Cancel edit</button>
-              <span class="note">Tip: <span class="kbd">Hover</span> points • <span class="kbd">Click</span> select • use filters to focus the matrix.</span>
-            </div>
-
-            <input type="hidden" id="editingId" value="" />
-          </form>
+        <div class="hero-cta">
+          <button class="btn primary" id="btnOpenPmbok">Open PMBOK</button>
+          <button class="btn" id="btnOpenStakeholders">Open Stakeholders</button>
+          <div class="meta" id="statusText">Status: ready</div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- 2) MATRIX (full width, vibrant, collapsible) -->
-      <section class="card" id="cardMatrix">
-        <div class="hd">
-          <div>
-            <p class="title">Power / Interest Matrix (0–100)</p>
-            <div class="meta">Y = Power • X = Interest • Midlines at 50/50 • Filters apply to the matrix only.</div>
-          </div>
+    <!-- 4 x 2 TILE GRID -->
+    <section class="grid" id="toolGrid" aria-label="Tool tiles"></section>
 
-          <div class="hd-right">
-            <div class="pill"><span class="dot"></span><b>Stakeholder</b></div>
-            <button class="btn icon ghost" data-collapse="#cardMatrix" aria-expanded="true" title="Minimise / expand">
-              ▾
-            </button>
-          </div>
-        </div>
-
-        <div class="bd">
-          <div class="matrixToolbar">
-            <div class="filters">
-              <div class="f">
-                <label for="fOrg">Filter: Organisation</label>
-                <select id="fOrg"></select>
-              </div>
-              <div class="f">
-                <label for="fRole">Filter: Role</label>
-                <select id="fRole"></select>
-              </div>
-              <div class="f">
-                <label for="fCat">Filter: Category</label>
-                <select id="fCat"></select>
-              </div>
-            </div>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
-              <button class="btn ghost" id="btnResetGraphFilters" type="button">Reset filters</button>
-              <div class="mini" id="matrixCountText">—</div>
-            </div>
-          </div>
-
-          <canvas id="matrix" width="1200" height="680" aria-label="Power Interest Matrix Canvas"></canvas>
-
-          <div class="hint">
-            Quadrants:
-            <b>Manage closely</b> (High/High) • <b>Keep satisfied</b> (High Power/Low Interest) •
-            <b>Keep informed</b> (Low Power/High Interest) • <b>Monitor</b> (Low/Low)
-          </div>
-        </div>
-      </section>
-
-      <!-- 3) TABLE (under graph, collapsible) -->
-      <section class="card" id="cardTable">
-        <div class="hd">
-          <div>
-            <p class="title">Stakeholder Table</p>
-            <div class="meta">Search + sort your list. Edit/delete from here.</div>
-          </div>
-
-          <div class="hd-right">
-            <button class="btn icon ghost" data-collapse="#cardTable" aria-expanded="true" title="Minimise / expand">
-              ▾
-            </button>
-          </div>
-        </div>
-
-        <div class="bd">
-          <div class="list-head">
-            <div class="search">
-              <span class="icon">🔎</span>
-              <input id="search" placeholder="Search name / org / role / notes..." />
-            </div>
-
-            <div class="pill" title="Sort order">
-              Sort:
-              <select id="sort" style="width:auto; padding:6px 10px; border-radius:12px; margin-left:8px;">
-                <option value="recent" selected>Most recent</option>
-                <option value="name">Name (A→Z)</option>
-                <option value="power">Power (High→Low)</option>
-                <option value="interest">Interest (High→Low)</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="max-height:420px; overflow:auto; border-radius:14px;">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width:28%;">Stakeholder</th>
-                  <th style="width:22%;">Org / Role</th>
-                  <th style="width:22%;">Matrix (0–100)</th>
-                  <th style="width:18%;">Plan</th>
-                  <th style="width:10%; text-align:right;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-    </main>
   </div>
 
-  <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
-
-<script>
-  // ============================
-  // Stakeholder Manager (0–100)
-  // ============================
-
-  const els = {
-    form: document.getElementById('stakeholderForm'),
-    editingId: document.getElementById('editingId'),
-    name: document.getElementById('name'),
-    organisation: document.getElementById('organisation'),
-    role: document.getElementById('role'),
-    category: document.getElementById('category'),
-    email: document.getElementById('email'),
-    phone: document.getElementById('phone'),
-    power: document.getElementById('power'),
-    interest: document.getElementById('interest'),
-    powerVal: document.getElementById('powerVal'),
-    interestVal: document.getElementById('interestVal'),
-    attitude: document.getElementById('attitude'),
-    engagement: document.getElementById('engagement'),
-    frequency: document.getElementById('frequency'),
-    channel: document.getElementById('channel'),
-    notes: document.getElementById('notes'),
-
-    btnSave: document.getElementById('btnSave'),
-    btnCancel: document.getElementById('btnCancel'),
-
-    tbody: document.getElementById('tbody'),
-    search: document.getElementById('search'),
-    sort: document.getElementById('sort'),
-    countPill: document.getElementById('countPill'),
-
-    btnExport: document.getElementById('btnExport'),
-    fileImport: document.getElementById('fileImport'),
-    btnClear: document.getElementById('btnClear'),
-
-    // graph
-    canvas: document.getElementById('matrix'),
-    tooltip: document.getElementById('tooltip'),
-    fOrg: document.getElementById('fOrg'),
-    fRole: document.getElementById('fRole'),
-    fCat: document.getElementById('fCat'),
-    btnResetGraphFilters: document.getElementById('btnResetGraphFilters'),
-    matrixCountText: document.getElementById('matrixCountText')
-  };
-
-  const STORAGE_KEY = 'stakeholders.powerInterest.v2_0to100';
-
-  let stakeholders = loadFromStorage();
-  let filteredTable = [...stakeholders];
-  let selectedId = null;
-
-  // Canvas hit points
-  let points = []; // {id, xPx, yPx, stakeholder}
-
-  // ---------------- Utilities ----------------
-  function uid(){
-    return 'sh_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
-  }
-  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
-  function nowISO(){ return new Date().toISOString(); }
-  function toInt(v){ return parseInt(v, 10); }
-  function safeText(s){ return (s ?? '').toString().trim(); }
-
-  // old 1..5 -> 0..100 (keeps imports backward compatible)
-  function normalizeScale(v){
-    const n = Number(v);
-    if(Number.isNaN(n)) return 60;
-    if(n <= 5 && n >= 0){ // treat <=5 as old scale if it looks like it
-      // If value is exactly 0..5, map: 0->0, 1->25, 2->50, 3->75, 4->100, 5->100-ish
-      // Better mapping for 1..5: (n-1)/4*100
-      if(n === 0) return 0;
-      if(n >= 1 && n <= 5) return Math.round(((n - 1) / 4) * 100);
-    }
-    return clamp(Math.round(n), 0, 100);
-  }
-
-  function quadrantLabel(power, interest){
-    const hiPow = power >= 50;
-    const hiInt = interest >= 50;
-    if (hiPow && hiInt) return 'Manage closely';
-    if (hiPow && !hiInt) return 'Keep satisfied';
-    if (!hiPow && hiInt) return 'Keep informed';
-    return 'Monitor';
-  }
-
-  function saveToStorage(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stakeholders));
-    els.countPill.textContent = String(stakeholders.length);
-  }
-
-  function loadFromStorage(){
-    try{
-      // migrate from old key if present
-      const rawNew = localStorage.getItem(STORAGE_KEY);
-      if(rawNew){
-        const arr = JSON.parse(rawNew);
-        return Array.isArray(arr) ? arr : [];
-      }
-
-      // try older v1 key if user had it
-      const rawOld = localStorage.getItem('stakeholders.powerInterest.v1');
-      if(rawOld){
-        const arr = JSON.parse(rawOld);
-        if(!Array.isArray(arr)) return [];
-        // migrate
-        const migrated = arr.map(s => ({
-          id: s.id || uid(),
-          name: safeText(s.name),
-          organisation: safeText(s.organisation),
-          role: s.role || 'Other',
-          category: s.category || 'External',
-          email: safeText(s.email),
-          phone: safeText(s.phone),
-          power: normalizeScale(s.influence ?? s.power ?? 3),
-          interest: normalizeScale(s.interest ?? 3),
-          attitude: s.attitude || 'Unknown',
-          engagement: s.engagement || quadrantLabel(normalizeScale(s.influence ?? 3), normalizeScale(s.interest ?? 3)),
-          frequency: s.frequency || 'Weekly',
-          channel: s.channel || 'Meeting',
-          notes: safeText(s.notes),
-          updatedAt: s.updatedAt || nowISO()
-        })).filter(s => s.name);
-
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
-        return migrated;
-      }
-
-      return [];
-    }catch{
-      return [];
-    }
-  }
-
-  function download(filename, text){
-    const blob = new Blob([text], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  }
-
-  function setEditingMode(isEditing){
-    els.btnCancel.style.display = isEditing ? 'inline-flex' : 'none';
-    els.btnSave.textContent = isEditing ? '✅ Update stakeholder' : '➕ Add stakeholder';
-  }
-
-  function resetForm(){
-    els.form.reset();
-    els.editingId.value = '';
-    // restore default slider reads
-    els.power.value = "60"; els.interest.value = "60";
-    syncSliderLabels();
-    setEditingMode(false);
-  }
-
-  function syncSliderLabels(){
-    els.powerVal.textContent = String(els.power.value);
-    els.interestVal.textContent = String(els.interest.value);
-  }
-
-  // ------------- Collapsible cards -------------
-  function setupCollapsibles(){
-    document.querySelectorAll('[data-collapse]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const sel = btn.getAttribute('data-collapse');
-        const card = document.querySelector(sel);
-        if(!card) return;
-        const isCollapsed = card.classList.toggle('collapsed');
-        btn.setAttribute('aria-expanded', String(!isCollapsed));
-        btn.textContent = isCollapsed ? '▸' : '▾';
-      });
-    });
-  }
-
-  // ------------- Table filtering/sorting -------------
-  function getSortedList(list){
-    const mode = els.sort.value;
-    const arr = [...list];
-
-    if(mode === 'name'){
-      arr.sort((a,b) => (a.name||'').localeCompare(b.name||''));
-    } else if(mode === 'power'){
-      arr.sort((a,b) => (b.power - a.power) || (b.interest - a.interest) || (b.updatedAt||'').localeCompare(a.updatedAt||''));
-    } else if(mode === 'interest'){
-      arr.sort((a,b) => (b.interest - a.interest) || (b.power - a.power) || (b.updatedAt||'').localeCompare(a.updatedAt||''));
-    } else {
-      arr.sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
-    }
-    return arr;
-  }
-
-  function applyTableFilter(){
-    const q = safeText(els.search.value).toLowerCase();
-    let list = [...stakeholders];
-
-    if(q){
-      list = list.filter(s => {
-        const blob = [
-          s.name, s.organisation, s.role, s.category, s.email, s.phone,
-          s.attitude, s.engagement, s.frequency, s.channel, s.notes,
-          String(s.power), String(s.interest)
-        ].join(' ').toLowerCase();
-        return blob.includes(q);
-      });
-    }
-
-    filteredTable = getSortedList(list);
-    renderTable();
-    drawMatrix(); // keep matrix in sync with selection + updated list; graph filtering is separate
-  }
-
-  function renderTable(){
-    els.tbody.innerHTML = '';
-    const rows = filteredTable.map(s => {
-      const quad = quadrantLabel(s.power, s.interest);
-      const isSel = (s.id === selectedId);
-      const tr = document.createElement('tr');
-      tr.dataset.id = s.id;
-      if(isSel){
-        tr.style.outline = '2px solid rgba(255,55,47,.40)';
-        tr.style.outlineOffset = '-2px';
-      }
-
-      tr.innerHTML = `
-        <td>
-          <div style="font-weight:1000; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <span>${escapeHtml(s.name)}</span>
-            <span class="tag">${escapeHtml(s.category || '—')}</span>
-          </div>
-          <div class="mini">${escapeHtml(s.email || '')}${s.phone ? ' • ' + escapeHtml(s.phone) : ''}</div>
-        </td>
-
-        <td>
-          <div style="font-weight:900;">${escapeHtml(s.organisation || '—')}</div>
-          <div class="mini">${escapeHtml(s.role || '—')}</div>
-        </td>
-
-        <td>
-          <div class="tag">Power: <b style="margin-left:6px;">${s.power}</b>/100</div>
-          <span style="display:inline-block;width:8px;"></span>
-          <div class="tag">Interest: <b style="margin-left:6px;">${s.interest}</b>/100</div>
-          <div class="mini" style="margin-top:6px;">Quadrant: <b style="color:rgba(255,55,47,.95)">${escapeHtml(quad)}</b></div>
-        </td>
-
-        <td>
-          <div class="mini">Attitude: <b style="color:rgba(255,255,255,.92)">${escapeHtml(s.attitude || '—')}</b></div>
-          <div class="mini">Plan: <b style="color:rgba(255,255,255,.92)">${escapeHtml(s.engagement || quad)}</b></div>
-          <div class="mini">Comms: <b style="color:rgba(255,255,255,.92)">${escapeHtml(s.frequency || '—')}</b> • ${escapeHtml(s.channel || '—')}</div>
-        </td>
-
-        <td style="text-align:right;">
-          <div class="actions">
-            <button class="btn-sm" data-action="select">Select</button>
-            <button class="btn-sm" data-action="edit">Edit</button>
-            <button class="btn-sm danger" data-action="delete">Delete</button>
-          </div>
-        </td>
-      `;
-      return tr;
-    });
-
-    rows.forEach(r => els.tbody.appendChild(r));
-    els.countPill.textContent = String(stakeholders.length);
-  }
-
-  function escapeHtml(str){
-    return (str ?? '')
-      .toString()
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#039;');
-  }
-
-  // ------------- Graph filter dropdowns -------------
-  function buildGraphFilterOptions(){
-    const orgs = uniqueSorted(stakeholders.map(s => safeText(s.organisation)).filter(Boolean));
-    const roles = uniqueSorted(stakeholders.map(s => safeText(s.role)).filter(Boolean));
-    const cats = uniqueSorted(stakeholders.map(s => safeText(s.category)).filter(Boolean));
-
-    fillSelect(els.fOrg, ['All organisations', ...orgs]);
-    fillSelect(els.fRole, ['All roles', ...roles]);
-    fillSelect(els.fCat, ['All categories', ...cats]);
-  }
-
-  function uniqueSorted(arr){
-    return [...new Set(arr)].sort((a,b) => a.localeCompare(b));
-  }
-
-  function fillSelect(select, options){
-    const current = select.value;
-    select.innerHTML = '';
-    options.forEach((o, idx) => {
-      const opt = document.createElement('option');
-      opt.value = idx === 0 ? '' : o;
-      opt.textContent = o;
-      select.appendChild(opt);
-    });
-    // keep selection if possible
-    if(current && [...select.options].some(x => x.value === current)){
-      select.value = current;
-    }else{
-      select.value = '';
-    }
-  }
-
-  function getGraphFilteredList(){
-    const org = els.fOrg.value;
-    const role = els.fRole.value;
-    const cat = els.fCat.value;
-
-    return stakeholders.filter(s => {
-      if(org && safeText(s.organisation) !== org) return false;
-      if(role && safeText(s.role) !== role) return false;
-      if(cat && safeText(s.category) !== cat) return false;
-      return true;
-    });
-  }
-
-  // ------------- Matrix drawing (vibrant) -------------
-  function drawMatrix(){
-    const canvas = els.canvas;
-    const ctx = canvas.getContext('2d');
-
-    const cssW = canvas.getBoundingClientRect().width;
-    const cssH = canvas.getBoundingClientRect().height;
-    const dpr = window.devicePixelRatio || 1;
-
-    canvas.width = Math.round(cssW * dpr);
-    canvas.height = Math.round(cssH * dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-
-    const W = cssW;
-    const H = cssH;
-
-    const pad = 56;
-    const left = pad, top = pad, right = W - pad, bottom = H - pad;
-    const w = right - left, h = bottom - top;
-
-    ctx.clearRect(0,0,W,H);
-
-    // Vibrant background: dark + red glows
-    const bg = ctx.createLinearGradient(0,0,W,H);
-    bg.addColorStop(0, 'rgba(0,0,0,.55)');
-    bg.addColorStop(.55, 'rgba(255,55,47,.08)');
-    bg.addColorStop(1, 'rgba(0,0,0,.65)');
-    roundRect(ctx, 10, 10, W-20, H-20, 16);
-    ctx.fillStyle = bg;
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,.14)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // subtle vignette glow
-    ctx.save();
-    ctx.globalAlpha = 0.9;
-    const glow = ctx.createRadialGradient(W*0.78, H*0.22, 20, W*0.78, H*0.22, Math.max(W,H));
-    glow.addColorStop(0, 'rgba(255,55,47,.16)');
-    glow.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0,0,W,H);
-    ctx.restore();
-
-    // midlines at 50/50
-    const midX = left + (w * 0.5);
-    const midY = top + (h * 0.5);
-
-    // Quadrants tint (slightly more vivid)
-    fillRect(ctx, left, top, w/2, h/2, 'rgba(255,55,47,.10)');     // high power / low interest? (top-left)
-    fillRect(ctx, midX, top, w/2, h/2, 'rgba(255,55,47,.18)');     // high/high (top-right)
-    fillRect(ctx, left, midY, w/2, h/2, 'rgba(255,255,255,.03)');  // low/low (bottom-left)
-    fillRect(ctx, midX, midY, w/2, h/2, 'rgba(255,55,47,.08)');    // low power / high interest (bottom-right)
-
-    // Grid lines 0..100 ticks
-    ctx.strokeStyle = 'rgba(255,255,255,.10)';
-    ctx.lineWidth = 1;
-    for(let i=1;i<=3;i++){
-      const x = left + (w * i/4);
-      const y = top + (h * i/4);
-      ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, bottom); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(right, y); ctx.stroke();
-    }
-
-    // Mid lines
-    ctx.strokeStyle = 'rgba(255,55,47,.45)';
-    ctx.lineWidth = 1.8;
-    ctx.beginPath(); ctx.moveTo(midX, top); ctx.lineTo(midX, bottom); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(left, midY); ctx.lineTo(right, midY); ctx.stroke();
-
-    // Labels
-    ctx.fillStyle = 'rgba(255,255,255,.88)';
-    ctx.font = '1000 13px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
-
-    // y-axis label rotated
-    ctx.save();
-    ctx.translate(18, top + h/2);
-    ctx.rotate(-Math.PI/2);
-    ctx.fillText('Power (0 → 100)', 0, 0);
-    ctx.restore();
-
-    // x-axis label
-    ctx.fillText('Interest (0 → 100)', left + w/2 - 55, H - 16);
-
-    // Quadrant labels
-    ctx.font = '1000 12px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,.72)';
-    ctx.fillText('KEEP SATISFIED', left + 10, top + 18);
-    ctx.fillStyle = 'rgba(255,55,47,.96)';
-    ctx.fillText('MANAGE CLOSELY', midX + 10, top + 18);
-    ctx.fillStyle = 'rgba(255,255,255,.72)';
-    ctx.fillText('MONITOR', left + 10, midY + 18);
-    ctx.fillStyle = 'rgba(255,55,47,.90)';
-    ctx.fillText('KEEP INFORMED', midX + 10, midY + 18);
-
-    // tick labels
-    ctx.font = '900 11px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,.62)';
-    const ticks = [0,25,50,75,100];
-    ticks.forEach((t, i) => {
-      const x = left + (w * (t/100));
-      ctx.fillText(String(t), x - 8, bottom + 22);
-      const y = bottom - (h * (t/100));
-      ctx.fillText(String(t), left - 30, y + 4);
-    });
-
-    // Points list (filtered by graph filters)
-    points = [];
-    const list = getGraphFilteredList();
-    els.matrixCountText.textContent = `${list.length}/${stakeholders.length} shown`;
-
-    // anti-overlap bucket for identical (power,interest)
-    const bucketCount = new Map();
-    list.forEach(s => {
-      const pow = clamp(toInt(s.power), 0, 100);
-      const intr = clamp(toInt(s.interest), 0, 100);
-      const key = `${pow}-${intr}`;
-      const k = (bucketCount.get(key) || 0) + 1;
-      bucketCount.set(key, k);
-
-      // map to plot
-      const xN = intr / 100;           // 0..1
-      const yN = pow / 100;            // 0..1
-      let x = left + xN * w;
-      let y = bottom - yN * h;
-
-      // jitter spiral ONLY if duplicates exist
-      const idx = k - 1;
-      if(idx > 0){
-        const angle = idx * 2.399963229728653; // golden angle
-        const rad = Math.min(18, 6 + idx * 2);
-        x += Math.cos(angle) * rad;
-        y += Math.sin(angle) * rad;
-      }
-
-      x = clamp(x, left + 6, right - 6);
-      y = clamp(y, top + 6, bottom - 6);
-
-      const isSelected = s.id === selectedId;
-
-      // glow halo
-      ctx.save();
-      ctx.globalAlpha = isSelected ? 0.9 : 0.55;
-      ctx.beginPath();
-      ctx.arc(x, y, isSelected ? 15 : 11, 0, Math.PI*2);
-      const halo = ctx.createRadialGradient(x,y,2, x,y, isSelected ? 16 : 12);
-      halo.addColorStop(0, 'rgba(255,55,47,.35)');
-      halo.addColorStop(1, 'rgba(255,55,47,0)');
-      ctx.fillStyle = halo;
-      ctx.fill();
-      ctx.restore();
-
-      // core point
-      ctx.beginPath();
-      ctx.arc(x, y, isSelected ? 7.4 : 6.2, 0, Math.PI*2);
-
-      const grad = ctx.createLinearGradient(x-8,y-8,x+8,y+8);
-      grad.addColorStop(0, 'rgba(255,255,255,.92)');
-      grad.addColorStop(1, 'rgba(255,55,47,.98)');
-      ctx.fillStyle = grad;
-      ctx.fill();
-
-      ctx.lineWidth = isSelected ? 2.4 : 1.2;
-      ctx.strokeStyle = isSelected ? 'rgba(255,255,255,.75)' : 'rgba(255,255,255,.22)';
-      ctx.stroke();
-
-      points.push({ id: s.id, xPx: x, yPx: y, stakeholder: s });
-    });
-
-    // footer
-    ctx.fillStyle = 'rgba(255,255,255,.62)';
-    ctx.font = '900 11px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
-    ctx.fillText(`Matrix filter active • click a point to select`, left, H - 12);
-  }
-
-  function fillRect(ctx,x,y,w,h,fill){
-    ctx.fillStyle = fill;
-    ctx.fillRect(x,y,w,h);
-  }
-
-  function roundRect(ctx, x, y, w, h, r){
-    const rr = Math.min(r, w/2, h/2);
-    ctx.beginPath();
-    ctx.moveTo(x+rr, y);
-    ctx.arcTo(x+w, y, x+w, y+h, rr);
-    ctx.arcTo(x+w, y+h, x, y+h, rr);
-    ctx.arcTo(x, y+h, x, y, rr);
-    ctx.arcTo(x, y, x+w, y, rr);
-    ctx.closePath();
-  }
-
-  // ------------- Tooltip / hit testing -------------
-  function findPointAt(clientX, clientY){
-    const rect = els.canvas.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-    let best = null;
-    let bestD = 9999;
-    for(const p of points){
-      const dx = p.xPx - x;
-      const dy = p.yPx - y;
-      const d = Math.sqrt(dx*dx + dy*dy);
-      if(d < bestD && d <= 12) { best = p; bestD = d; }
-    }
-    return best;
-  }
-
-  function showTooltip(p, clientX, clientY){
-    const s = p.stakeholder;
-    const quad = quadrantLabel(s.power, s.interest);
-    els.tooltip.innerHTML = `
-      <div class="t">${escapeHtml(s.name)}</div>
-      <div class="s">
-        <div>${escapeHtml(s.organisation || '—')} • ${escapeHtml(s.role || '—')} • <b>${escapeHtml(s.category || '—')}</b></div>
-        <div style="margin-top:6px;">Power: <b>${s.power}</b>/100 • Interest: <b>${s.interest}</b>/100</div>
-        <div>Quadrant: <b style="color:rgba(255,55,47,.95)">${escapeHtml(quad)}</b></div>
-        <div>Attitude: <b>${escapeHtml(s.attitude || '—')}</b> • Comms: <b>${escapeHtml(s.frequency || '—')}</b></div>
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Modal Preview -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Tool preview">
+      <div class="modalHd">
+        <div class="modalTitle">
+          <span id="modalTitle">Preview</span>
+          <small id="modalUrl">—</small>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn ghost" id="btnOpenNew">↗ Open in new tab</button>
+          <button class="btn" id="btnClose">✕ Close</button>
+        </div>
       </div>
-    `;
-    els.tooltip.style.left = clientX + 'px';
-    els.tooltip.style.top = clientY + 'px';
-    els.tooltip.style.opacity = '1';
-  }
-  function hideTooltip(){ els.tooltip.style.opacity = '0'; }
+      <div class="modalBody">
+        <iframe id="modalFrame" title="Tool preview iframe"></iframe>
+      </div>
+    </div>
+  </div>
 
-  // ------------- CRUD -------------
-  function getFormData(){
-    const name = safeText(els.name.value);
-    if(!name) throw new Error('Name is required.');
+  <script>
+    // =========================
+    // CONFIG: edit tile titles, descriptions, and add URLs when ready
+    // =========================
+    const TOOLS = [
+      {
+        key: "pmbok",
+        title: "PMBOK App",
+        desc: "Quick structure and guidance for project delivery.",
+        url: "https://pcarel.github.io/Mining-the-Mind/PMbok.html"
+      },
+      {
+        key: "stakeholders",
+        title: "Stakeholders App",
+        desc: "Capture people, map power/interest, align decisions.",
+        url: "https://pcarel.github.io/Mining-the-Mind/STH.html"
+      },
+      {
+        key: "risk",
+        title: "Risk Radar",
+        desc: "Register + simple heatmap + actions for delivery.",
+        url: "" // add later
+      },
+      {
+        key: "pulse",
+        title: "Weekly Pulse",
+        desc: "Highlights, risks, priorities — one clean weekly view.",
+        url: "" // add later
+      },
+      {
+        key: "lessons",
+        title: "Lessons Organiser",
+        desc: "Capture and tag lessons learned so they don’t disappear.",
+        url: "" // add later
+      },
+      {
+        key: "safety",
+        title: "Safety Snapshot",
+        desc: "Quick HSE view (counts, trends, and actions).",
+        url: "" // add later
+      },
+      {
+        key: "cost",
+        title: "Cost Forecast",
+        desc: "Forecast basics and simple trend tracking.",
+        url: "" // add later
+      },
+      {
+        key: "schedule",
+        title: "Schedule Pulse",
+        desc: "Top constraints + lookahead + what’s slipping.",
+        url: "" // add later
+      }
+    ];
 
-    const power = clamp(toInt(els.power.value), 0, 100);
-    const interest = clamp(toInt(els.interest.value), 0, 100);
+    const LINKS = Object.fromEntries(TOOLS.filter(t => t.url).map(t => [t.key, t.url]));
+    const LAST_KEY = "mining_tools.last_opened.v2";
 
-    return {
-      id: els.editingId.value || uid(),
-      name,
-      organisation: safeText(els.organisation.value),
-      role: els.role.value,
-      category: els.category.value,
-      email: safeText(els.email.value),
-      phone: safeText(els.phone.value),
-      power,
-      interest,
-      attitude: els.attitude.value,
-      engagement: els.engagement.value,
-      frequency: els.frequency.value,
-      channel: els.channel.value,
-      notes: safeText(els.notes.value),
-      updatedAt: nowISO()
+    // =========================
+    // DOM
+    // =========================
+    const el = {
+      grid: document.getElementById("toolGrid"),
+      btnContinue: document.getElementById("btnContinue"),
+      lastToolText: document.getElementById("lastToolText"),
+      statusText: document.getElementById("statusText"),
+      btnResetLast: document.getElementById("btnResetLast"),
+
+      btnOpenPmbok: document.getElementById("btnOpenPmbok"),
+      btnOpenStakeholders: document.getElementById("btnOpenStakeholders"),
+
+      toast: document.getElementById("toast"),
+
+      modal: document.getElementById("modal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalUrl: document.getElementById("modalUrl"),
+      modalFrame: document.getElementById("modalFrame"),
+      btnClose: document.getElementById("btnClose"),
+      btnOpenNew: document.getElementById("btnOpenNew"),
     };
-  }
 
-  function upsertStakeholder(s){
-    const idx = stakeholders.findIndex(x => x.id === s.id);
-    if(idx >= 0){
-      stakeholders[idx] = { ...stakeholders[idx], ...s };
-    } else {
-      stakeholders.unshift(s);
+    let modalCurrentUrl = "";
+
+    function showToast(msg){
+      el.toast.textContent = msg;
+      el.toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => el.toast.classList.remove("show"), 2200);
     }
-    saveToStorage();
-    buildGraphFilterOptions();
-    applyTableFilter();
-  }
 
-  function deleteStakeholder(id){
-    stakeholders = stakeholders.filter(s => s.id !== id);
-    if(selectedId === id) selectedId = null;
-    saveToStorage();
-    buildGraphFilterOptions();
-    applyTableFilter();
-  }
-
-  function selectStakeholder(id){
-    selectedId = id;
-    renderTable();
-    drawMatrix();
-  }
-
-  function startEdit(id){
-    const s = stakeholders.find(x => x.id === id);
-    if(!s) return;
-
-    els.editingId.value = s.id;
-    els.name.value = s.name || '';
-    els.organisation.value = s.organisation || '';
-    els.role.value = s.role || 'Other';
-    els.category.value = s.category || 'External';
-    els.email.value = s.email || '';
-    els.phone.value = s.phone || '';
-    els.power.value = String(clamp(toInt(s.power ?? 60),0,100));
-    els.interest.value = String(clamp(toInt(s.interest ?? 60),0,100));
-    els.attitude.value = s.attitude || 'Supportive';
-    els.engagement.value = s.engagement || quadrantLabel(toInt(s.power ?? 60), toInt(s.interest ?? 60));
-    els.frequency.value = s.frequency || 'Weekly';
-    els.channel.value = s.channel || 'Meeting';
-    els.notes.value = s.notes || '';
-
-    syncSliderLabels();
-    setEditingMode(true);
-    selectStakeholder(id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // ------------- Events -------------
-  els.power.addEventListener('input', syncSliderLabels);
-  els.interest.addEventListener('input', syncSliderLabels);
-
-  els.form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    try{
-      const data = getFormData();
-      upsertStakeholder(data);
-      resetForm();
-    }catch(err){
-      alert(err.message || 'Please check the form.');
+    function setLast(toolKey){
+      localStorage.setItem(LAST_KEY, toolKey);
+      renderLast();
     }
-  });
-
-  els.btnCancel.addEventListener('click', () => resetForm());
-
-  els.tbody.addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-action]');
-    if(!btn) return;
-    const tr = e.target.closest('tr');
-    if(!tr) return;
-    const id = tr.dataset.id;
-    const action = btn.dataset.action;
-
-    if(action === 'select') selectStakeholder(id);
-    if(action === 'edit') startEdit(id);
-    if(action === 'delete'){
-      const s = stakeholders.find(x => x.id === id);
-      const ok = confirm(`Delete stakeholder: ${s?.name || 'this item'}?`);
-      if(ok) deleteStakeholder(id);
+    function getLast(){
+      return localStorage.getItem(LAST_KEY) || "";
     }
-  });
-
-  els.search.addEventListener('input', applyTableFilter);
-  els.sort.addEventListener('change', applyTableFilter);
-
-  // Graph filter events
-  els.fOrg.addEventListener('change', drawMatrix);
-  els.fRole.addEventListener('change', drawMatrix);
-  els.fCat.addEventListener('change', drawMatrix);
-  els.btnResetGraphFilters.addEventListener('click', () => {
-    els.fOrg.value = '';
-    els.fRole.value = '';
-    els.fCat.value = '';
-    drawMatrix();
-  });
-
-  // Export / Import / Clear
-  els.btnExport.addEventListener('click', () => {
-    const payload = {
-      exportedAt: new Date().toISOString(),
-      version: 2,
-      scale: "0-100",
-      stakeholders
-    };
-    download(`stakeholders_${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(payload, null, 2));
-  });
-
-  els.fileImport.addEventListener('change', async () => {
-    const file = els.fileImport.files && els.fileImport.files[0];
-    if(!file) return;
-    try{
-      const text = await file.text();
-      const parsed = JSON.parse(text);
-
-      let list = null;
-      if(Array.isArray(parsed)) list = parsed;
-      else if(parsed && Array.isArray(parsed.stakeholders)) list = parsed.stakeholders;
-
-      if(!list) throw new Error('Could not find a stakeholders array in that JSON.');
-
-      stakeholders = list.map(s => {
-        const pow = normalizeScale(s.power ?? s.influence ?? 60);
-        const intr = normalizeScale(s.interest ?? 60);
-        return {
-          id: s.id || uid(),
-          name: safeText(s.name),
-          organisation: safeText(s.organisation),
-          role: s.role || 'Other',
-          category: s.category || 'External',
-          email: safeText(s.email),
-          phone: safeText(s.phone),
-          power: pow,
-          interest: intr,
-          attitude: s.attitude || 'Unknown',
-          engagement: s.engagement || quadrantLabel(pow, intr),
-          frequency: s.frequency || 'Weekly',
-          channel: s.channel || 'Meeting',
-          notes: safeText(s.notes),
-          updatedAt: s.updatedAt || nowISO()
-        };
-      }).filter(s => s.name);
-
-      selectedId = null;
-      saveToStorage();
-      buildGraphFilterOptions();
-      applyTableFilter();
-      resetForm();
-      alert(`Imported ${stakeholders.length} stakeholder(s).`);
-    }catch(err){
-      alert(err.message || 'Import failed.');
-    }finally{
-      els.fileImport.value = '';
+    function renderLast(){
+      const v = getLast();
+      el.lastToolText.textContent = v ? v : "—";
     }
-  });
 
-  els.btnClear.addEventListener('click', () => {
-    const ok = confirm('This will clear all stakeholders (and localStorage). Continue?');
-    if(!ok) return;
-    stakeholders = [];
-    filteredTable = [];
-    selectedId = null;
-    localStorage.removeItem(STORAGE_KEY);
-    // keep old key clean too
-    localStorage.removeItem('stakeholders.powerInterest.v1');
-    resetForm();
-    buildGraphFilterOptions();
-    applyTableFilter();
-  });
-
-  // Canvas interactions
-  els.canvas.addEventListener('mousemove', (e) => {
-    const p = findPointAt(e.clientX, e.clientY);
-    if(p) showTooltip(p, e.clientX, e.clientY);
-    else hideTooltip();
-  });
-  els.canvas.addEventListener('mouseleave', hideTooltip);
-
-  els.canvas.addEventListener('click', (e) => {
-    const p = findPointAt(e.clientX, e.clientY);
-    if(!p) return;
-    selectStakeholder(p.id);
-
-    const row = els.tbody.querySelector(`tr[data-id="${CSS.escape(p.id)}"]`);
-    if(row){
-      row.scrollIntoView({ behavior:'smooth', block:'center' });
+    function openTool(toolKey){
+      const url = LINKS[toolKey];
+      if(!url){
+        showToast("Under construction — link not added yet.");
+        return;
+      }
+      setLast(toolKey);
+      window.open(url, "_blank", "noopener,noreferrer");
+      el.statusText.textContent = "Status: opened " + toolKey;
     }
-  });
 
-  window.addEventListener('resize', () => drawMatrix());
+    function previewTool(toolKey){
+      const url = LINKS[toolKey];
+      if(!url){
+        showToast("Under construction — preview not available.");
+        return;
+      }
+      setLast(toolKey);
+      modalCurrentUrl = url;
 
-  // ------------- Init -------------
-  function init(){
-    setupCollapsibles();
-    syncSliderLabels();
-    els.countPill.textContent = String(stakeholders.length);
+      const t = TOOLS.find(x => x.key === toolKey);
+      el.modalTitle.textContent = (t?.title || "Preview") + " — Preview";
+      el.modalUrl.textContent = url;
 
-    // seed examples
-    if(stakeholders.length === 0){
-      stakeholders = [
-        {
-          id: uid(),
-          name: "Project Sponsor",
-          organisation: "Client Org",
-          role: "Project Sponsor",
-          category: "External",
-          email: "",
-          phone: "",
-          power: 92,
-          interest: 88,
-          attitude: "Supportive",
-          engagement: "Manage closely",
-          frequency: "Weekly",
-          channel: "Meeting",
-          notes: "Wants confidence in schedule + budget. Keep decisions documented.",
-          updatedAt: nowISO()
-        },
-        {
-          id: uid(),
-          name: "Operations Lead",
-          organisation: "Site / Ops",
-          role: "Operations",
-          category: "Internal",
-          email: "",
-          phone: "",
-          power: 76,
-          interest: 44,
-          attitude: "Neutral",
-          engagement: "Keep satisfied",
-          frequency: "Bi-weekly",
-          channel: "MS Teams",
-          notes: "Cares about handover, maintainability, downtime windows.",
-          updatedAt: nowISO()
-        },
-        {
-          id: uid(),
-          name: "Community Rep",
-          organisation: "Local Community",
-          role: "Community",
-          category: "Community",
-          email: "",
-          phone: "",
-          power: 28,
-          interest: 86,
-          attitude: "Unknown",
-          engagement: "Keep informed",
-          frequency: "Monthly",
-          channel: "Meeting",
-          notes: "Interested in safety, noise, job creation updates.",
-          updatedAt: nowISO()
+      el.modalFrame.src = url;
+      el.modal.classList.add("open");
+      el.modal.setAttribute("aria-hidden", "false");
+      el.statusText.textContent = "Status: previewing " + toolKey;
+    }
+
+    function closeModal(){
+      el.modal.classList.remove("open");
+      el.modal.setAttribute("aria-hidden", "true");
+      el.modalFrame.src = "about:blank";
+      modalCurrentUrl = "";
+      el.statusText.textContent = "Status: ready";
+    }
+
+    function tileIconSVG(kind){
+      // Simple icons in WSP red/white only
+      const commonStroke = "rgba(255,255,255,.92)";
+      const redStroke = "rgba(255,55,47,.95)";
+      if(kind === "pmbok"){
+        return `
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 3h8l2 2v16H7V3Z" stroke="${commonStroke}" stroke-width="1.8"/>
+            <path d="M9 8h6M9 12h6M9 16h4" stroke="${redStroke}" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>`;
+      }
+      if(kind === "stakeholders"){
+        return `
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M16 11c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3Z" stroke="${commonStroke}" stroke-width="1.8"/>
+            <path d="M8 12c1.7 0 3-1.3 3-3S9.7 6 8 6 5 7.3 5 9s1.3 3 3 3Z" stroke="${commonStroke}" stroke-width="1.8"/>
+            <path d="M3.5 20c.7-3 3-5 6.5-5s5.8 2 6.5 5" stroke="${redStroke}" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>`;
+      }
+      // generic tool
+      return `
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2l2.2 4.6L19 7l-3.6 3.5.9 5L12 13.6 7.7 15.5l.9-5L5 7l4.8-.4L12 2Z"
+            stroke="${redStroke}" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>`;
+    }
+
+    function renderTiles(){
+      el.grid.innerHTML = "";
+
+      TOOLS.forEach(t => {
+        const live = !!t.url;
+
+        const tile = document.createElement("article");
+        tile.className = "tile";
+        tile.setAttribute("data-key", t.key);
+
+        tile.innerHTML = `
+          ${live ? "" : `<div class="ribbon" aria-hidden="true">UNDER CONSTRUCTION</div>`}
+
+          <div class="tile-top">
+            <div>
+              <h3>${t.title}</h3>
+              <p>${t.desc}</p>
+            </div>
+            <div class="icon">${tileIconSVG(t.key)}</div>
+          </div>
+
+          <div class="tile-actions">
+            <div class="left">
+              <button class="btn ${t.key === "pmbok" ? "primary" : ""}" data-open="${t.key}" ${live ? "" : "disabled"}>Open</button>
+              <button class="btn ghost" data-preview="${t.key}" ${live ? "" : "disabled"}>Preview</button>
+            </div>
+            <span class="meta">${live ? "Live" : "Coming soon"}</span>
+          </div>
+        `;
+
+        el.grid.appendChild(tile);
+      });
+
+      // wire tile buttons
+      document.querySelectorAll("[data-open]").forEach(b => {
+        b.addEventListener("click", () => openTool(b.dataset.open));
+      });
+      document.querySelectorAll("[data-preview]").forEach(b => {
+        b.addEventListener("click", () => previewTool(b.dataset.preview));
+      });
+
+      // clicking a disabled tile shows toast (nice UX)
+      el.grid.addEventListener("click", (e) => {
+        const tile = e.target.closest(".tile");
+        if(!tile) return;
+        const key = tile.getAttribute("data-key");
+        const tool = TOOLS.find(x => x.key === key);
+        if(tool && !tool.url){
+          // only if they click somewhere not on enabled buttons
+          if(!e.target.closest("button")){
+            showToast("Under construction — link not added yet.");
+          }
         }
-      ];
-      saveToStorage();
+      }, { once: true });
     }
 
-    buildGraphFilterOptions();
-    applyTableFilter();
-    drawMatrix();
-  }
+    // Quick header buttons
+    el.btnOpenPmbok.addEventListener("click", () => openTool("pmbok"));
+    el.btnOpenStakeholders.addEventListener("click", () => openTool("stakeholders"));
 
-  init();
-</script>
+    // Continue
+    el.btnContinue.addEventListener("click", () => {
+      const last = getLast();
+      if(last && LINKS[last]) openTool(last);
+      else openTool("pmbok");
+    });
+
+    // Reset
+    el.btnResetLast.addEventListener("click", () => {
+      localStorage.removeItem(LAST_KEY);
+      renderLast();
+      el.statusText.textContent = "Status: reset";
+      showToast("Continue reset.");
+    });
+
+    // Modal controls
+    el.btnClose.addEventListener("click", closeModal);
+    el.modal.addEventListener("click", (e) => {
+      if(e.target === el.modal) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && el.modal.classList.contains("open")) closeModal();
+    });
+    el.btnOpenNew.addEventListener("click", () => {
+      if(modalCurrentUrl) window.open(modalCurrentUrl, "_blank", "noopener,noreferrer");
+    });
+
+    // Init
+    renderLast();
+    renderTiles();
+  </script>
 </body>
 </html>
