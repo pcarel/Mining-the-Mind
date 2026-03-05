@@ -518,8 +518,8 @@
     </header>
 
     <main>
-      <!-- 1) INPUT (collapsible) -->
-      <section class="card" id="cardForm">
+      <!-- 1) INPUT (collapsible) — DEFAULT COLLAPSED -->
+      <section class="card collapsed" id="cardForm">
         <div class="hd">
           <div>
             <p class="title">Input (Add / Edit Stakeholder)</p>
@@ -530,8 +530,8 @@
             <div class="pill" title="Auto-saved in your browser (localStorage)">
               💾 <b id="countPill">0</b> saved
             </div>
-            <button class="btn icon ghost" data-collapse="#cardForm" aria-expanded="true" title="Minimise / expand">
-              ▾
+            <button class="btn icon ghost" data-collapse="#cardForm" aria-expanded="false" title="Minimise / expand">
+              ▸
             </button>
           </div>
         </div>
@@ -835,9 +835,7 @@
   function normalizeScale(v){
     const n = Number(v);
     if(Number.isNaN(n)) return 60;
-    if(n <= 5 && n >= 0){ // treat <=5 as old scale if it looks like it
-      // If value is exactly 0..5, map: 0->0, 1->25, 2->50, 3->75, 4->100, 5->100-ish
-      // Better mapping for 1..5: (n-1)/4*100
+    if(n <= 5 && n >= 0){
       if(n === 0) return 0;
       if(n >= 1 && n <= 5) return Math.round(((n - 1) / 4) * 100);
     }
@@ -860,19 +858,17 @@
 
   function loadFromStorage(){
     try{
-      // migrate from old key if present
       const rawNew = localStorage.getItem(STORAGE_KEY);
       if(rawNew){
         const arr = JSON.parse(rawNew);
         return Array.isArray(arr) ? arr : [];
       }
 
-      // try older v1 key if user had it
+      // try older v1 key if present
       const rawOld = localStorage.getItem('stakeholders.powerInterest.v1');
       if(rawOld){
         const arr = JSON.parse(rawOld);
         if(!Array.isArray(arr)) return [];
-        // migrate
         const migrated = arr.map(s => ({
           id: s.id || uid(),
           name: safeText(s.name),
@@ -920,7 +916,6 @@
   function resetForm(){
     els.form.reset();
     els.editingId.value = '';
-    // restore default slider reads
     els.power.value = "60"; els.interest.value = "60";
     syncSliderLabels();
     setEditingMode(false);
@@ -979,7 +974,7 @@
 
     filteredTable = getSortedList(list);
     renderTable();
-    drawMatrix(); // keep matrix in sync with selection + updated list; graph filtering is separate
+    drawMatrix();
   }
 
   function renderTable(){
@@ -1070,7 +1065,6 @@
       opt.textContent = o;
       select.appendChild(opt);
     });
-    // keep selection if possible
     if(current && [...select.options].some(x => x.value === current)){
       select.value = current;
     }else{
@@ -1113,7 +1107,7 @@
 
     ctx.clearRect(0,0,W,H);
 
-    // Vibrant background: dark + red glows
+    // Vibrant background
     const bg = ctx.createLinearGradient(0,0,W,H);
     bg.addColorStop(0, 'rgba(0,0,0,.55)');
     bg.addColorStop(.55, 'rgba(255,55,47,.08)');
@@ -1125,7 +1119,7 @@
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // subtle vignette glow
+    // subtle glow
     ctx.save();
     ctx.globalAlpha = 0.9;
     const glow = ctx.createRadialGradient(W*0.78, H*0.22, 20, W*0.78, H*0.22, Math.max(W,H));
@@ -1135,17 +1129,16 @@
     ctx.fillRect(0,0,W,H);
     ctx.restore();
 
-    // midlines at 50/50
     const midX = left + (w * 0.5);
     const midY = top + (h * 0.5);
 
-    // Quadrants tint (slightly more vivid)
-    fillRect(ctx, left, top, w/2, h/2, 'rgba(255,55,47,.10)');     // high power / low interest? (top-left)
-    fillRect(ctx, midX, top, w/2, h/2, 'rgba(255,55,47,.18)');     // high/high (top-right)
-    fillRect(ctx, left, midY, w/2, h/2, 'rgba(255,255,255,.03)');  // low/low (bottom-left)
-    fillRect(ctx, midX, midY, w/2, h/2, 'rgba(255,55,47,.08)');    // low power / high interest (bottom-right)
+    // Quadrants tint
+    fillRect(ctx, left, top, w/2, h/2, 'rgba(255,55,47,.10)');
+    fillRect(ctx, midX, top, w/2, h/2, 'rgba(255,55,47,.18)');
+    fillRect(ctx, left, midY, w/2, h/2, 'rgba(255,255,255,.03)');
+    fillRect(ctx, midX, midY, w/2, h/2, 'rgba(255,55,47,.08)');
 
-    // Grid lines 0..100 ticks
+    // Grid lines 0..100
     ctx.strokeStyle = 'rgba(255,255,255,.10)';
     ctx.lineWidth = 1;
     for(let i=1;i<=3;i++){
@@ -1165,14 +1158,12 @@
     ctx.fillStyle = 'rgba(255,255,255,.88)';
     ctx.font = '1000 13px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
 
-    // y-axis label rotated
     ctx.save();
     ctx.translate(18, top + h/2);
     ctx.rotate(-Math.PI/2);
     ctx.fillText('Power (0 → 100)', 0, 0);
     ctx.restore();
 
-    // x-axis label
     ctx.fillText('Interest (0 → 100)', left + w/2 - 55, H - 16);
 
     // Quadrant labels
@@ -1186,23 +1177,22 @@
     ctx.fillStyle = 'rgba(255,55,47,.90)';
     ctx.fillText('KEEP INFORMED', midX + 10, midY + 18);
 
-    // tick labels
+    // Tick labels
     ctx.font = '900 11px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,.62)';
     const ticks = [0,25,50,75,100];
-    ticks.forEach((t, i) => {
+    ticks.forEach((t) => {
       const x = left + (w * (t/100));
       ctx.fillText(String(t), x - 8, bottom + 22);
       const y = bottom - (h * (t/100));
       ctx.fillText(String(t), left - 30, y + 4);
     });
 
-    // Points list (filtered by graph filters)
+    // Points
     points = [];
     const list = getGraphFilteredList();
     els.matrixCountText.textContent = `${list.length}/${stakeholders.length} shown`;
 
-    // anti-overlap bucket for identical (power,interest)
     const bucketCount = new Map();
     list.forEach(s => {
       const pow = clamp(toInt(s.power), 0, 100);
@@ -1211,16 +1201,14 @@
       const k = (bucketCount.get(key) || 0) + 1;
       bucketCount.set(key, k);
 
-      // map to plot
-      const xN = intr / 100;           // 0..1
-      const yN = pow / 100;            // 0..1
+      const xN = intr / 100;
+      const yN = pow / 100;
       let x = left + xN * w;
       let y = bottom - yN * h;
 
-      // jitter spiral ONLY if duplicates exist
       const idx = k - 1;
       if(idx > 0){
-        const angle = idx * 2.399963229728653; // golden angle
+        const angle = idx * 2.399963229728653;
         const rad = Math.min(18, 6 + idx * 2);
         x += Math.cos(angle) * rad;
         y += Math.sin(angle) * rad;
@@ -1231,7 +1219,7 @@
 
       const isSelected = s.id === selectedId;
 
-      // glow halo
+      // halo
       ctx.save();
       ctx.globalAlpha = isSelected ? 0.9 : 0.55;
       ctx.beginPath();
@@ -1246,7 +1234,6 @@
       // core point
       ctx.beginPath();
       ctx.arc(x, y, isSelected ? 7.4 : 6.2, 0, Math.PI*2);
-
       const grad = ctx.createLinearGradient(x-8,y-8,x+8,y+8);
       grad.addColorStop(0, 'rgba(255,255,255,.92)');
       grad.addColorStop(1, 'rgba(255,55,47,.98)');
@@ -1260,7 +1247,6 @@
       points.push({ id: s.id, xPx: x, yPx: y, stakeholder: s });
     });
 
-    // footer
     ctx.fillStyle = 'rgba(255,255,255,.62)';
     ctx.font = '900 11px Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif';
     ctx.fillText(`Matrix filter active • click a point to select`, left, H - 12);
@@ -1391,6 +1377,15 @@
     syncSliderLabels();
     setEditingMode(true);
     selectStakeholder(id);
+
+    // auto-open the input if user is editing (nice UX)
+    const cardForm = document.getElementById('cardForm');
+    if(cardForm && cardForm.classList.contains('collapsed')){
+      cardForm.classList.remove('collapsed');
+      const btn = document.querySelector('[data-collapse="#cardForm"]');
+      if(btn){ btn.setAttribute('aria-expanded','true'); btn.textContent='▾'; }
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -1404,12 +1399,28 @@
       const data = getFormData();
       upsertStakeholder(data);
       resetForm();
+      // keep form collapsed after save (since default is collapsed)
+      const cardForm = document.getElementById('cardForm');
+      if(cardForm && !cardForm.classList.contains('collapsed')){
+        cardForm.classList.add('collapsed');
+        const btn = document.querySelector('[data-collapse="#cardForm"]');
+        if(btn){ btn.setAttribute('aria-expanded','false'); btn.textContent='▸'; }
+      }
     }catch(err){
       alert(err.message || 'Please check the form.');
     }
   });
 
-  els.btnCancel.addEventListener('click', () => resetForm());
+  els.btnCancel.addEventListener('click', () => {
+    resetForm();
+    // collapse back
+    const cardForm = document.getElementById('cardForm');
+    if(cardForm && !cardForm.classList.contains('collapsed')){
+      cardForm.classList.add('collapsed');
+      const btn = document.querySelector('[data-collapse="#cardForm"]');
+      if(btn){ btn.setAttribute('aria-expanded','false'); btn.textContent='▸'; }
+    }
+  });
 
   els.tbody.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');
@@ -1493,6 +1504,15 @@
       buildGraphFilterOptions();
       applyTableFilter();
       resetForm();
+
+      // keep collapsed
+      const cardForm = document.getElementById('cardForm');
+      if(cardForm && !cardForm.classList.contains('collapsed')){
+        cardForm.classList.add('collapsed');
+        const btn = document.querySelector('[data-collapse="#cardForm"]');
+        if(btn){ btn.setAttribute('aria-expanded','false'); btn.textContent='▸'; }
+      }
+
       alert(`Imported ${stakeholders.length} stakeholder(s).`);
     }catch(err){
       alert(err.message || 'Import failed.');
@@ -1508,7 +1528,6 @@
     filteredTable = [];
     selectedId = null;
     localStorage.removeItem(STORAGE_KEY);
-    // keep old key clean too
     localStorage.removeItem('stakeholders.powerInterest.v1');
     resetForm();
     buildGraphFilterOptions();
