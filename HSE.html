@@ -1,0 +1,3121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Risk Assessment Logger</title>
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --bg2:#eef3f9;
+      --panel:#ffffff;
+      --panel-soft:#f8fbff;
+      --line:#d8e1ec;
+      --line2:#e8eef5;
+      --text:#1f2937;
+      --muted:#64748b;
+      --brand:#2563eb;
+      --brand2:#1d4ed8;
+      --brand3:#0f172a;
+      --accent:#ef4444;
+
+      --shadow:0 18px 48px rgba(15,23,42,.10);
+      --shadow-soft:0 8px 22px rgba(15,23,42,.06);
+      --radius:18px;
+
+      --font:"Segoe UI", Inter, Arial, system-ui, -apple-system, sans-serif;
+      --mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+      --risk-low:#56B4E9;
+      --risk-medium:#009E73;
+      --risk-high:#E69F00;
+      --risk-extreme:#D55E00;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:
+        radial-gradient(900px 520px at 8% 0%, rgba(37,99,235,.10), transparent 60%),
+        radial-gradient(860px 520px at 92% 8%, rgba(29,78,216,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+      color:var(--text);
+    }
+
+    .wrap{
+      width:100%;
+      margin:0 auto;
+      padding:18px 18px 42px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 16px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:22px;
+      background:linear-gradient(90deg, #0f172a 0%, #1e3a8a 54%, #2563eb 100%);
+      color:#fff;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:12px;
+      z-index:40;
+    }
+
+    .brandWrap{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brandIcon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:linear-gradient(135deg,#60a5fa,#2563eb);
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      font-weight:900;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.24);
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:260px;
+    }
+    .title h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+      font-weight:800;
+      line-height:1.1;
+      color:#fff;
+    }
+    .title p{
+      margin:0;
+      color:rgba(255,255,255,.82);
+      font-size:12.5px;
+    }
+
+    .bar-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:800;
+      font-size:13px;
+      cursor:pointer;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      box-shadow:0 8px 20px rgba(15,23,42,.06);
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      background:#f8fbff;
+      border-color:#bfd2ef;
+      box-shadow:0 14px 28px rgba(37,99,235,.08);
+    }
+    .btn:active{transform:translateY(0)}
+    .btn.primary{
+      border-color:#2f63e8;
+      background:linear-gradient(180deg,#3b82f6,#2563eb);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.20);
+    }
+    .btn.primary:hover{
+      background:linear-gradient(180deg,#4b8cf7,#1f5ee0);
+    }
+    .btn.ghost{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-color:rgba(255,255,255,.22);
+      backdrop-filter:blur(4px);
+    }
+    .btn.ghost:hover{
+      background:rgba(255,255,255,.22);
+      border-color:rgba(255,255,255,.34);
+      box-shadow:none;
+    }
+    .btn.danger{
+      border-color:#f3b1b1;
+      background:#fff5f5;
+      color:#b91c1c;
+    }
+    .btn.danger:hover{
+      background:#ffe8e8;
+      border-color:#ef9a9a;
+    }
+    .btn.small{
+      padding:7px 10px;
+      font-size:12px;
+      border-radius:12px;
+      box-shadow:none;
+    }
+
+    :focus{outline:none}
+    .btn:focus-visible,
+    input:focus-visible, select:focus-visible, textarea:focus-visible,
+    .clickable:focus-visible, .rte:focus-visible, .ribbonTile:focus-visible{
+      outline:3px solid rgba(37,99,235,.25);
+      outline-offset:2px;
+      border-color:#7aa7ff;
+    }
+
+    .editorBar{
+      margin-top:14px;
+      padding:14px;
+      border:1px solid var(--line2);
+      border-radius:22px;
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:88px;
+      z-index:35;
+    }
+
+    .editorBarTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .editorBarTitle{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .editorBarTitle strong{
+      font-size:13px;
+      letter-spacing:.2px;
+      color:#0f172a;
+    }
+    .editorBarTitle span{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      border:1px solid var(--line2);
+      background:#f8fbff;
+      border-radius:999px;
+      padding:5px 10px;
+      font-size:12px;
+      color:var(--text);
+      white-space:nowrap;
+    }
+    .pill.red{
+      border-color:#b8cdf8;
+      background:#eaf2ff;
+      color:#1d4ed8;
+    }
+    .pill.good{
+      border-color:rgba(0,176,80,.35);
+      background:rgba(0,176,80,.10);
+      color:#0d5f2f;
+    }
+    .pill.bad{
+      border-color:rgba(239,68,68,.32);
+      background:rgba(239,68,68,.10);
+      color:#991b1b;
+    }
+
+    .editorTools{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      overflow-x:auto;
+      overflow-y:hidden;
+      padding-bottom:4px;
+      scrollbar-width:thin;
+    }
+
+    .editorTools::-webkit-scrollbar{height:9px}
+    .editorTools::-webkit-scrollbar-thumb{
+      background:#d7e2f0;
+      border-radius:999px;
+    }
+
+    .ribbonTile,
+    .tileSelect,
+    .tileColor{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+      color:var(--text);
+      border-radius:16px;
+      min-height:84px;
+      min-width:86px;
+      box-shadow:0 4px 10px rgba(15,23,42,.04);
+      flex:0 0 auto;
+      transition:.16s ease;
+    }
+
+    .ribbonTile{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:8px;
+      cursor:pointer;
+    }
+    .ribbonTile:hover,
+    .tileSelect:hover,
+    .tileColor:hover{
+      background:#eef6ff;
+      border-color:#b8cdf8;
+      transform:translateY(-1px);
+      box-shadow:0 10px 18px rgba(37,99,235,.10);
+    }
+
+    .tileIcon{
+      font-size:22px;
+      line-height:1;
+      font-weight:800;
+      color:#0f172a;
+    }
+    .tileLabel{
+      font-size:12px;
+      font-weight:700;
+      text-align:center;
+      color:#334155;
+      line-height:1.1;
+    }
+
+    .tileSelect,
+    .tileColor{
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      gap:6px;
+      padding:8px;
+    }
+    .tileSelect label,
+    .tileColor label{
+      font-size:11px;
+      font-weight:800;
+      color:#64748b;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+      text-align:center;
+    }
+    .tileSelect select,
+    .tileColor input[type="color"]{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:12px;
+      font-weight:700;
+      min-height:38px;
+    }
+
+    .tileSelect.wide{min-width:138px}
+    .tileSelect.slim{min-width:110px}
+    .tileColor{min-width:96px}
+
+    .card{
+      margin-top:14px;
+      border-radius:22px;
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line2);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .card .hd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line2);
+      background:linear-gradient(180deg,#ffffff, #f8fbff);
+      gap:10px;
+    }
+    .card .hd .left{display:flex; flex-direction:column; gap:2px;}
+    .card .hd h2{
+      margin:0;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:#0f172a;
+    }
+    .card .hd .sub{
+      margin:0;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+    .card .bd{padding:14px 16px}
+    .card.collapsed .bd{display:none}
+    .clickable{cursor:pointer}
+
+    .muted{color:var(--muted)}
+    .hint{font-size:12.5px; color:var(--muted)}
+    .k{
+      font-family:var(--mono);
+      font-size:12px;
+      color:#334155;
+      background:#f8fbff;
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid #e3edf8;
+    }
+
+    input[type="text"], input[type="number"], select, textarea{
+      width:100%;
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-size:13px;
+      transition:border-color .12s ease, background .12s ease, box-shadow .12s ease;
+    }
+    select{cursor:pointer}
+    input::placeholder, textarea::placeholder{color:#94a3b8}
+    input:hover, select:hover, textarea:hover{
+      border-color:#bfd2ef;
+      background:#fbfdff;
+    }
+
+    .divider{height:1px; background:var(--line2); margin:12px 0}
+    .chips{display:flex; flex-wrap:wrap; gap:6px}
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    @media (max-width: 1100px){
+      .grid2{grid-template-columns:1fr}
+      .topbar{flex-direction:column; align-items:stretch}
+      .bar-actions{justify-content:flex-start}
+    }
+
+    .matrixToolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .matrixToolbarGroup{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .axisNameGrid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(220px, 320px));
+      gap:10px;
+      margin:0 0 12px;
+    }
+    .axisBox{
+      border:1px solid var(--line2);
+      background:#f8fbff;
+      border-radius:16px;
+      padding:10px;
+    }
+    .axisBox label{
+      display:block;
+      font-size:12px;
+      font-weight:900;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .matrixBuilderWrap{
+      overflow:auto;
+      border:1px solid var(--line2);
+      border-radius:18px;
+      background:#f8fbff;
+      padding:10px;
+    }
+    .matrixBuilder{
+      display:grid;
+      gap:10px;
+      min-width:max-content;
+      align-items:stretch;
+    }
+    .builderCorner,
+    .builderHead,
+    .builderSide,
+    .builderCell{
+      border-radius:16px;
+      border:1px solid rgba(15,23,42,.10);
+      min-height:86px;
+      box-shadow:0 8px 18px rgba(15,23,42,.06);
+    }
+    .builderCorner{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      background:#ffffff;
+      font-weight:900;
+      text-align:center;
+      color:var(--text);
+      line-height:1.35;
+    }
+    .builderHead,
+    .builderSide{
+      background:#ffffff;
+      padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .builderCell{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .builderHeaderInput,
+    .builderRowInput,
+    .builderValueInput{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(15,23,42,.12);
+      background:#ffffff;
+      color:var(--text);
+      padding:9px 10px;
+      font-size:13px;
+      font-weight:800;
+    }
+    .builderHeaderInput,
+    .builderRowInput{text-align:center}
+    .builderValueInput{
+      text-align:center;
+      font-size:16px;
+      font-weight:900;
+    }
+    .bandHint{
+      text-align:center;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.25px;
+      opacity:.95;
+    }
+    .matrixLegend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+    .legendSwatch{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(15,23,42,.12);
+      font-size:12px;
+      font-weight:900;
+      color:#0f172a;
+    }
+
+    .libraryBlock{
+      min-width:0;
+    }
+
+    .libraryBlockHd{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+
+    .libraryBlockHd h3{
+      margin:0 0 2px;
+      font-size:14px;
+      font-weight:900;
+      color:#0f172a;
+    }
+
+    .libraryBlockHd p{
+      margin:0;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .libraryTableWrap{
+      overflow:auto;
+      border:1px solid var(--line2);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .libraryTable{
+      width:100%;
+      min-width:620px;
+      border-collapse:collapse;
+      background:#fff;
+    }
+
+    .libraryTable th,
+    .libraryTable td{
+      border:1px solid var(--line2);
+      padding:10px;
+      vertical-align:top;
+      background:#fff;
+    }
+
+    .libraryTable th{
+      background:#f8fbff;
+      color:#0f172a;
+      font-size:12px;
+      font-weight:900;
+      text-align:left;
+      letter-spacing:.25px;
+    }
+
+    .libraryTable input[type="text"]{
+      width:100%;
+    }
+
+    .libraryTable .rteWrap{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+    }
+
+    .libraryTable .rte{
+      min-height:80px;
+    }
+
+    .libraryTable .rte.lg{
+      min-height:80px;
+    }
+
+    .rteWrap{
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+      background:#ffffff;
+    }
+    .rte{
+      min-height:92px;
+      padding:10px 12px;
+      outline:none;
+      line-height:1.45;
+      color:var(--text);
+      background:transparent;
+    }
+    .rte.sm{min-height:72px}
+    .rte.lg{min-height:140px}
+    .rte[data-placeholder]:empty:before{
+      content:attr(data-placeholder);
+      color:#94a3b8;
+      pointer-events:none;
+    }
+    .rte.readonly{
+      cursor:default;
+      background:#fbfdff;
+    }
+    .rte.readonly[data-placeholder]:empty:before{
+      color:#94a3b8;
+    }
+
+    .activity{
+      border-radius:18px;
+      border:1px solid var(--line2);
+      background:#ffffff;
+      overflow:hidden;
+      margin-top:12px;
+      box-shadow:var(--shadow-soft);
+    }
+    .activity .sum{
+      display:grid;
+      grid-template-columns: 70px minmax(240px, 1.5fr) minmax(160px, 1fr) minmax(160px, 1fr) 170px 140px;
+      gap:10px;
+      align-items:center;
+      padding:12px 12px;
+      cursor:pointer;
+      background:linear-gradient(180deg,#ffffff, #f8fbff);
+      border-bottom:1px solid var(--line2);
+    }
+    @media (max-width: 1200px){
+      .activity .sum{
+        grid-template-columns: 70px 1fr 1fr;
+        grid-auto-rows:auto;
+      }
+      .activity .sum .col-span{grid-column:span 3;}
+    }
+    .sum .no{font-weight:900; text-align:center; color:#0f172a}
+    .sum .task{font-weight:900}
+    .sum .mini{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .sum .right{justify-content:flex-end}
+    .sum:hover{background:#f4f9ff}
+    .activity .details{display:none; padding:12px 12px; background:#fff}
+    .activity.open .details{display:block}
+
+    .record{
+      width:100%;
+      border-collapse:collapse;
+      table-layout:fixed;
+      background:#ffffff;
+      color:#111;
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .record td, .record th{
+      border:1px solid rgba(15,23,42,.10);
+      padding:10px;
+      vertical-align:top;
+      font-size:13px;
+      word-break:break-word;
+      background:#ffffff;
+      color:#111;
+    }
+    .center{text-align:center}
+    .noCell{width:70px; text-align:center; font-weight:900}
+    .taskCell{width:280px; font-weight:900}
+
+    .risk-before-header{
+      background:rgba(230,159,0,.14) !important;
+      font-weight:900;
+      text-align:center;
+    }
+    .risk-after-header{
+      background:rgba(0,158,115,.14) !important;
+      color:#111;
+      font-weight:900;
+      text-align:center;
+    }
+
+    .ratingCell{
+      text-align:center;
+      font-weight:900;
+      border-radius:12px;
+      padding:10px;
+    }
+
+    .riskBadge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid rgba(15,23,42,.12);
+      white-space:nowrap;
+    }
+
+    .statusCell{
+      writing-mode:vertical-rl;
+      transform:rotate(180deg);
+      text-align:center;
+      font-weight:900;
+      letter-spacing:1px;
+      width:46px;
+    }
+    .statusCell.go{background:rgba(0,176,80,.85) !important; color:#fff !important;}
+    .statusCell.nogo{background:rgba(255,0,0,.85) !important; color:#fff !important;}
+
+    .record input[type="text"], .record input[type="number"], .record select, .record textarea{
+      background:#ffffff;
+      color:#111;
+      border:1px solid rgba(15,23,42,.14);
+    }
+    .record .pill{
+      background:#f8fbff;
+      border-color:rgba(15,23,42,.12);
+      color:#111;
+    }
+    .record .hint{ color:rgba(15,23,42,.55); }
+    .record .muted{ color:rgba(15,23,42,.55); }
+
+    .record .rteWrap{
+      border:1px solid rgba(15,23,42,.14);
+      background:#fff;
+    }
+    .record .rte{ color:#111; }
+    .record .rte[data-placeholder]:empty:before{ color:rgba(15,23,42,.35); }
+
+    .controlsSplit{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .controlPane{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .controlPane label{
+      font-size:12px;
+      font-weight:900;
+      color:rgba(15,23,42,.60);
+    }
+    .autoBlock{
+      border:1px solid rgba(15,23,42,.10);
+      border-radius:12px;
+      padding:8px 10px;
+      margin-bottom:8px;
+      background:#f8fbff;
+    }
+    .autoBlockTitle{
+      font-weight:900;
+      margin-bottom:6px;
+      color:#111;
+    }
+
+    .builderCell.low,
+    .riskBadge.low,
+    .ratingCell.low{
+      background:rgba(86,180,233,.24);
+      border-color:rgba(86,180,233,.60);
+      color:#072433;
+    }
+    .builderCell.medium,
+    .riskBadge.medium,
+    .ratingCell.medium{
+      background:rgba(0,158,115,.22);
+      border-color:rgba(0,158,115,.62);
+      color:#05261d;
+    }
+    .builderCell.high,
+    .riskBadge.high,
+    .ratingCell.high{
+      background:rgba(230,159,0,.24);
+      border-color:rgba(230,159,0,.60);
+      color:#3d2800;
+    }
+    .builderCell.extreme,
+    .riskBadge.extreme,
+    .ratingCell.extreme{
+      background:rgba(213,94,0,.28);
+      border-color:rgba(213,94,0,.72);
+      color:#fff;
+    }
+
+    .legendSwatch.low{ background:rgba(86,180,233,.16); }
+    .legendSwatch.medium{ background:rgba(0,158,115,.16); }
+    .legendSwatch.high{ background:rgba(230,159,0,.16); }
+    .legendSwatch.extreme{ background:rgba(213,94,0,.18); }
+
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:60;
+      backdrop-filter:blur(4px);
+    }
+    .modal{
+      width:min(900px, 96vw);
+      max-height:min(82vh, 900px);
+      overflow:auto;
+      border-radius:20px;
+      border:1px solid var(--line2);
+      background:#ffffff;
+      box-shadow:var(--shadow);
+    }
+    .modalHd{
+      padding:14px 14px;
+      border-bottom:1px solid var(--line2);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      position:sticky;
+      top:0;
+      background:linear-gradient(180deg,#ffffff, #f8fbff);
+      z-index:1;
+    }
+    .modalHd h3{
+      margin:0;
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:.3px;
+      color:#0f172a;
+    }
+    .modalBd{padding:14px 14px}
+    .list{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:8px 14px;
+    }
+    .item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:8px 10px;
+      border:1px solid var(--line2);
+      border-radius:14px;
+      background:#fbfdff;
+    }
+    .item:hover{
+      border-color:#bfd2ef;
+      background:#f5faff;
+    }
+    .item label{
+      cursor:pointer;
+      line-height:1.25;
+      font-size:13px;
+      color:var(--text);
+    }
+    .item input{margin-top:2px}
+    .modalFt{
+      padding:14px 14px;
+      border-top:1px solid var(--line2);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      position:sticky;
+      bottom:0;
+      background:#ffffff;
+    }
+
+    #toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line2);
+      background:#ffffff;
+      box-shadow:var(--shadow);
+      color:var(--text);
+      font-weight:900;
+      font-size:13px;
+      letter-spacing:.2px;
+      z-index:70;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .12s ease;
+    }
+
+    @media (max-width: 980px){
+      .axisNameGrid{grid-template-columns:1fr}
+      .controlsSplit{grid-template-columns:1fr}
+      .editorBar{top:132px}
+    }
+    @media (max-width: 900px){
+      .builderCorner,
+      .builderHead,
+      .builderSide,
+      .builderCell{ min-height:74px; }
+      .builderHeaderInput,
+      .builderRowInput,
+      .builderValueInput{
+        font-size:12px;
+        padding:8px;
+      }
+      .builderValueInput{font-size:14px}
+      .list{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brandWrap">
+        <div class="brandIcon">R</div>
+        <div class="title">
+          <h1>Risk Assessment Logger</h1>
+          <p>Office-style ribbon • matrix builder • hazard library • material risk library</p>
+        </div>
+      </div>
+
+      <div class="bar-actions">
+        <button class="btn ghost" id="exportBtn" type="button">Export JSON</button>
+        <button class="btn ghost" id="importBtn" type="button">Import JSON</button>
+        <button class="btn danger" id="clearBtn" type="button">Clear data</button>
+      </div>
+    </header>
+
+    <section class="editorBar" aria-label="Rich text editor toolbar">
+      <div class="editorBarTop">
+        <div class="editorBarTitle">
+          <strong>Ribbon editor</strong>
+          <span id="editorTargetLabel">Click inside a text area to edit it with the ribbon.</span>
+        </div>
+        <div class="pill" id="editorStatePill">No editor selected</div>
+      </div>
+
+      <div class="editorTools">
+        <button type="button" class="ribbonTile" data-rte-cmd="undo" title="Undo">
+          <span class="tileIcon">↶</span>
+          <span class="tileLabel">Undo</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="redo" title="Redo">
+          <span class="tileIcon">↷</span>
+          <span class="tileLabel">Redo</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="bold" title="Bold">
+          <span class="tileIcon"><b>B</b></span>
+          <span class="tileLabel">Bold</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="italic" title="Italic">
+          <span class="tileIcon"><i>I</i></span>
+          <span class="tileLabel">Italic</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="underline" title="Underline">
+          <span class="tileIcon"><u>U</u></span>
+          <span class="tileLabel">Underline</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="strikeThrough" title="Strike">
+          <span class="tileIcon"><s>S</s></span>
+          <span class="tileLabel">Strike</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="insertUnorderedList" title="Bullets">
+          <span class="tileIcon">•</span>
+          <span class="tileLabel">Bullets</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="insertOrderedList" title="Numbering">
+          <span class="tileIcon">1.</span>
+          <span class="tileLabel">Numbering</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="indent" title="Indent">
+          <span class="tileIcon">⇥</span>
+          <span class="tileLabel">Indent</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="outdent" title="Outdent">
+          <span class="tileIcon">⇤</span>
+          <span class="tileLabel">Outdent</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="justifyLeft" title="Align Left">
+          <span class="tileIcon">⯇</span>
+          <span class="tileLabel">Left</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="justifyCenter" title="Align Center">
+          <span class="tileIcon">≡</span>
+          <span class="tileLabel">Center</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-cmd="justifyRight" title="Align Right">
+          <span class="tileIcon">⯈</span>
+          <span class="tileLabel">Right</span>
+        </button>
+
+        <div class="tileSelect wide" title="Font family">
+          <label for="rteFontSelect">Font</label>
+          <select id="rteFontSelect">
+            <option value="">Font</option>
+            <option value="Segoe UI">Segoe UI</option>
+            <option value="Arial">Arial</option>
+            <option value="Calibri">Calibri</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times</option>
+          </select>
+        </div>
+
+        <div class="tileSelect wide" title="Style">
+          <label for="rteFormatSelect">Style</label>
+          <select id="rteFormatSelect">
+            <option value="">Style</option>
+            <option value="P">Paragraph</option>
+            <option value="H1">Heading 1</option>
+            <option value="H2">Heading 2</option>
+            <option value="H3">Heading 3</option>
+            <option value="PRE">Pre</option>
+          </select>
+        </div>
+
+        <div class="tileSelect slim" title="Font size">
+          <label for="rteSizeSelect">Size</label>
+          <select id="rteSizeSelect">
+            <option value="">Size</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </div>
+
+        <div class="tileColor" title="Text colour">
+          <label for="rteForeColor">Text</label>
+          <input type="color" id="rteForeColor" value="#111111" />
+        </div>
+
+        <div class="tileColor" title="Highlight">
+          <label for="rteBackColor">Highlight</label>
+          <input type="color" id="rteBackColor" value="#fff176" />
+        </div>
+
+        <button type="button" class="ribbonTile" data-rte-action="date" title="Insert date">
+          <span class="tileIcon">📅</span>
+          <span class="tileLabel">Date</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-action="rule" title="Insert line">
+          <span class="tileIcon">―</span>
+          <span class="tileLabel">Line</span>
+        </button>
+
+        <button type="button" class="ribbonTile" data-rte-action="clear" title="Clear formatting">
+          <span class="tileIcon">⌫</span>
+          <span class="tileLabel">Clear</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card collapsed" id="matrixCard">
+      <div class="hd clickable" tabindex="0" role="button" aria-expanded="false" data-collapse="matrixCard">
+        <div class="left">
+          <h2>▸ Risk Matrix Builder</h2>
+          <p class="sub">Edit axis names, row headers, column headers and cell values directly.</p>
+        </div>
+        <div class="right">
+          <span class="pill red" id="matrixSizePill">5 × 5</span>
+          <span class="pill">Editable grid</span>
+        </div>
+      </div>
+
+      <div class="bd">
+        <div class="matrixToolbar">
+          <div class="matrixToolbarGroup">
+            <button class="btn small" id="removeRowBtn" type="button">− Row</button>
+            <button class="btn small" id="addRowBtn" type="button">+ Row</button>
+            <button class="btn small" id="removeColBtn" type="button">− Column</button>
+            <button class="btn small" id="addColBtn" type="button">+ Column</button>
+          </div>
+
+          <div class="matrixToolbarGroup">
+            <button class="btn small" id="resetMatrixBtn" type="button">Reset 5×5</button>
+            <button class="btn primary" id="saveMatrixBtn" type="button">Save Matrix</button>
+          </div>
+        </div>
+
+        <div class="axisNameGrid">
+          <div class="axisBox">
+            <label for="rowAxisNameInput">Row Axis Name</label>
+            <input type="text" id="rowAxisNameInput" placeholder="Likelihood" />
+          </div>
+          <div class="axisBox">
+            <label for="colAxisNameInput">Column Axis Name</label>
+            <input type="text" id="colAxisNameInput" placeholder="Consequence" />
+          </div>
+        </div>
+
+        <p class="hint" style="margin:8px 0 12px;">
+          Size can be from <span class="k">3×3</span> up to <span class="k">10×10</span>.
+          The row and column headers below are also used in the activity rating dropdowns.
+        </p>
+
+        <div class="matrixBuilderWrap">
+          <div id="matrixBuilder" class="matrixBuilder" aria-label="Editable risk matrix"></div>
+        </div>
+
+        <div class="matrixLegend" id="matrixLegend"></div>
+
+        <div style="display:flex; justify-content:flex-end; margin-top:12px;">
+          <span class="hint">Stored as <span class="k">wspRiskMatrix</span> in localStorage.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="libraryCard">
+      <div class="hd clickable" tabindex="0" role="button" aria-expanded="true" data-collapse="libraryCard">
+        <div class="left">
+          <h2>▾ Hazard Library</h2>
+          <p class="sub">Hazards and standard controls used in the activity table.</p>
+        </div>
+        <div class="right">
+          <span class="pill">Reusable standards</span>
+        </div>
+      </div>
+
+      <div class="bd">
+        <div class="libraryBlock">
+          <div class="libraryBlockHd">
+            <div>
+              <h3>Hazard Library</h3>
+              <p>Hazard and standard control</p>
+            </div>
+            <button class="btn small primary" id="addHazardStdBtn" type="button">+ Add row</button>
+          </div>
+          <div id="hazardLibraryList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="materialRiskCard">
+      <div class="hd clickable" tabindex="0" role="button" aria-expanded="true" data-collapse="materialRiskCard">
+        <div class="left">
+          <h2>▾ Material Risk Library</h2>
+          <p class="sub">Material risks with descriptions and mandatory controls.</p>
+        </div>
+        <div class="right">
+          <span class="pill">Baseline material risks</span>
+        </div>
+      </div>
+
+      <div class="bd">
+        <div class="libraryBlockHd">
+          <div>
+            <h3>Material Risk Table</h3>
+            <p>Copy any material risk into the Hazard Library for use in activities.</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn small" id="copyAllMaterialRisksBtn" type="button">Copy all to Hazard Library</button>
+            <button class="btn small primary" id="addMaterialRiskBtn" type="button">+ Add row</button>
+          </div>
+        </div>
+
+        <div id="materialRiskLibraryList"></div>
+      </div>
+    </section>
+
+    <section class="card" id="registerCard">
+      <div class="hd clickable" tabindex="0" role="button" aria-expanded="true" data-collapse="registerCard">
+        <div class="left">
+          <h2>▾ Activities</h2>
+          <p class="sub">Add activity → opens the layout. Add another at the bottom.</p>
+        </div>
+        <div class="right">
+          <button class="btn primary" id="addActivityTop" type="button">+ Add Activity</button>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="hint" style="margin-bottom:10px;">
+          Click an activity line to open or close it. All edits auto-save.
+        </div>
+
+        <div id="activityList"></div>
+
+        <div class="divider"></div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="btn primary" id="addActivityBottom" type="button">+ Add another activity</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modalOverlay" id="pickerOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" role="document">
+      <div class="modalHd">
+        <h3 id="pickerTitle">Select hazards</h3>
+        <button class="btn small" id="pickerCloseBtn" type="button">Close</button>
+      </div>
+      <div class="modalBd">
+        <div class="hint" id="pickerHint" style="margin-bottom:10px"></div>
+        <div class="list" id="pickerList"></div>
+      </div>
+      <div class="modalFt">
+        <div class="right">
+          <span class="hint">Selected: <span class="k" id="pickerCount">0</span></span>
+        </div>
+        <div class="right">
+          <button class="btn" id="pickerClearBtn" type="button">Clear</button>
+          <button class="btn primary" id="pickerApplyBtn" type="button">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="importFile" accept="application/json" style="display:none" />
+  <div id="toast"></div>
+
+  <script>
+    const defaultHazardTitles = [
+      "Bacteria / Virus / Fungi",
+      "Chemical",
+      "Confined space",
+      "Dropped / falling object",
+      "Drugs or alcohol",
+      "Electrical",
+      "Ergonomic",
+      "Fall from height",
+      "Fatigue",
+      "Fire",
+      "Fumes / Dust / Vapour / Mist",
+      "Ground instability / Subsidence",
+      "Housekeeping",
+      "Illumination (Lights)",
+      "Lightning (Thunderbolt)",
+      "Manual handling",
+      "Mobile plant",
+      "Molten materials",
+      "Moving / Rotating plant or machinery",
+      "Noise",
+      "Other",
+      "Plants / Animals / Insects",
+      "Pressurised systems",
+      "Psychological",
+      "Radiation",
+      "Security / asset protection",
+      "Slip / trip (same level)",
+      "Thermal (hot / cold)",
+      "Tools & equipment",
+      "Vehicle",
+      "Vibration"
+    ];
+
+    const defaultMaterialRisks = [
+      {
+        name: "Working at Heights",
+        descriptionHtml: "Risk of falling from ladders, platforms, scaffolds, roofs or elevated work areas.",
+        controlsHtml: `<ul>
+          <li>Work at height permit where required</li>
+          <li>Fall prevention before fall arrest</li>
+          <li>Inspected scaffold or platform</li>
+          <li>100% tie-off where required</li>
+          <li>Certified anchor points</li>
+          <li>Rescue plan in place</li>
+          <li>Dropped object controls</li>
+        </ul>`
+      },
+      {
+        name: "Stored Energy / Isolation",
+        descriptionHtml: "Exposure to electrical, mechanical, hydraulic, pneumatic, thermal or gravitational energy during work.",
+        controlsHtml: `<ul>
+          <li>Isolation procedure followed</li>
+          <li>Lock out / tag out / try out</li>
+          <li>Zero energy verification</li>
+          <li>All isolation points identified</li>
+          <li>Authorised isolator only</li>
+          <li>No work before isolation confirmation</li>
+        </ul>`
+      },
+      {
+        name: "Electrical Contact / Arc Flash",
+        descriptionHtml: "Contact with live systems or exposure to arc flash during electrical work or near energised equipment.",
+        controlsHtml: `<ul>
+          <li>Electrical permit where required</li>
+          <li>Isolate and test for dead</li>
+          <li>Authorised competent persons only</li>
+          <li>Arc-rated PPE where applicable</li>
+          <li>Barricading and signage</li>
+          <li>Insulated tools used</li>
+        </ul>`
+      },
+      {
+        name: "Light Vehicle / Mobile Equipment Interaction",
+        descriptionHtml: "Collision, rollover or struck-by interaction between pedestrians, vehicles and mobile plant.",
+        controlsHtml: `<ul>
+          <li>Seatbelts mandatory</li>
+          <li>Licensed / authorised operators only</li>
+          <li>Pre-start inspections</li>
+          <li>Traffic management plan</li>
+          <li>Pedestrian segregation</li>
+          <li>Speed limits and reversing controls</li>
+          <li>Fatigue management</li>
+        </ul>`
+      },
+      {
+        name: "Lifting and Suspended Loads",
+        descriptionHtml: "Dropped loads, rigging failure or uncontrolled lifting resulting in serious injury or fatality.",
+        controlsHtml: `<ul>
+          <li>Lift plan for non-routine lifts</li>
+          <li>Certified lifting gear</li>
+          <li>Inspected slings and tackle</li>
+          <li>Competent operator and rigger</li>
+          <li>Exclusion zone in place</li>
+          <li>No one under suspended loads</li>
+        </ul>`
+      },
+      {
+        name: "Line of Fire / Crushing",
+        descriptionHtml: "Being struck, trapped, crushed, pinned or caught between moving equipment, loads or structures.",
+        controlsHtml: `<ul>
+          <li>Identify line-of-fire hazards in pre-task review</li>
+          <li>Establish exclusion zones</li>
+          <li>Use mechanical aids</li>
+          <li>Support and chock loads</li>
+          <li>Keep body out of pinch points</li>
+          <li>Use spotters where required</li>
+        </ul>`
+      },
+      {
+        name: "Confined Space",
+        descriptionHtml: "Entry into a space with restricted access and possible toxic, oxygen-deficient or engulfment hazards.",
+        controlsHtml: `<ul>
+          <li>Confined space permit</li>
+          <li>Gas testing before and during entry</li>
+          <li>Isolation of all energy sources</li>
+          <li>Standby person present</li>
+          <li>Communication system in place</li>
+          <li>Rescue plan and equipment ready</li>
+        </ul>`
+      },
+      {
+        name: "Excavation / Ground Disturbance",
+        descriptionHtml: "Ground collapse, engulfment or striking underground services during excavation or digging.",
+        controlsHtml: `<ul>
+          <li>Permit to dig</li>
+          <li>Service locates reviewed</li>
+          <li>Potholing / verification of services</li>
+          <li>Barricading in place</li>
+          <li>Safe access and egress</li>
+          <li>Excavation inspected by competent person</li>
+        </ul>`
+      },
+      {
+        name: "Hot Work / Fire / Explosion",
+        descriptionHtml: "Ignition, burns, fire spread or explosion during welding, grinding, cutting or spark-producing work.",
+        controlsHtml: `<ul>
+          <li>Hot work permit</li>
+          <li>Gas testing where required</li>
+          <li>Fire watch assigned</li>
+          <li>Combustibles removed or covered</li>
+          <li>Firefighting equipment at point of work</li>
+          <li>Post-work fire inspection</li>
+        </ul>`
+      },
+      {
+        name: "Hazardous Chemicals / Substances",
+        descriptionHtml: "Exposure to toxic, corrosive, flammable or reactive chemicals during handling, storage or use.",
+        controlsHtml: `<ul>
+          <li>SDS available and understood</li>
+          <li>Correct labelling</li>
+          <li>Approved storage and segregation</li>
+          <li>Correct PPE</li>
+          <li>Spill kits available</li>
+          <li>Ventilation and exposure controls</li>
+        </ul>`
+      },
+      {
+        name: "Pressure Systems",
+        descriptionHtml: "Release of compressed gas, steam, hydraulic or pneumatic energy causing injury or equipment failure.",
+        controlsHtml: `<ul>
+          <li>Depressurise before work</li>
+          <li>Isolate and verify</li>
+          <li>Pressure-rated equipment only</li>
+          <li>Whip checks / restraints where needed</li>
+          <li>Inspection and certification current</li>
+          <li>Competent persons only</li>
+        </ul>`
+      },
+      {
+        name: "MEWP",
+        descriptionHtml: "Fall, entrapment, tip-over or collision while using a mobile elevating work platform.",
+        controlsHtml: `<ul>
+          <li>Authorised operator only</li>
+          <li>Pre-use inspection</li>
+          <li>Ground conditions assessed</li>
+          <li>Harness and lanyard where required</li>
+          <li>Exclusion zone below</li>
+          <li>Emergency lowering available</li>
+        </ul>`
+      },
+      {
+        name: "Manual Handling / Ergonomics",
+        descriptionHtml: "Musculoskeletal injury from lifting, carrying, pushing, pulling or awkward posture.",
+        controlsHtml: `<ul>
+          <li>Manual handling assessment</li>
+          <li>Use mechanical aids</li>
+          <li>Team lifts where required</li>
+          <li>Reduce load size and weight</li>
+          <li>Correct lifting technique</li>
+          <li>Task rotation where appropriate</li>
+        </ul>`
+      },
+      {
+        name: "Slips, Trips and Falls (Same Level)",
+        descriptionHtml: "Falls caused by poor housekeeping, wet surfaces, uneven ground or obstructed walkways.",
+        controlsHtml: `<ul>
+          <li>Good housekeeping</li>
+          <li>Defined walkways</li>
+          <li>Adequate lighting</li>
+          <li>Immediate clean-up of spills</li>
+          <li>Trailing leads / hoses secured</li>
+          <li>Non-slip footwear</li>
+        </ul>`
+      },
+      {
+        name: "Fit for Work / Fatigue",
+        descriptionHtml: "Reduced alertness, impairment or inability to work safely due to fatigue, illness, alcohol or drugs.",
+        controlsHtml: `<ul>
+          <li>Fit-for-work requirement enforced</li>
+          <li>Fatigue management applied</li>
+          <li>Alcohol and drug policy compliance</li>
+          <li>Adequate rest periods</li>
+          <li>Escalate if worker appears unfit</li>
+          <li>Stop work if unsafe condition exists</li>
+        </ul>`
+      },
+      {
+        name: "Dropped Objects",
+        descriptionHtml: "Tools, materials or equipment falling from height and striking people below.",
+        controlsHtml: `<ul>
+          <li>Tool lanyards where required</li>
+          <li>Toe boards and edge protection</li>
+          <li>Exclusion zone below</li>
+          <li>Secure storage of materials</li>
+          <li>No stacking near edges</li>
+          <li>Dropped-object review completed</li>
+        </ul>`
+      },
+      {
+        name: "Noise",
+        descriptionHtml: "Exposure to harmful noise levels causing hearing damage or communication failure.",
+        controlsHtml: `<ul>
+          <li>Noise assessment completed</li>
+          <li>Hearing protection in required areas</li>
+          <li>Noise signage posted</li>
+          <li>Exposure duration limited</li>
+          <li>Equipment maintained to reduce noise</li>
+        </ul>`
+      },
+      {
+        name: "Dust / Fumes / Airborne Contaminants",
+        descriptionHtml: "Exposure to dust, fumes, vapours or other airborne contaminants that can cause short- or long-term illness.",
+        controlsHtml: `<ul>
+          <li>Exposure assessment completed</li>
+          <li>Ventilation / extraction in place</li>
+          <li>Dust suppression used</li>
+          <li>Correct respirator selected and fitted</li>
+          <li>Air monitoring where required</li>
+        </ul>`
+      },
+      {
+        name: "Heat Stress / Environmental Conditions",
+        descriptionHtml: "Illness or reduced performance due to heat, humidity, sun exposure or harsh environmental conditions.",
+        controlsHtml: `<ul>
+          <li>Hydration maintained</li>
+          <li>Rest breaks scheduled</li>
+          <li>Shade / cooling available</li>
+          <li>Weather conditions monitored</li>
+          <li>Workers monitored for symptoms</li>
+        </ul>`
+      },
+      {
+        name: "Biological Hazards / Animal Bites / Stings",
+        descriptionHtml: "Injury or illness from insects, snakes, animals, contaminated material or biological exposure.",
+        controlsHtml: `<ul>
+          <li>Pre-task area inspection</li>
+          <li>Avoid handling wildlife</li>
+          <li>Correct PPE where required</li>
+          <li>First aid available</li>
+          <li>Emergency response for bites / stings</li>
+          <li>Housekeeping to reduce attraction of pests</li>
+        </ul>`
+      }
+    ];
+
+    const MIN_MATRIX = 3;
+    const MAX_MATRIX = 10;
+
+    const BAND_SCALE = [
+      { key: "low", label: "Low" },
+      { key: "medium", label: "Medium" },
+      { key: "high", label: "High" },
+      { key: "extreme", label: "Extreme" }
+    ];
+
+    const DEFAULT_ROW_5 = ["Rare", "Unlikely", "Possible", "Likely", "Almost Certain"];
+    const DEFAULT_COL_5 = ["Insignificant", "Minor", "Moderate", "Major", "Catastrophic"];
+
+    const LS_MATRIX = "wspRiskMatrix";
+    const LS_RECORDS = "wspRiskActivities";
+    const LS_OPEN = "wspRiskOpenSet";
+    const LS_HAZARD_LIBRARY = "wspHazardLibrary";
+    const LS_MATERIAL_LIBRARY = "wspMaterialRiskLibrary";
+
+    const loadJSON = (key, fallback) => {
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return parsed ?? fallback;
+      }catch{
+        return fallback;
+      }
+    };
+
+    const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+    function makeId(prefix="id"){
+      try{
+        if(window.crypto?.randomUUID) return `${prefix}_${crypto.randomUUID()}`;
+      }catch{}
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,9)}`;
+    }
+
+    const escapeHTML = (str) => String(str ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+    function sanitizeHTML(html){
+      const template = document.createElement("template");
+      template.innerHTML = String(html ?? "");
+
+      template.content.querySelectorAll("script,style,iframe,object,embed,link,meta").forEach(n => n.remove());
+
+      template.content.querySelectorAll("*").forEach(el => {
+        [...el.attributes].forEach(attr => {
+          const name = attr.name.toLowerCase();
+          const value = String(attr.value || "");
+          if(name.startsWith("on")) el.removeAttribute(attr.name);
+          if((name === "href" || name === "src") && /^javascript:/i.test(value)) el.removeAttribute(attr.name);
+        });
+      });
+
+      return template.innerHTML;
+    }
+
+    function htmlToText(html){
+      const div = document.createElement("div");
+      div.innerHTML = sanitizeHTML(html);
+      return (div.textContent || div.innerText || "").trim();
+    }
+
+    function firstLineFromHtml(html){
+      return htmlToText(html).split(/\r?\n/).map(x => x.trim()).find(Boolean) || "";
+    }
+
+    function toast(msg){
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.style.opacity = "1";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => { el.style.opacity = "0"; }, 1400);
+    }
+
+    function makeDefaultRowLabels(count){
+      if(count === 5) return [...DEFAULT_ROW_5];
+      return Array.from({ length: count }, (_, i) => `Row ${i + 1}`);
+    }
+
+    function makeDefaultColLabels(count){
+      if(count === 5) return [...DEFAULT_COL_5];
+      return Array.from({ length: count }, (_, i) => `Column ${i + 1}`);
+    }
+
+    function buildDefaultMatrix(rowCount = 5, colCount = 5){
+      const rows = makeDefaultRowLabels(rowCount).map(label => ({ label }));
+      const cols = makeDefaultColLabels(colCount).map(label => ({ label }));
+      const cells = Array.from({ length: rowCount }, (_, r) =>
+        Array.from({ length: colCount }, (_, c) => String((r + 1) * (c + 1)))
+      );
+      return {
+        rowAxisName: "Likelihood",
+        colAxisName: "Consequence",
+        rows,
+        cols,
+        cells
+      };
+    }
+
+    function normalizeMatrix(raw){
+      const rowCount = clamp(Number(raw?.rows?.length || 5), MIN_MATRIX, MAX_MATRIX);
+      const colCount = clamp(Number(raw?.cols?.length || 5), MIN_MATRIX, MAX_MATRIX);
+      const defaults = buildDefaultMatrix(rowCount, colCount);
+
+      const rows = Array.from({ length: rowCount }, (_, r) => ({
+        label: String(raw?.rows?.[r]?.label ?? defaults.rows[r].label)
+      }));
+
+      const cols = Array.from({ length: colCount }, (_, c) => ({
+        label: String(raw?.cols?.[c]?.label ?? defaults.cols[c].label)
+      }));
+
+      const cells = Array.from({ length: rowCount }, (_, r) =>
+        Array.from({ length: colCount }, (_, c) => {
+          const existing = raw?.cells?.[r]?.[c];
+          return existing === undefined || existing === null || existing === ""
+            ? defaults.cells[r][c]
+            : String(existing);
+        })
+      );
+
+      return {
+        rowAxisName: String(raw?.rowAxisName ?? defaults.rowAxisName),
+        colAxisName: String(raw?.colAxisName ?? defaults.colAxisName),
+        rows,
+        cols,
+        cells
+      };
+    }
+
+    function normalizeLibrary(raw, defaultTitles, prefix){
+      if(Array.isArray(raw) && raw.length){
+        return raw.map(item => ({
+          id: String(item?.id || makeId(prefix)),
+          title: String(item?.title ?? ""),
+          controlsHtml: sanitizeHTML(item?.controlsHtml ?? "")
+        }));
+      }
+
+      return defaultTitles.map(title => ({
+        id: makeId(prefix),
+        title,
+        controlsHtml: ""
+      }));
+    }
+
+    function normalizeMaterialRiskLibrary(raw){
+      if(Array.isArray(raw) && raw.length){
+        return raw.map(item => ({
+          id: String(item?.id || makeId("mat")),
+          name: String(item?.name ?? ""),
+          descriptionHtml: sanitizeHTML(item?.descriptionHtml ?? ""),
+          controlsHtml: sanitizeHTML(item?.controlsHtml ?? "")
+        }));
+      }
+
+      return defaultMaterialRisks.map(item => ({
+        id: makeId("mat"),
+        name: item.name,
+        descriptionHtml: sanitizeHTML(item.descriptionHtml || ""),
+        controlsHtml: sanitizeHTML(item.controlsHtml || "")
+      }));
+    }
+
+    function getRowAxisName(){ return String(matrix.rowAxisName || "Row Axis"); }
+    function getColAxisName(){ return String(matrix.colAxisName || "Column Axis"); }
+    function getRowLabel(idx){ return String(matrix.rows?.[idx]?.label || `Row ${idx + 1}`); }
+    function getColLabel(idx){ return String(matrix.cols?.[idx]?.label || `Column ${idx + 1}`); }
+
+    function getNumericCellValues(){
+      const nums = [];
+      matrix.cells.forEach(row => row.forEach(v => {
+        const n = Number(v);
+        if(Number.isFinite(n)) nums.push(n);
+      }));
+      return nums;
+    }
+
+    function getCellBand(rowIdx, colIdx){
+      const raw = matrix.cells?.[rowIdx]?.[colIdx];
+      const n = Number(raw);
+      let t = 0.5;
+
+      if(Number.isFinite(n)){
+        const nums = getNumericCellValues();
+        const min = nums.length ? Math.min(...nums) : 0;
+        const max = nums.length ? Math.max(...nums) : 1;
+        t = max === min ? 0.5 : (n - min) / (max - min);
+      } else {
+        const rows = matrix.rows.length;
+        const cols = matrix.cols.length;
+        const denom = Math.max(1, (rows * cols) - 1);
+        t = ((rowIdx * cols) + colIdx) / denom;
+      }
+
+      if(t <= 0.25) return BAND_SCALE[0];
+      if(t <= 0.50) return BAND_SCALE[1];
+      if(t <= 0.75) return BAND_SCALE[2];
+      return BAND_SCALE[3];
+    }
+
+    function getCellInfo(rowIdx, colIdx){
+      const raw = String(matrix.cells?.[rowIdx]?.[colIdx] ?? "");
+      const numeric = raw !== "" && Number.isFinite(Number(raw)) ? Number(raw) : null;
+      const band = getCellBand(rowIdx, colIdx);
+      return {
+        raw,
+        numeric,
+        band,
+        displayValue: raw === "" ? band.label : raw
+      };
+    }
+
+    function bandRank(key){
+      return Math.max(0, BAND_SCALE.findIndex(x => x.key === key));
+    }
+
+    let matrix = normalizeMatrix(loadJSON(LS_MATRIX, buildDefaultMatrix(5, 5)));
+    let hazardLibrary = normalizeLibrary(loadJSON(LS_HAZARD_LIBRARY, null), defaultHazardTitles, "haz");
+    let materialRiskLibrary = normalizeMaterialRiskLibrary(loadJSON(LS_MATERIAL_LIBRARY, null));
+    let activities = loadJSON(LS_RECORDS, []);
+    let openSet = new Set(loadJSON(LS_OPEN, []));
+
+    function findHazardById(id){ return hazardLibrary.find(x => x.id === id); }
+
+    function normalizeActivity(a, idx = 0){
+      const rowMax = matrix.rows.length - 1;
+      const colMax = matrix.cols.length - 1;
+
+      return {
+        no: Number.isFinite(Number(a?.no)) ? Number(a.no) : idx + 1,
+        mainTaskHtml: sanitizeHTML(a?.mainTaskHtml ?? ""),
+        hazardIds: Array.isArray(a?.hazardIds)
+          ? a.hazardIds.map(String)
+          : Array.isArray(a?.hazardArr)
+            ? a.hazardArr.map(title => hazardLibrary.find(x => x.title === title)?.id).filter(Boolean)
+            : [],
+        riskDescHtml: sanitizeHTML(a?.riskDescHtml ?? ""),
+        beforeRow: clamp(
+          Number.isFinite(Number(a?.beforeRow)) ? Number(a.beforeRow) : ((Number(a?.lBefore || 1)) - 1),
+          0, rowMax
+        ),
+        beforeCol: clamp(
+          Number.isFinite(Number(a?.beforeCol)) ? Number(a.beforeCol) : ((Number(a?.cBefore || 1)) - 1),
+          0, colMax
+        ),
+        additionalControlsHtml: sanitizeHTML(a?.additionalControlsHtml ?? a?.controlsRaw ?? ""),
+        afterRow: clamp(
+          Number.isFinite(Number(a?.afterRow)) ? Number(a.afterRow) : ((Number(a?.lAfter || 1)) - 1),
+          0, rowMax
+        )
+      };
+    }
+
+    activities = activities.map((a, i) => normalizeActivity(a, i));
+    let nextNo = activities.length ? Math.max(...activities.map(a => a.no)) + 1 : 1;
+
+    function persistAll(){
+      saveJSON(LS_MATRIX, matrix);
+      saveJSON(LS_HAZARD_LIBRARY, hazardLibrary);
+      saveJSON(LS_MATERIAL_LIBRARY, materialRiskLibrary);
+      saveJSON(LS_RECORDS, activities);
+      saveJSON(LS_OPEN, [...openSet]);
+    }
+
+    function clampActivitiesToMatrix(){
+      const rowMax = matrix.rows.length - 1;
+      const colMax = matrix.cols.length - 1;
+
+      activities = activities.map((a, i) => ({
+        ...normalizeActivity(a, i),
+        beforeRow: clamp(Number(a.beforeRow || 0), 0, rowMax),
+        beforeCol: clamp(Number(a.beforeCol || 0), 0, colMax),
+        afterRow: clamp(Number(a.afterRow || 0), 0, rowMax)
+      }));
+    }
+
+    function resizeMatrix(nextRows, nextCols){
+      nextRows = clamp(Number(nextRows), MIN_MATRIX, MAX_MATRIX);
+      nextCols = clamp(Number(nextCols), MIN_MATRIX, MAX_MATRIX);
+
+      const current = normalizeMatrix(matrix);
+      const defaults = buildDefaultMatrix(nextRows, nextCols);
+
+      const rows = Array.from({ length: nextRows }, (_, r) => ({
+        label: String(current.rows?.[r]?.label ?? defaults.rows[r].label)
+      }));
+
+      const cols = Array.from({ length: nextCols }, (_, c) => ({
+        label: String(current.cols?.[c]?.label ?? defaults.cols[c].label)
+      }));
+
+      const cells = Array.from({ length: nextRows }, (_, r) =>
+        Array.from({ length: nextCols }, (_, c) => {
+          const existing = current.cells?.[r]?.[c];
+          return existing === undefined || existing === null || existing === ""
+            ? defaults.cells[r][c]
+            : String(existing);
+        })
+      );
+
+      matrix = {
+        rowAxisName: current.rowAxisName,
+        colAxisName: current.colAxisName,
+        rows,
+        cols,
+        cells
+      };
+
+      clampActivitiesToMatrix();
+      persistAll();
+      renderAll();
+    }
+
+    function labelFromIds(ids){
+      if(!ids || !ids.length) return `<span class="hint">None selected</span>`;
+      return `<div class="chips">${
+        ids.map(id => {
+          const item = findHazardById(id);
+          return `<span class="pill">${escapeHTML(item?.title || "Untitled")}</span>`;
+        }).join("")
+      }</div>`;
+    }
+
+    function buildMandatoryControlsHTML(activity){
+      const hazardBlocks = (activity.hazardIds || [])
+        .map(id => findHazardById(id))
+        .filter(Boolean)
+        .map(item => ({
+          title: item.title || "Untitled hazard",
+          html: sanitizeHTML(item.controlsHtml || "")
+        }));
+
+      const blocks = [];
+      hazardBlocks.forEach(item => {
+        blocks.push(`
+          <div class="autoBlock">
+            <div class="autoBlockTitle">Hazard: ${escapeHTML(item.title)}</div>
+            ${item.html || `<div class="muted">No standard mandatory controls set yet.</div>`}
+          </div>
+        `);
+      });
+
+      if(!blocks.length){
+        return `<div class="muted">Select hazards to auto-build mandatory controls here.</div>`;
+      }
+
+      return blocks.join("");
+    }
+
+    const matrixBuilder = document.getElementById("matrixBuilder");
+    const matrixLegend = document.getElementById("matrixLegend");
+    const matrixSizePill = document.getElementById("matrixSizePill");
+    const rowAxisNameInput = document.getElementById("rowAxisNameInput");
+    const colAxisNameInput = document.getElementById("colAxisNameInput");
+    const hazardLibraryList = document.getElementById("hazardLibraryList");
+    const materialRiskLibraryList = document.getElementById("materialRiskLibraryList");
+    const listEl = document.getElementById("activityList");
+    const editorTargetLabel = document.getElementById("editorTargetLabel");
+    const editorStatePill = document.getElementById("editorStatePill");
+
+    let activeEditor = null;
+    let savedRange = null;
+
+    function setEditorStatus(editor){
+      if(!editor || editor.getAttribute("contenteditable") !== "true"){
+        activeEditor = null;
+        savedRange = null;
+        editorTargetLabel.textContent = "Click inside a text area to edit it with the ribbon.";
+        editorStatePill.textContent = "No editor selected";
+        return;
+      }
+
+      activeEditor = editor;
+      const label = editor.dataset.editorLabel || "Text field";
+      editorTargetLabel.textContent = `Editing: ${label}`;
+      editorStatePill.textContent = label;
+    }
+
+    function saveSelectionForEditor(editor){
+      const sel = window.getSelection();
+      if(!sel || sel.rangeCount === 0) return;
+      const range = sel.getRangeAt(0);
+      if(editor.contains(range.commonAncestorContainer)){
+        savedRange = range.cloneRange();
+      }
+    }
+
+    function restoreSelectionForEditor(editor){
+      const sel = window.getSelection();
+      if(!sel) return;
+      editor.focus();
+
+      if(savedRange && editor.contains(savedRange.commonAncestorContainer)){
+        sel.removeAllRanges();
+        sel.addRange(savedRange);
+        return;
+      }
+
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function execEditorCommand(cmd, value=null){
+      if(!activeEditor) return;
+      restoreSelectionForEditor(activeEditor);
+      document.execCommand(cmd, false, value);
+      saveSelectionForEditor(activeEditor);
+      activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+      activeEditor.focus();
+    }
+
+    function syncActivityRichText(editor){
+      const activityEl = editor.closest(".activity");
+      if(!activityEl) return;
+
+      const no = Number(activityEl.dataset.no);
+      const act = activities.find(x => x.no === no);
+      if(!act) return;
+
+      const field = editor.dataset.field;
+      if(!field) return;
+
+      act[field] = sanitizeHTML(editor.innerHTML);
+      persistAll();
+      refreshActivityUI(activityEl, act);
+    }
+
+    function syncLibraryRichText(editor){
+      const itemEl = editor.closest(".libItem");
+      if(!itemEl) return;
+
+      const id = itemEl.dataset.id;
+      const field = editor.dataset.libField;
+      const item = hazardLibrary.find(x => x.id === id);
+      if(!item || !field) return;
+
+      item[field] = sanitizeHTML(editor.innerHTML);
+      persistAll();
+      renderActivities();
+    }
+
+    function syncMaterialRiskRichText(editor){
+      const itemEl = editor.closest(".matItem");
+      if(!itemEl) return;
+
+      const id = itemEl.dataset.id;
+      const field = editor.dataset.matField;
+      const item = materialRiskLibrary.find(x => x.id === id);
+      if(!item || !field) return;
+
+      item[field] = sanitizeHTML(editor.innerHTML);
+      persistAll();
+    }
+
+    function copyMaterialRiskToHazard(id){
+      const item = materialRiskLibrary.find(x => x.id === id);
+      if(!item) return;
+
+      const cleanName = String(item.name || "").trim();
+      if(!cleanName){
+        toast("Give the material risk a name first.");
+        return;
+      }
+
+      const existing = hazardLibrary.find(h => String(h.title || "").trim().toLowerCase() === cleanName.toLowerCase());
+
+      if(existing){
+        existing.title = cleanName;
+        existing.controlsHtml = sanitizeHTML(item.controlsHtml || "");
+        persistAll();
+        renderLibraries();
+        renderActivities();
+        toast("Hazard Library item updated.");
+        return;
+      }
+
+      hazardLibrary.push({
+        id: makeId("haz"),
+        title: cleanName,
+        controlsHtml: sanitizeHTML(item.controlsHtml || "")
+      });
+
+      persistAll();
+      renderLibraries();
+      renderActivities();
+      toast("Copied to Hazard Library.");
+    }
+
+    function copyAllMaterialRisksToHazards(){
+      let added = 0;
+      let updated = 0;
+
+      materialRiskLibrary.forEach(item => {
+        const cleanName = String(item.name || "").trim();
+        if(!cleanName) return;
+
+        const existing = hazardLibrary.find(h => String(h.title || "").trim().toLowerCase() === cleanName.toLowerCase());
+
+        if(existing){
+          existing.title = cleanName;
+          existing.controlsHtml = sanitizeHTML(item.controlsHtml || "");
+          updated++;
+        } else {
+          hazardLibrary.push({
+            id: makeId("haz"),
+            title: cleanName,
+            controlsHtml: sanitizeHTML(item.controlsHtml || "")
+          });
+          added++;
+        }
+      });
+
+      persistAll();
+      renderLibraries();
+      renderActivities();
+      toast(`Material risks copied. Added: ${added}, updated: ${updated}`);
+    }
+
+    function renderMatrixLegend(){
+      matrixLegend.innerHTML = BAND_SCALE.map(b => `
+        <span class="legendSwatch ${b.key}">
+          <span>${escapeHTML(b.label)}</span>
+        </span>
+      `).join("");
+    }
+
+    function renderMatrixBuilder(){
+      const rowCount = matrix.rows.length;
+      const colCount = matrix.cols.length;
+
+      matrixSizePill.textContent = `${rowCount} × ${colCount}`;
+      rowAxisNameInput.value = getRowAxisName();
+      colAxisNameInput.value = getColAxisName();
+
+      matrixBuilder.style.gridTemplateColumns = `220px repeat(${colCount}, minmax(96px, 1fr))`;
+
+      let html = `
+        <div class="builderCorner">
+          <div>
+            <div>${escapeHTML(getRowAxisName())}</div>
+            <div style="opacity:.7; font-size:12px; margin:4px 0;">vs</div>
+            <div>${escapeHTML(getColAxisName())}</div>
+          </div>
+        </div>
+      `;
+
+      for(let c = 0; c < colCount; c++){
+        html += `
+          <div class="builderHead">
+            <input
+              type="text"
+              class="builderHeaderInput"
+              data-col-header="${c}"
+              value="${escapeHTML(getColLabel(c))}"
+              placeholder="Column ${c + 1}"
+            />
+          </div>
+        `;
+      }
+
+      for(let r = 0; r < rowCount; r++){
+        html += `
+          <div class="builderSide">
+            <input
+              type="text"
+              class="builderRowInput"
+              data-row-header="${r}"
+              value="${escapeHTML(getRowLabel(r))}"
+              placeholder="Row ${r + 1}"
+            />
+          </div>
+        `;
+
+        for(let c = 0; c < colCount; c++){
+          const band = getCellBand(r, c);
+          html += `
+            <div class="builderCell ${band.key}">
+              <input
+                type="number"
+                step="any"
+                class="builderValueInput"
+                data-cell-row="${r}"
+                data-cell-col="${c}"
+                value="${escapeHTML(matrix.cells[r][c])}"
+              />
+              <div class="bandHint">${escapeHTML(band.label)}</div>
+            </div>
+          `;
+        }
+      }
+
+      matrixBuilder.innerHTML = html;
+      renderMatrixLegend();
+    }
+
+    function renderLibraryList(container, items){
+      container.innerHTML = `
+        <div class="libraryTableWrap">
+          <table class="libraryTable">
+            <thead>
+              <tr>
+                <th>Hazard</th>
+                <th>Control</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                items.map(item => `
+                  <tr class="libItem" data-id="${escapeHTML(item.id)}">
+                    <td>
+                      <input
+                        type="text"
+                        value="${escapeHTML(item.title)}"
+                        data-lib-field="title"
+                        placeholder="Enter hazard"
+                      />
+                    </td>
+                    <td>
+                      <div class="rteWrap">
+                        <div
+                          class="rte lg"
+                          contenteditable="true"
+                          spellcheck="true"
+                          data-lib-field="controlsHtml"
+                          data-editor-label="Hazard standard controls"
+                          data-placeholder="Enter standard control..."
+                        >${sanitizeHTML(item.controlsHtml)}</div>
+                      </div>
+                    </td>
+                  </tr>
+                `).join("")
+              }
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderLibraries(){
+      renderLibraryList(hazardLibraryList, hazardLibrary);
+    }
+
+    function renderMaterialRiskList(){
+      materialRiskLibraryList.innerHTML = `
+        <div class="libraryTableWrap">
+          <table class="libraryTable" style="min-width:1100px;">
+            <thead>
+              <tr>
+                <th style="width:22%;">Material Risk</th>
+                <th style="width:28%;">Description</th>
+                <th style="width:38%;">Mandatory Controls</th>
+                <th style="width:12%;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                materialRiskLibrary.map(item => `
+                  <tr class="matItem" data-id="${escapeHTML(item.id)}">
+                    <td>
+                      <input
+                        type="text"
+                        value="${escapeHTML(item.name)}"
+                        data-mat-field="name"
+                        placeholder="Enter material risk"
+                      />
+                    </td>
+
+                    <td>
+                      <div class="rteWrap">
+                        <div
+                          class="rte lg"
+                          contenteditable="true"
+                          spellcheck="true"
+                          data-mat-field="descriptionHtml"
+                          data-editor-label="Material risk description"
+                          data-placeholder="Enter description..."
+                        >${sanitizeHTML(item.descriptionHtml)}</div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="rteWrap">
+                        <div
+                          class="rte lg"
+                          contenteditable="true"
+                          spellcheck="true"
+                          data-mat-field="controlsHtml"
+                          data-editor-label="Material risk mandatory controls"
+                          data-placeholder="Enter mandatory controls..."
+                        >${sanitizeHTML(item.controlsHtml)}</div>
+                      </div>
+                    </td>
+
+                    <td class="center">
+                      <button class="btn small" type="button" data-action="copyMaterialRisk">Copy to Hazard</button>
+                    </td>
+                  </tr>
+                `).join("")
+              }
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function derived(a){
+      const before = getCellInfo(a.beforeRow, a.beforeCol);
+      const after = getCellInfo(a.afterRow, a.beforeCol);
+
+      const go = (before.numeric !== null && after.numeric !== null)
+        ? after.numeric < before.numeric
+        : bandRank(after.band.key) < bandRank(before.band.key);
+
+      return { before, after, go };
+    }
+
+    function renderActivities(){
+      if(!activities.length){
+        listEl.innerHTML = `
+          <div class="hint" style="padding:10px 4px;">
+            No activities yet — click <span class="pill red">+ Add Activity</span> to start.
+          </div>
+        `;
+        return;
+      }
+
+      const rowAxis = getRowAxisName();
+      const colAxis = getColAxisName();
+
+      const rowOpts = (val) => matrix.rows.map((x, idx) =>
+        `<option value="${idx}" ${Number(val) === idx ? "selected" : ""}>${escapeHTML(`${idx + 1} — ${getRowLabel(idx)}`)}</option>`
+      ).join("");
+
+      const colOpts = (val) => matrix.cols.map((x, idx) =>
+        `<option value="${idx}" ${Number(val) === idx ? "selected" : ""}>${escapeHTML(`${idx + 1} — ${getColLabel(idx)}`)}</option>`
+      ).join("");
+
+      listEl.innerHTML = activities
+        .sort((a, b) => a.no - b.no)
+        .map(a => {
+          const d = derived(a);
+          const isOpen = openSet.has(a.no);
+          const chev = isOpen ? "▾" : "▸";
+
+          return `
+            <div class="activity ${isOpen ? "open" : ""}" data-no="${a.no}">
+              <div class="sum" tabindex="0" role="button" aria-expanded="${isOpen}">
+                <div class="no">${chev} #${a.no}</div>
+
+                <div class="task ${window.innerWidth < 1200 ? "col-span" : ""}">
+                  <span data-role="sumTask">${escapeHTML(firstLineFromHtml(a.mainTaskHtml) || "Untitled activity")}</span>
+                  <div class="hint" data-role="sumDesc">${escapeHTML(firstLineFromHtml(a.riskDescHtml) || "No risk description yet")}</div>
+                </div>
+
+                <div class="mini">
+                  <span class="riskBadge ${d.before.band.key}" data-role="sumBefore">Before: ${escapeHTML(d.before.band.label)} • ${escapeHTML(d.before.displayValue)}</span>
+                </div>
+
+                <div class="mini">
+                  <span class="riskBadge ${d.after.band.key}" data-role="sumAfter">After: ${escapeHTML(d.after.band.label)} • ${escapeHTML(d.after.displayValue)}</span>
+                </div>
+
+                <div class="mini">
+                  <span class="pill ${d.go ? "good" : "bad"}" data-role="sumGo">${d.go ? "GO WITH CONTROLS" : "NO / GO"}</span>
+                </div>
+
+                <div class="mini right">
+                  <button class="btn small danger" type="button" data-action="delete">Delete</button>
+                </div>
+              </div>
+
+              <div class="details">
+                <table class="record">
+                  <tr>
+                    <td class="noCell center" rowspan="6">${a.no}</td>
+
+                    <td class="taskCell" rowspan="6">
+                      <label class="hint">Main Task</label>
+                      <div class="rteWrap">
+                        <div
+                          class="rte lg"
+                          contenteditable="true"
+                          spellcheck="true"
+                          data-field="mainTaskHtml"
+                          data-editor-label="Activity main task"
+                          data-placeholder="Type main task..."
+                        >${sanitizeHTML(a.mainTaskHtml)}</div>
+                      </div>
+                    </td>
+
+                    <td rowspan="6">
+                      <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div>
+                          <div class="hint">Hazard / Impact / Aspect</div>
+                          ${labelFromIds(a.hazardIds)}
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                          <button class="btn small" type="button" data-action="pickHaz">Select Hazards</button>
+                          <span class="pill">${(a.hazardIds || []).length} selected</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td rowspan="6">
+                      <label class="hint">Risk Description</label>
+                      <div class="rteWrap">
+                        <div
+                          class="rte lg"
+                          contenteditable="true"
+                          spellcheck="true"
+                          data-field="riskDescHtml"
+                          data-editor-label="Activity risk description"
+                          data-placeholder="Describe the unwanted event..."
+                        >${sanitizeHTML(a.riskDescHtml)}</div>
+                      </div>
+                    </td>
+
+                    <td class="risk-before-header center" colspan="6">Risk Before Controls</td>
+                    <td class="statusCell ${d.go ? "go" : "nogo"}" data-role="status" rowspan="6">${d.go ? "GO WITH CONTROLS" : "NO / GO"}</td>
+                  </tr>
+
+                  <tr>
+                    <td class="center"><b>${escapeHTML(rowAxis)}</b></td>
+                    <td><select data-field="beforeRow">${rowOpts(a.beforeRow)}</select></td>
+                    <td class="center"><b>${escapeHTML(colAxis)}</b></td>
+                    <td><select data-field="beforeCol">${colOpts(a.beforeCol)}</select></td>
+                    <td class="center"><b>Risk Level</b></td>
+                    <td class="center">
+                      <div class="ratingCell ${d.before.band.key}" data-role="beforeLevel">
+                        ${escapeHTML(d.before.band.label)}<br><span class="muted">${escapeHTML(d.before.displayValue)}</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="6">
+                      <div class="controlsSplit">
+                        <div class="controlPane">
+                          <label>Mandatory Controls</label>
+                          <div class="rteWrap">
+                            <div
+                              class="rte lg readonly"
+                              contenteditable="false"
+                              data-role="mandatoryControls"
+                              data-placeholder="Mandatory controls will be generated from selected hazards."
+                            >${buildMandatoryControlsHTML(a)}</div>
+                          </div>
+                        </div>
+
+                        <div class="controlPane">
+                          <label>Additional Controls</label>
+                          <div class="rteWrap">
+                            <div
+                              class="rte lg"
+                              contenteditable="true"
+                              spellcheck="true"
+                              data-field="additionalControlsHtml"
+                              data-editor-label="Activity additional controls"
+                              data-placeholder="Add any project-specific additional controls..."
+                            >${sanitizeHTML(a.additionalControlsHtml)}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="risk-after-header center" colspan="6">Risk After Controls</td>
+                  </tr>
+
+                  <tr>
+                    <td class="center"><b>${escapeHTML(rowAxis)}</b></td>
+                    <td><select data-field="afterRow">${rowOpts(a.afterRow)}</select></td>
+
+                    <td class="center"><b>${escapeHTML(colAxis)}</b></td>
+                    <td>
+                      <select data-role="afterColDisplay" disabled>
+                        ${colOpts(a.beforeCol)}
+                      </select>
+                    </td>
+
+                    <td class="center"><b>Risk Level</b></td>
+                    <td class="center">
+                      <div class="ratingCell ${d.after.band.key}" data-role="afterLevel">
+                        ${escapeHTML(d.after.band.label)}<br><span class="muted">${escapeHTML(d.after.displayValue)}</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="6">
+                      <div class="hint">
+                        Risk after controls keeps the same <span class="k">${escapeHTML(colAxis)}</span> value and lets you reduce the <span class="k">${escapeHTML(rowAxis)}</span> value.
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          `;
+        }).join("");
+    }
+
+    function refreshActivityUI(activityEl, a){
+      const d = derived(a);
+
+      const t = activityEl.querySelector('[data-role="sumTask"]');
+      const desc = activityEl.querySelector('[data-role="sumDesc"]');
+      if(t) t.textContent = firstLineFromHtml(a.mainTaskHtml) || "Untitled activity";
+      if(desc) desc.textContent = firstLineFromHtml(a.riskDescHtml) || "No risk description yet";
+
+      const sumBefore = activityEl.querySelector('[data-role="sumBefore"]');
+      const sumAfter = activityEl.querySelector('[data-role="sumAfter"]');
+
+      if(sumBefore){
+        sumBefore.classList.remove("low", "medium", "high", "extreme");
+        sumBefore.classList.add(d.before.band.key);
+        sumBefore.textContent = `Before: ${d.before.band.label} • ${d.before.displayValue}`;
+      }
+
+      if(sumAfter){
+        sumAfter.classList.remove("low", "medium", "high", "extreme");
+        sumAfter.classList.add(d.after.band.key);
+        sumAfter.textContent = `After: ${d.after.band.label} • ${d.after.displayValue}`;
+      }
+
+      const sumGo = activityEl.querySelector('[data-role="sumGo"]');
+      if(sumGo){
+        sumGo.classList.remove("good", "bad");
+        sumGo.classList.add(d.go ? "good" : "bad");
+        sumGo.textContent = d.go ? "GO WITH CONTROLS" : "NO / GO";
+      }
+
+      const status = activityEl.querySelector('[data-role="status"]');
+      if(status){
+        status.classList.remove("go", "nogo");
+        status.classList.add(d.go ? "go" : "nogo");
+        status.textContent = d.go ? "GO WITH CONTROLS" : "NO / GO";
+      }
+
+      const beforeLevel = activityEl.querySelector('[data-role="beforeLevel"]');
+      const afterLevel = activityEl.querySelector('[data-role="afterLevel"]');
+
+      if(beforeLevel){
+        beforeLevel.classList.remove("low", "medium", "high", "extreme");
+        beforeLevel.classList.add(d.before.band.key);
+        beforeLevel.innerHTML = `${escapeHTML(d.before.band.label)}<br><span class="muted">${escapeHTML(d.before.displayValue)}</span>`;
+      }
+
+      if(afterLevel){
+        afterLevel.classList.remove("low", "medium", "high", "extreme");
+        afterLevel.classList.add(d.after.band.key);
+        afterLevel.innerHTML = `${escapeHTML(d.after.band.label)}<br><span class="muted">${escapeHTML(d.after.displayValue)}</span>`;
+      }
+
+      const afterColDisplay = activityEl.querySelector('[data-role="afterColDisplay"]');
+      if(afterColDisplay) afterColDisplay.value = String(a.beforeCol);
+
+      const mandatoryControls = activityEl.querySelector('[data-role="mandatoryControls"]');
+      if(mandatoryControls){
+        mandatoryControls.innerHTML = buildMandatoryControlsHTML(a);
+      }
+    }
+
+    function updateMatrixFromInput(target){
+      if(target.id === "rowAxisNameInput"){
+        matrix.rowAxisName = target.value.trim() || "Row Axis";
+        return true;
+      }
+      if(target.id === "colAxisNameInput"){
+        matrix.colAxisName = target.value.trim() || "Column Axis";
+        return true;
+      }
+      if(target.dataset.rowHeader !== undefined){
+        const r = Number(target.dataset.rowHeader);
+        matrix.rows[r].label = target.value;
+        return true;
+      }
+      if(target.dataset.colHeader !== undefined){
+        const c = Number(target.dataset.colHeader);
+        matrix.cols[c].label = target.value;
+        return true;
+      }
+      if(target.dataset.cellRow !== undefined && target.dataset.cellCol !== undefined){
+        const r = Number(target.dataset.cellRow);
+        const c = Number(target.dataset.cellCol);
+        matrix.cells[r][c] = target.value;
+        return true;
+      }
+      return false;
+    }
+
+    function addLibraryItem(){
+      const item = {
+        id: makeId("haz"),
+        title: "",
+        controlsHtml: ""
+      };
+
+      hazardLibrary.push(item);
+
+      persistAll();
+      renderAll();
+
+      setTimeout(() => {
+        hazardLibraryList.querySelector(`[data-id="${item.id}"] input[data-lib-field="title"]`)?.focus();
+      }, 20);
+    }
+
+    function defaultActivity(){
+      return {
+        no: nextNo,
+        mainTaskHtml: "",
+        hazardIds: [],
+        riskDescHtml: "",
+        beforeRow: 0,
+        beforeCol: 0,
+        additionalControlsHtml: "",
+        afterRow: 0
+      };
+    }
+
+    function addActivity(open = true){
+      const a = defaultActivity();
+      activities.push(a);
+      nextNo++;
+      if(open) openSet.add(a.no);
+      persistAll();
+      renderActivities();
+      toast("Activity added.");
+
+      setTimeout(() => {
+        document.querySelector(`.activity[data-no="${a.no}"]`)?.scrollIntoView({ behavior:"smooth", block:"start" });
+      }, 30);
+    }
+
+    function renderAll(){
+      renderMatrixBuilder();
+      renderLibraries();
+      renderMaterialRiskList();
+      renderActivities();
+    }
+
+    const overlay = document.getElementById("pickerOverlay");
+    const pickerTitle = document.getElementById("pickerTitle");
+    const pickerHint = document.getElementById("pickerHint");
+    const pickerList = document.getElementById("pickerList");
+    const pickerCount = document.getElementById("pickerCount");
+    const pickerCloseBtn = document.getElementById("pickerCloseBtn");
+    const pickerClearBtn = document.getElementById("pickerClearBtn");
+    const pickerApplyBtn = document.getElementById("pickerApplyBtn");
+
+    let pickerSelected = [];
+    let pickerApplyCallback = null;
+    let lastFocusEl = null;
+
+    function openPicker(selected, onApply){
+      pickerSelected = Array.isArray(selected) ? [...selected] : [];
+      pickerApplyCallback = onApply;
+      lastFocusEl = document.activeElement;
+
+      pickerTitle.textContent = "Select Hazards";
+      pickerHint.textContent = "Tick all that apply.";
+
+      pickerList.innerHTML = hazardLibrary.map((opt, idx) => {
+        const id = `pick_hazard_${idx}`;
+        const checked = pickerSelected.includes(opt.id) ? "checked" : "";
+        return `
+          <div class="item">
+            <input type="checkbox" id="${id}" value="${escapeHTML(opt.id)}" ${checked} />
+            <label for="${id}">${escapeHTML(opt.title || "Untitled item")}</label>
+          </div>
+        `;
+      }).join("");
+
+      pickerList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener("change", () => {
+          const val = cb.value;
+          if(cb.checked){
+            if(!pickerSelected.includes(val)) pickerSelected.push(val);
+          } else {
+            pickerSelected = pickerSelected.filter(x => x !== val);
+          }
+          pickerCount.textContent = String(pickerSelected.length);
+        });
+      });
+
+      pickerCount.textContent = String(pickerSelected.length);
+      overlay.style.display = "flex";
+      overlay.setAttribute("aria-hidden", "false");
+      setTimeout(() => pickerCloseBtn.focus(), 0);
+    }
+
+    function closePicker(apply=false){
+      if(apply && typeof pickerApplyCallback === "function"){
+        const sorted = hazardLibrary.filter(o => pickerSelected.includes(o.id)).map(o => o.id);
+        pickerApplyCallback(sorted);
+      }
+      overlay.style.display = "none";
+      overlay.setAttribute("aria-hidden", "true");
+      pickerApplyCallback = null;
+      if(lastFocusEl && typeof lastFocusEl.focus === "function") lastFocusEl.focus();
+    }
+
+    function toggleCard(cardId){
+      const card = document.getElementById(cardId);
+      if(!card) return;
+      const isCollapsed = card.classList.toggle("collapsed");
+      const hd = card.querySelector(".hd h2");
+      if(hd){
+        const label = hd.textContent.replace(/^▾|^▸/, "").trim();
+        hd.textContent = (isCollapsed ? "▸ " : "▾ ") + label;
+      }
+      const btn = document.querySelector(`[data-collapse="${cardId}"]`);
+      if(btn) btn.setAttribute("aria-expanded", String(!isCollapsed));
+    }
+
+    document.querySelectorAll("[data-collapse]").forEach(hd => {
+      const id = hd.dataset.collapse;
+      hd.addEventListener("click", () => toggleCard(id));
+      hd.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          toggleCard(id);
+        }
+      });
+    });
+
+    rowAxisNameInput.addEventListener("input", (e) => {
+      if(updateMatrixFromInput(e.target)){
+        persistAll();
+        renderActivities();
+      }
+    });
+
+    colAxisNameInput.addEventListener("input", (e) => {
+      if(updateMatrixFromInput(e.target)){
+        persistAll();
+        renderActivities();
+      }
+    });
+
+    matrixBuilder.addEventListener("input", (e) => {
+      if(updateMatrixFromInput(e.target)){
+        persistAll();
+        renderActivities();
+      }
+    });
+
+    matrixBuilder.addEventListener("change", (e) => {
+      if(updateMatrixFromInput(e.target)){
+        persistAll();
+        renderMatrixBuilder();
+        renderActivities();
+      }
+    });
+
+    document.getElementById("saveMatrixBtn").addEventListener("click", () => {
+      persistAll();
+      toast("Matrix saved.");
+    });
+
+    document.getElementById("resetMatrixBtn").addEventListener("click", () => {
+      matrix = buildDefaultMatrix(5, 5);
+      clampActivitiesToMatrix();
+      persistAll();
+      renderAll();
+      toast("Matrix reset.");
+    });
+
+    document.getElementById("addRowBtn").addEventListener("click", () => resizeMatrix(matrix.rows.length + 1, matrix.cols.length));
+    document.getElementById("removeRowBtn").addEventListener("click", () => resizeMatrix(matrix.rows.length - 1, matrix.cols.length));
+    document.getElementById("addColBtn").addEventListener("click", () => resizeMatrix(matrix.rows.length, matrix.cols.length + 1));
+    document.getElementById("removeColBtn").addEventListener("click", () => resizeMatrix(matrix.rows.length, matrix.cols.length - 1));
+
+    document.getElementById("addHazardStdBtn").addEventListener("click", () => addLibraryItem());
+
+    hazardLibraryList.addEventListener("input", (e) => {
+      const itemEl = e.target.closest(".libItem");
+      if(!itemEl) return;
+
+      const id = itemEl.dataset.id;
+      const item = hazardLibrary.find(x => x.id === id);
+      if(!item) return;
+
+      if(e.target.matches('input[data-lib-field="title"]')){
+        item.title = e.target.value;
+        persistAll();
+        renderActivities();
+        return;
+      }
+
+      const editor = e.target.closest(".rte[data-lib-field]");
+      if(editor) syncLibraryRichText(editor);
+    });
+
+    document.getElementById("addMaterialRiskBtn").addEventListener("click", () => {
+      materialRiskLibrary.push({
+        id: makeId("mat"),
+        name: "",
+        descriptionHtml: "",
+        controlsHtml: ""
+      });
+      persistAll();
+      renderMaterialRiskList();
+
+      setTimeout(() => {
+        materialRiskLibraryList.querySelector('.matItem:last-child input[data-mat-field="name"]')?.focus();
+      }, 20);
+    });
+
+    document.getElementById("copyAllMaterialRisksBtn").addEventListener("click", () => {
+      copyAllMaterialRisksToHazards();
+    });
+
+    materialRiskLibraryList.addEventListener("input", (e) => {
+      const itemEl = e.target.closest(".matItem");
+      if(!itemEl) return;
+
+      const id = itemEl.dataset.id;
+      const item = materialRiskLibrary.find(x => x.id === id);
+      if(!item) return;
+
+      if(e.target.matches('input[data-mat-field="name"]')){
+        item.name = e.target.value;
+        persistAll();
+        return;
+      }
+
+      const editor = e.target.closest(".rte[data-mat-field]");
+      if(editor){
+        syncMaterialRiskRichText(editor);
+      }
+    });
+
+    materialRiskLibraryList.addEventListener("click", (e) => {
+      const btn = e.target.closest('[data-action="copyMaterialRisk"]');
+      if(!btn) return;
+
+      const row = btn.closest(".matItem");
+      if(!row) return;
+
+      copyMaterialRiskToHazard(row.dataset.id);
+    });
+
+    document.getElementById("addActivityTop").addEventListener("click", () => addActivity(true));
+    document.getElementById("addActivityBottom").addEventListener("click", () => addActivity(true));
+
+    listEl.addEventListener("click", (e) => {
+      const deleteBtn = e.target.closest('[data-action="delete"]');
+      const pickHazBtn = e.target.closest('[data-action="pickHaz"]');
+      const sum = e.target.closest(".sum");
+      const activityEl = e.target.closest(".activity");
+
+      if(!activityEl) return;
+
+      const no = Number(activityEl.dataset.no);
+      const act = activities.find(x => x.no === no);
+      if(!act) return;
+
+      if(deleteBtn){
+        const ok = confirm(`Delete activity #${no}?`);
+        if(!ok) return;
+        activities = activities.filter(x => x.no !== no);
+        openSet.delete(no);
+        persistAll();
+        renderActivities();
+        toast(`Deleted #${no}.`);
+        return;
+      }
+
+      if(pickHazBtn){
+        openPicker(act.hazardIds, (selected) => {
+          act.hazardIds = selected;
+          persistAll();
+          renderActivities();
+        });
+        return;
+      }
+
+      if(sum && !e.target.closest("button")){
+        if(openSet.has(no)) openSet.delete(no);
+        else openSet.add(no);
+        persistAll();
+        renderActivities();
+      }
+    });
+
+    listEl.addEventListener("keydown", (e) => {
+      const sum = e.target.closest(".sum");
+      if(!sum) return;
+
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        const no = Number(sum.closest(".activity")?.dataset.no);
+        if(!no) return;
+        if(openSet.has(no)) openSet.delete(no);
+        else openSet.add(no);
+        persistAll();
+        renderActivities();
+      }
+    });
+
+    listEl.addEventListener("input", (e) => {
+      const fieldEl = e.target.closest("select[data-field], input[data-field]");
+      if(!fieldEl) return;
+
+      const activityEl = e.target.closest(".activity");
+      if(!activityEl) return;
+
+      const no = Number(activityEl.dataset.no);
+      const act = activities.find(x => x.no === no);
+      if(!act) return;
+
+      const field = fieldEl.dataset.field;
+      let val = fieldEl.value;
+      if(["beforeRow","beforeCol","afterRow"].includes(field)) val = Number(val || 0);
+
+      act[field] = val;
+      persistAll();
+      refreshActivityUI(activityEl, act);
+    });
+
+    listEl.addEventListener("change", (e) => {
+      const fieldEl = e.target.closest("select[data-field], input[data-field]");
+      if(!fieldEl) return;
+
+      const activityEl = e.target.closest(".activity");
+      if(!activityEl) return;
+
+      const no = Number(activityEl.dataset.no);
+      const act = activities.find(x => x.no === no);
+      if(!act) return;
+
+      const field = fieldEl.dataset.field;
+      let val = fieldEl.value;
+      if(["beforeRow","beforeCol","afterRow"].includes(field)) val = Number(val || 0);
+
+      act[field] = val;
+      persistAll();
+      refreshActivityUI(activityEl, act);
+    });
+
+    document.addEventListener("focusin", (e) => {
+      const editor = e.target.closest(".rte[contenteditable='true']");
+      if(editor){
+        setEditorStatus(editor);
+        saveSelectionForEditor(editor);
+      }
+    });
+
+    document.addEventListener("focusout", (e) => {
+      if(e.target === activeEditor){
+        setTimeout(() => {
+          const now = document.activeElement;
+          if(now && now.closest(".editorBar")) return;
+          if(!(now && now.closest(".rte[contenteditable='true']"))){
+            setEditorStatus(null);
+          }
+        }, 0);
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      const editor = e.target.closest(".rte[contenteditable='true']");
+      if(editor){
+        setEditorStatus(editor);
+        saveSelectionForEditor(editor);
+      }
+    });
+
+    document.addEventListener("mouseup", (e) => {
+      const editor = e.target.closest(".rte[contenteditable='true']");
+      if(editor){
+        setEditorStatus(editor);
+        saveSelectionForEditor(editor);
+      }
+    });
+
+    document.addEventListener("input", (e) => {
+      const activityEditor = e.target.closest(".rte[data-field]");
+      if(activityEditor){
+        syncActivityRichText(activityEditor);
+        return;
+      }
+
+      const libEditor = e.target.closest(".rte[data-lib-field]");
+      if(libEditor){
+        syncLibraryRichText(libEditor);
+        return;
+      }
+
+      const matEditor = e.target.closest(".rte[data-mat-field]");
+      if(matEditor){
+        syncMaterialRiskRichText(matEditor);
+      }
+    });
+
+    document.addEventListener("mousedown", (e) => {
+      const ctl = e.target.closest("[data-rte-cmd],[data-rte-action]");
+      if(ctl) e.preventDefault();
+    });
+
+    document.addEventListener("click", (e) => {
+      const ctl = e.target.closest("[data-rte-cmd],[data-rte-action]");
+      if(!ctl || !activeEditor) return;
+
+      const cmd = ctl.dataset.rteCmd;
+      const action = ctl.dataset.rteAction;
+
+      if(cmd){
+        execEditorCommand(cmd);
+        return;
+      }
+
+      if(action === "date"){
+        restoreSelectionForEditor(activeEditor);
+        document.execCommand("insertText", false, new Date().toISOString().slice(0,10));
+        saveSelectionForEditor(activeEditor);
+        activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+        activeEditor.focus();
+      } else if(action === "rule"){
+        execEditorCommand("insertHorizontalRule");
+      } else if(action === "clear"){
+        execEditorCommand("removeFormat");
+      }
+    });
+
+    document.getElementById("rteFontSelect").addEventListener("change", (e) => {
+      if(!activeEditor || !e.target.value) return;
+      restoreSelectionForEditor(activeEditor);
+      document.execCommand("fontName", false, e.target.value);
+      saveSelectionForEditor(activeEditor);
+      activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+      activeEditor.focus();
+      e.target.value = "";
+    });
+
+    document.getElementById("rteFormatSelect").addEventListener("change", (e) => {
+      if(!activeEditor || !e.target.value) return;
+      restoreSelectionForEditor(activeEditor);
+      document.execCommand("formatBlock", false, e.target.value);
+      saveSelectionForEditor(activeEditor);
+      activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+      activeEditor.focus();
+      e.target.value = "";
+    });
+
+    document.getElementById("rteSizeSelect").addEventListener("change", (e) => {
+      if(!activeEditor || !e.target.value) return;
+      restoreSelectionForEditor(activeEditor);
+      document.execCommand("fontSize", false, e.target.value);
+      saveSelectionForEditor(activeEditor);
+      activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+      activeEditor.focus();
+      e.target.value = "";
+    });
+
+    document.getElementById("rteForeColor").addEventListener("change", (e) => {
+      if(!activeEditor) return;
+      restoreSelectionForEditor(activeEditor);
+      document.execCommand("foreColor", false, e.target.value);
+      saveSelectionForEditor(activeEditor);
+      activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+      activeEditor.focus();
+    });
+
+    document.getElementById("rteBackColor").addEventListener("change", (e) => {
+      if(!activeEditor) return;
+      restoreSelectionForEditor(activeEditor);
+      document.execCommand("hiliteColor", false, e.target.value);
+      saveSelectionForEditor(activeEditor);
+      activeEditor.dispatchEvent(new Event("input", { bubbles:true }));
+      activeEditor.focus();
+    });
+
+    pickerCloseBtn.addEventListener("click", () => closePicker(false));
+    pickerApplyBtn.addEventListener("click", () => closePicker(true));
+    pickerClearBtn.addEventListener("click", () => {
+      pickerSelected = [];
+      pickerList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      pickerCount.textContent = "0";
+    });
+    overlay.addEventListener("click", (e) => { if(e.target === overlay) closePicker(false); });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && overlay.style.display === "flex") closePicker(false);
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      const payload = {
+        matrix,
+        hazardLibrary,
+        materialRiskLibrary,
+        activities,
+        open: [...openSet],
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "risk-assessment-activities.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("Exported JSON.");
+    });
+
+    const importFile = document.getElementById("importFile");
+    document.getElementById("importBtn").addEventListener("click", () => importFile.click());
+
+    importFile.addEventListener("change", async () => {
+      const file = importFile.files?.[0];
+      if(!file) return;
+
+      try{
+        const txt = await file.text();
+        const payload = JSON.parse(txt);
+
+        matrix = normalizeMatrix(payload.matrix ?? buildDefaultMatrix(5, 5));
+        hazardLibrary = normalizeLibrary(payload.hazardLibrary ?? null, defaultHazardTitles, "haz");
+        materialRiskLibrary = normalizeMaterialRiskLibrary(payload.materialRiskLibrary ?? null);
+        activities = Array.isArray(payload.activities)
+          ? payload.activities.map((a, i) => normalizeActivity(a, i))
+          : [];
+        openSet = new Set(Array.isArray(payload.open) ? payload.open : []);
+        nextNo = activities.length ? Math.max(...activities.map(a => a.no)) + 1 : 1;
+
+        clampActivitiesToMatrix();
+        persistAll();
+        renderAll();
+        toast("Imported JSON.");
+      }catch{
+        toast("Import failed. Invalid JSON.");
+      }finally{
+        importFile.value = "";
+      }
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      const ok = confirm("Clear matrix, libraries and all activities from this browser? This cannot be undone.");
+      if(!ok) return;
+
+      localStorage.removeItem(LS_MATRIX);
+      localStorage.removeItem(LS_HAZARD_LIBRARY);
+      localStorage.removeItem(LS_MATERIAL_LIBRARY);
+      localStorage.removeItem(LS_RECORDS);
+      localStorage.removeItem(LS_OPEN);
+
+      matrix = buildDefaultMatrix(5, 5);
+      hazardLibrary = normalizeLibrary(null, defaultHazardTitles, "haz");
+      materialRiskLibrary = normalizeMaterialRiskLibrary(null);
+      activities = [];
+      openSet = new Set();
+      nextNo = 1;
+
+      persistAll();
+      renderAll();
+      toast("Cleared.");
+    });
+
+    window.addEventListener("resize", () => {
+      renderActivities();
+    });
+
+    renderAll();
+    persistAll();
+  </script>
+</body>
+</html>
